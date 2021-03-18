@@ -34,7 +34,7 @@ app.use('/file', fileRouter);
 
 // test
 app.get('/test', (req, res) => {
-    res.send({response: 'Hello World!'});
+    res.json({response: 'Hello World!'});
     console.log("hello world");
 });
 
