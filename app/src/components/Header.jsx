@@ -6,8 +6,8 @@ const Header = () => {
 
   return (
         <Navbar sticky="top" bg="light" variant="light" className="navbar">
-            <Navbar.Brand className="mr-auto logo-nav">Template 4</Navbar.Brand>
-            <Nav className="mx-auto">
+            <Navbar.Brand className="mr-auto logo-nav">Rogue Chem ;)</Navbar.Brand>
+            <Nav className="ml-auto">
                 <Nav.Link as={Link} to="/"> Home </Nav.Link>
                 <Nav.Link as={Link} to="/file-management">File Management</Nav.Link>
                 <Nav.Link as={Link} to="/login">Login</Nav.Link>
