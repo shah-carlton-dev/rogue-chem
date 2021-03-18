@@ -26,6 +26,6 @@ const fileSchema = mongoose.Schema(
   }
 );
 
-const File = mongoose.model('File', fileSchema);
+const File = mongoose.model('File', fileSchema);  // param1: singular name (will look for lowercase, plural version of schema)
 
 module.exports = File;

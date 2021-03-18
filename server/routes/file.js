@@ -3,7 +3,8 @@ const express = require('express');
 const multer = require('multer');
 const File = require('../model/file');
 const Router = express.Router();
-
+const fsp = require('fs').promises;
+const fs = require('fs');
 const upload = multer({
   storage: multer.diskStorage({
     destination(req, file, cb) {
@@ -14,7 +15,7 @@ const upload = multer({
     }
   }),
   limits: {
-    fileSize: 1000000 // max file size 1MB = 1000000 bytes
+    fileSize: 62914560 // max file size 60MB = 62914560 bytes
   },
   fileFilter(req, file, cb) {
     if (!file.originalname.match(/\.(jpeg|jpg|png|pdf|doc|docx|xlsx|xls)$/)) {
@@ -77,6 +78,25 @@ Router.get('/download/:id', async (req, res) => {
     res.sendFile(path.join(__dirname, '..', file.file_path));
   } catch (error) {
     res.status(400).send('Error while downloading file. Try again later.');
+  }
+});
+
+Router.delete('/deleteAllFiles', async (req, res) => {
+  try {
+    await File.collection.drop();
+    const file_path = path.join(__dirname, '../files');
+    fsp.rmdir(file_path, { recursive: true })
+      .then(() => {
+        fs.mkdir(file_path, function(err) {
+          if (err) {
+            console.log(err)
+          } else {
+            console.log("New directory successfully created.")
+          }
+        })
+      });
+  } catch (error) {
+    res.status(400).send('Error while dropping files collection. Try again later.');
   }
 });
 

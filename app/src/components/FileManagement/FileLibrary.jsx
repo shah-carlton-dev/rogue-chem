@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import {Button, Form} from 'react-bootstrap';
 import download from 'downloadjs';
 import axios from 'axios';
 import { API_URL } from '../../utils/constants';
@@ -6,7 +7,7 @@ import { API_URL } from '../../utils/constants';
 const FileLibrary = () => {
   const [filesList, setFilesList] = useState([]);
   const [errorMsg, setErrorMsg] = useState('');
-
+  const [deleteFileMsg, setDeleteFileMsg] = useState('');
   useEffect(() => {
     const getFilesList = async () => {
       try {
@@ -37,10 +38,66 @@ const FileLibrary = () => {
     }
   };
 
+  const deleteAllFiles = async () => {
+    try {
+      await axios.delete(`${API_URL}/deleteAllFiles`);
+      setDeleteFileMsg('Successfully deleted all files.');
+    } catch (error) {
+      if (error.response && error.response.status === 400) {
+        setDeleteFileMsg('Error while deleting all files. Please try again later.');
+      }
+    }
+  };
+
   return (
-    <React.Fragment>
-        
-    </React.Fragment>
+    <div className="files-container">
+      {errorMsg && <p className="errorMsg">{errorMsg}</p>}
+      <table className="files-table">
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Description</th>
+            <th>File type</th>
+            <th>Download File</th>
+          </tr>
+        </thead>
+        <tbody>
+          {filesList.length > 0 ? (
+            filesList.map(
+              ({ _id, title, description, file_path, file_mimetype }) => (
+                <tr key={_id}>
+                  <td className="file-title">{title}</td>
+                  <td className="file-description">{description}</td>
+                  <td className="file-mimetype">{file_mimetype}</td>
+                  <td>
+                    <a 
+                      href="#/"
+                      onClick={() =>
+                        downloadFile(_id, file_path, file_mimetype)
+                      }
+                    >
+                      Download
+                    </a>
+                  </td>
+                </tr>
+              )
+            )
+          ) : (
+            <tr>
+              <td colSpan={4} style={{ fontWeight: '300' }}>
+                No files found. Please add some.
+              </td>
+            </tr>
+          )}
+        </tbody>
+      </table>
+      <Form className="search-form" onSubmit={deleteAllFiles}>
+        <Button variant="danger" type="submit">
+              Delete all files
+        </Button>
+      </Form>
+      
+    </div>
   );
 };
 

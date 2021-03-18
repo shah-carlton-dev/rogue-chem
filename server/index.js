@@ -29,14 +29,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 // router setup 
 const fileRouter = require('./routes/file');
 // const loginRouter = require('./routes/login');
-app.use('/file', fileRouter);
+app.use(fileRouter);
 // app.use('/login', loginRouter);
-
-// test
-app.get('/test', (req, res) => {
-    res.json({response: 'Hello World!'});
-    console.log("hello world");
-});
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

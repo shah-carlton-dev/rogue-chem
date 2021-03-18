@@ -1,14 +1,17 @@
 import React from 'react';
 import FileUpload from './FileUpload';
 import FileLibrary from './FileLibrary';
-import '../../styles/FileManagement.css';
+import '../../styles/FileManagement.scss';
 const FileManagement = (props) => {
 
     return (
         <React.Fragment>
             <h1>File Management</h1>
-            <FileUpload></FileUpload>
-            <FileLibrary></FileLibrary>
+            <div className="container">
+                <FileUpload></FileUpload>
+                <FileLibrary></FileLibrary>
+            </div>
+            
         </React.Fragment>
     );
 };
