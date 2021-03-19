@@ -71,13 +71,13 @@ Example:
 ```
   curl -X POST -H "Content-Type: application/json" -d 
   '{
-    "username":"rfarrell", 
-    "password":"RogueChem1",     
-    "email":"farrell.roguechem@gmail.com", 
-    "fname":"Ryan", 
-    "lname":"Farrell", 
-    "courses":["course_id"],
-    "messages":["message_id"]
+    "username":"", 
+    "password":"",     
+    "email":"", 
+    "fname":"", 
+    "lname":"", 
+    "courses":[],
+    "messages":[]
   }' http://localhost:3030/users/adminCreate
 ```
 
