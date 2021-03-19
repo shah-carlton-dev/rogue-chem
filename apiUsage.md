@@ -62,3 +62,22 @@ Example:
  });
 ```
 
+## USERS
+
+## Create admin account
+This can only be done through curl currently
+
+Example:
+```
+  curl -X POST -H "Content-Type: application/json" -d 
+  '{
+    "username":"rfarrell", 
+    "password":"RogueChem1",     
+    "email":"farrell.roguechem@gmail.com", 
+    "fname":"Ryan", 
+    "lname":"Farrell", 
+    "courses":["course_id"],
+    "messages":["message_id"]
+  }' http://localhost:3030/users/adminCreate
+```
+
