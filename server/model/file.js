@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const { courses_db } = require('../db/db');
 
 const fileSchema = mongoose.Schema(
   {
@@ -26,6 +27,6 @@ const fileSchema = mongoose.Schema(
   }
 );
 
-const File = mongoose.model('File', fileSchema);  // param1: singular name (will look for lowercase, plural version of schema)
+const File = courses_db.model('File', fileSchema);  // param1: singular name (will look for lowercase, plural version of schema)
 
 module.exports = File;
