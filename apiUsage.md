@@ -63,9 +63,37 @@ Example:
 ```
 
 ## USERS
+### Data schema:
+```
+admin: {
+    username: String,
+    password: String,
+    email: String,
+    fname: String,
+    lname: String,
+    courses: Array,
+    messages: Array
+}
+```
+```
+student: {
+    username: String,
+    password: String,
+    email: String,
+    fname: String,
+    lname: String,
+    courses: Array,
+    messages: Array,
+    starredSections: Array,
+    starredFiles: Array,
+    bookmarkedFiles: Array,
+    completedSections: Array,
+    completedFiles: Array
+}
+```
 
-## Create admin account
-This can only be done through curl currently
+## POST /users/adminCreate
+Creates a new admin user. This will only be accessible by a direct request.
 
 Example:
 ```
@@ -76,8 +104,48 @@ Example:
     "email":"", 
     "fname":"", 
     "lname":"", 
-    "courses":[],
-    "messages":[]
+    "courses":[""],
+    "messages":[""]
   }' http://localhost:3030/users/adminCreate
 ```
 
+## POST /users/studentCreate
+Creates a new student profile. Do not need to include any information beyond profile info.
+
+Example:
+```
+curl --request POST \
+  --url http://localhost:3030/users/studentCreate \
+  --header 'Content-Type: application/json' \
+  --data '{
+      "username": "",
+      "password": "",
+      "email": "",
+      "fname": "",
+      "lname": ""
+    }'
+```
+
+## POST /users/validateToken
+Checks JWT for validity. If valid, returns information on user; if not, returns false.
+
+Example:
+```
+curl --request POST \
+  --url http://localhost:3030/users/validateToken \
+  --header 'auth-token: (auth token as string)'
+```
+
+## POST /users/login
+Logs a user in by username and password. Returns user info and JWT if successful.
+
+Example:
+```
+curl --request POST \
+  --url http://localhost:3030/users/login \
+  --header 'Content-Type: application/json' \
+  --data '{
+      "username": "",
+      "password": ""
+    }'
+```

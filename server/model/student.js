@@ -30,6 +30,8 @@ const studentSchema = mongoose.Schema(
         bookmarkedFiles: Array,
         completedSections: Array,
         completedFiles: Array
+    }, {
+        timestamps: true
     }
 );
 
