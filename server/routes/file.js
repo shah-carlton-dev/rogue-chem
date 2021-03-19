@@ -81,6 +81,19 @@ Router.get('/download/:id', async (req, res) => {
   }
 });
 
+Router.delete('/deleteOneFile/:id', async (req, res) => {
+  try {
+    const file = await File.findById(req.params.id);
+    await fs.unlink(path.join(__dirname, '..', file.file_path), (err) => {
+      console.error(err);
+      return;
+    });
+    await File.findByIdAndDelete(req.params.id);
+  } catch (error) {
+    res.status(400).send('Error while dropping files collection. Try again later.');
+  }
+});
+
 Router.delete('/deleteAllFiles', async (req, res) => {
   try {
     await File.collection.drop();

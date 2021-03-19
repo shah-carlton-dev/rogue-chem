@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import {Button, Form} from 'react-bootstrap';
+import {AccordionCollapse, Button, Form} from 'react-bootstrap';
 import download from 'downloadjs';
 import axios from 'axios';
 import { API_URL } from '../../utils/constants';
@@ -7,7 +7,7 @@ import { API_URL } from '../../utils/constants';
 const FileLibrary = () => {
   const [filesList, setFilesList] = useState([]);
   const [errorMsg, setErrorMsg] = useState('');
-  const [deleteFileMsg, setDeleteFileMsg] = useState('');
+  const [deleteFileMsg, setDeleteFileMsg] = useState(''); // TODO: add delete file message tehe
   useEffect(() => {
     const getFilesList = async () => {
       try {
@@ -38,6 +38,18 @@ const FileLibrary = () => {
     }
   };
 
+  const deleteOneFile = async (id) => {
+    try {
+
+      await axios.delete(`${API_URL}/deleteOneFile/${id}`);
+      setErrorMsg('');
+    } catch (error) {
+      if (error.response && error.response.status === 400) {
+        setErrorMsg('Error while deleting file. Try again later');
+      }
+    }
+  };
+
   const deleteAllFiles = async () => {
     try {
       await axios.delete(`${API_URL}/deleteAllFiles`);
@@ -59,6 +71,7 @@ const FileLibrary = () => {
             <th>Description</th>
             <th>File type</th>
             <th>Download File</th>
+            <th>Delete File</th>
           </tr>
         </thead>
         <tbody>
@@ -79,12 +92,22 @@ const FileLibrary = () => {
                       Download
                     </a>
                   </td>
+                  <td>
+                    <a 
+                      href="#/"
+                      onClick={() =>
+                        deleteOneFile(_id)
+                      }
+                    >
+                      Delete
+                    </a>
+                  </td>
                 </tr>
               )
             )
           ) : (
             <tr>
-              <td colSpan={4} style={{ fontWeight: '300' }}>
+              <td colSpan={5} style={{ fontWeight: '300' }}>
                 No files found. Please add some.
               </td>
             </tr>

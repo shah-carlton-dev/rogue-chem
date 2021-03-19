@@ -101,6 +101,19 @@ const FileUpload = (props) => {
               </Form.Group>
             </Col>
           </Row>
+          <Row>
+            <Col>
+              <Form.Group controlId="keywords">
+                <Form.Control
+                  type="text"
+                  name="keywords"
+                  value={state.keywords || ''}
+                  placeholder="Type a keyword then hit enter to add another."
+                  onChange={handleInputChange}
+                />
+              </Form.Group>
+            </Col>
+          </Row>
           <div className="upload-section">
               <Dropzone 
                   onDrop={onDrop}
