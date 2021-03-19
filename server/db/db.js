@@ -1,7 +1,7 @@
 const Mongoose = require('mongoose');
 const constants = require('../utils/constants.js');
 
-Mongoose.connect(constants.mongo_courses_uri, {
+const users_db = Mongoose.createConnection(constants.mongo_users_uri, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
   useCreateIndex: true
@@ -10,3 +10,7 @@ Mongoose.connect(constants.mongo_courses_uri, {
   if (err) throw err;
   else console.log('MongoDB connection: SUCCESS');
 });
+
+const courses_db = users_db.useDb('courses');
+
+module.exports = { users_db, courses_db };

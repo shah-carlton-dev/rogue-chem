@@ -1,11 +1,5 @@
 const mongoose = require('mongoose');
-const constants = require('../utils/constants.js');
-
-users = mongoose.createConnection(constants.mongo_users_uri, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    useCreateIndex: true
-});
+const { users_db } = require('../db/db');
 
 const adminSchema = mongoose.Schema(
     {
@@ -22,6 +16,6 @@ const adminSchema = mongoose.Schema(
     }
 );
 
-const Admin = users.model('Admin', adminSchema);
+const Admin = users_db.model('Admin', adminSchema);
 
 module.exports = Admin;

@@ -1,11 +1,5 @@
 const mongoose = require('mongoose');
-const constants = require('../utils/constants.js');
-
-users = mongoose.createConnection(constants.mongo_users_uri, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    useCreateIndex: true
-});
+const { users_db } = require('../db/db');
 
 const studentSchema = mongoose.Schema(
     {
@@ -39,6 +33,6 @@ const studentSchema = mongoose.Schema(
     }
 );
 
-const Student = users.model('Student', studentSchema);
+const Student = users_db.model('Student', studentSchema);
 
 module.exports = Student;

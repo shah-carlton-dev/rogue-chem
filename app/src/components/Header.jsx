@@ -8,14 +8,14 @@ const Header = () => {
 	const { userData, setUserData } = useContext(UserContext);
 
 	const logout = () => {
-		history.push("/home");
+		history.push("/");
 		setUserData({});
 		localStorage.clear();
 	}
 
 	return (
 		<Navbar sticky="top" bg="light" variant="light" className="navbar">
-			<Navbar.Brand className="mr-auto logo-nav">Rogue Chem ;)</Navbar.Brand>
+			<Navbar.Brand className="mr-auto logo-nav">Rogue Chem</Navbar.Brand>
 			<Nav className="ml-auto">
 				<Nav.Link as={Link} to="/home"> Home </Nav.Link>
 				<Nav.Link as={Link} to="/file-management">File Management</Nav.Link>

@@ -46,38 +46,6 @@ Router.post('/studentCreate',
     }
 );
 
-Router.post('/validateTokenAdmin', async (req, res) => {
-    try {
-        const token = req.header("auth-token");
-        console.log(token);
-        if (!token) res.send(false);
-
-        const verified = jwt.verify(token, constants.jwt_pass);
-        if (!verified) res.send(false);
-        console.log(verified);
-
-        let existing;
-        try {
-            await Admin.findById(verified.id, (err, user) => {
-                existing = user;
-            });
-        } catch (err) {
-            res.status(400).send(false);
-        }
-
-        if (existing == null) res.send(false);
-
-        res.send({
-            valid: true,
-            token: token,
-            user: existing
-        });
-    } catch (err) {
-        res.status(500).send('Error validating token');
-        console.log(err);
-    }
-})
-
 Router.post('/validateToken', async (req, res) => {
     try {
         const token = req.header("auth-token");
@@ -85,7 +53,6 @@ Router.post('/validateToken', async (req, res) => {
 
         const verified = jwt.verify(token, constants.jwt_pass);
         if (!verified) res.send(false);
-        console.log(verified);
 
         let existing;
         await Student.findById(verified.id, (err, user) => {

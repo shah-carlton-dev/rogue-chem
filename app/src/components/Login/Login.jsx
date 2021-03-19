@@ -60,7 +60,7 @@ const Login = (props) => {
                             onChange={(e) => setPassword(e.target.value)}
                         />
                     </Form.Group>
-                    <Button block size="md" type="submit" disabled={!validateForm()}>
+                    <Button block size="md" variant="outline-dark" type="submit" disabled={!validateForm()}>
                         Sign in
                     </Button>
                 </Form>

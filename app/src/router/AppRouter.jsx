@@ -41,10 +41,17 @@ const AppRouter = () => {
             <BrowserRouter>
                 <Header />
                 <Switch>
-                    <Route component={Login} path="/login" />
+                    {userData.user ?
+                        <>
+                            <Route component={Login} path="/login" />
+                            <Route component={Home} path="/home" />
+                            <Route component={FileManagement} path="/file-management" />
+                        </> :
+                        <>
+                            <Route component={Login} path={"/login" | "/home" | "/file-management"} />
+                        </>
+                    }
                     <Route component={Login} path="/" exact={true} />
-                    <Route component={Home} path="/home" />
-                    <Route component={FileManagement} path="/file-management" />
                 </Switch>
             </BrowserRouter>
         </UserContext.Provider>
