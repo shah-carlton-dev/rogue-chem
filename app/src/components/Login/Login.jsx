@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { Form, Container, Button } from "react-bootstrap";
 import "../../styles/Login.scss";
 import Axios from "axios";
@@ -9,25 +9,29 @@ import { API_URL } from '../../utils/constants';
 const Login = (props) => {
 
     const history = useHistory();
+    const { userData, setUserData } = useContext(UserContext);
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
-    const { setUserData } = useContext(UserContext);
 
     function validateForm() {
         return username.length > 0 && password.length > 0;
     }
 
-    async function handleSubmit(event) {
+    useEffect(() => userData.user ? history.push("/home") : null, [])
+
+    const handleSubmit = async (event) => {
         event.preventDefault();
-        const loginUser = { username, password };
+        const user = { username, password };
         const url = API_URL + "/users/login";
         try {
-            const loginRes = await Axios.post(url, loginUser);
-            setUserData({
-                token: loginRes.data.token,
-                user: loginRes.data.user
+            await Axios.post(url, user).then((res) => {
+                setUserData({
+                    token: res.data.token,
+                    user: res.data.existing
+                });
+                localStorage.setItem("auth-token", res.data.token);
             });
-            localStorage.setItem("auth-token", loginRes.data.token);
+            history.push('/home')
         } catch (err) {
             console.log(err);
         }
@@ -37,8 +41,8 @@ const Login = (props) => {
         <>
             <h3 className="text-center pt-2">Sign in to your account here</h3>
             <Container className="login pt-2 col-md-6">
-                <Form onSubmit={handleSubmit} className="pt-3">
-                    <Form.Group size="lg" controlId="email">
+                <Form onSubmit={(event) => handleSubmit(event)} className="pt-3">
+                    <Form.Group size="lg" controlId="username">
                         <Form.Label>Username</Form.Label>
                         <Form.Control
                             autoFocus
@@ -51,6 +55,7 @@ const Login = (props) => {
                         <Form.Label>Password</Form.Label>
                         <Form.Control
                             type="password"
+                            autoComplete="current-password"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                         />
@@ -59,7 +64,8 @@ const Login = (props) => {
                         Sign in
                     </Button>
                 </Form>
-            </Container> </>
+            </Container>
+        </>
     )
 };
 

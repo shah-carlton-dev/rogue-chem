@@ -89,6 +89,26 @@ Router.post('/validateToken', async (req, res) => {
 
         let existing;
         await Student.findById(verified.id, (err, user) => {
+            if(err) {
+                console.log(err);
+                res.status(400).send("Error finding user");
+            }
+            existing = user;
+        });
+        if (!existing) {
+            await Admin.findById(verified.id, (err, user) => {
+                if (err) {
+                    console.log(err);
+                    res.status(401).send("Error finding admin");
+                }
+                existing = user;
+            });
+            if (!existing) {
+                res.status(400).send("Account not found");
+            }
+        }
+        // ----------------
+        await Student.findById(verified.id, (err, user) => {
             existing = user;
         });
         if (existing == null) res.send(false);
@@ -104,42 +124,41 @@ Router.post('/validateToken', async (req, res) => {
     }
 })
 
-Router.post('/login',
-    async (req, res) => {
-        try {
-            let existing; // will be assigned to an existing user if one exists
-            let { username, password } = req.body;
-            await Student.findOne({ username }, (err, user) => {
+Router.post('/login', async (req, res) => {
+    try {
+        let existing; // will be assigned to an existing user if one exists
+        let { username, password } = req.body;
+        await Student.findOne({ username }, (err, user) => {
+            if (err) {
+                console.log(err);
+                res.status(400).send("Error finding user");
+            }
+            existing = user;
+        });
+        if (!existing) {
+            await Admin.findOne({ username }, (err, user) => {
                 if (err) {
                     console.log(err);
-                    res.status(400).send("Error finding user");
+                    res.status(401).send("Error finding admin");
                 }
                 existing = user;
             });
             if (!existing) {
-                await Admin.findOne({ username }, (err, user) => {
-                    if (err) {
-                        console.log(err);
-                        res.status(400).send("Error finding admin");
-                    }
-                    existing = user;
-                });
-                if (!existing) {
-                    res.status(400).send("Account not found");
-                }
+                res.status(400).send("Account not found");
             }
-            const pass = await bcrypt.compare(password, existing.password);
-            if (!pass) {
-                res.status(400).send("Invalid password");
-            }
-            const token = jwt.sign({ id: existing._id }, constants.jwt_pass);
-            res.status(200).send({ existing, token });
         }
-        catch (err) {
-            res.status(400).send('Error logging in');
-            console.log(err);
+        const pass = await bcrypt.compare(password, existing.password);
+        if (!pass) {
+            res.status(400).send("Invalid password");
         }
+        const token = jwt.sign({ id: existing._id }, constants.jwt_pass);
+        res.status(200).send({ existing, token });
     }
+    catch (err) {
+        res.status(400).send('Error logging in');
+        console.log(err);
+    }
+}
 )
 
 module.exports = Router;
