@@ -25,7 +25,6 @@ const AppRouter = () => {
                     if (!tokenRes) {
                         console.log("Error :(");
                     }
-                    console.log(tokenRes);
                     if (tokenRes.data.valid) {
                         setUserData({
                             token: tokenRes.data.token,
@@ -46,7 +45,7 @@ const AppRouter = () => {
         checkToken();
     }, []);
 
-    if (! userData.user) {
+    if (!userData.user) {
         return null;
     }
 
