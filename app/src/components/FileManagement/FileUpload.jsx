@@ -43,7 +43,6 @@ const FileUpload = (props) => {
     };
     const handleOnSubmit = async (event) => {
       event.preventDefault();
-    
       try {
         const { title, description } = state;
         if (title.trim() !== '' && description.trim() !== '') {

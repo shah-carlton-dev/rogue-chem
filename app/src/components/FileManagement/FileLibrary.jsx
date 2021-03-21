@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import {AccordionCollapse, Button, Form} from 'react-bootstrap';
+import { AccordionCollapse, Button, Form } from 'react-bootstrap';
 import download from 'downloadjs';
 import axios from 'axios';
 import { API_URL } from '../../utils/constants';
@@ -50,7 +50,8 @@ const FileLibrary = () => {
     }
   };
 
-  const deleteAllFiles = async () => {
+  const deleteAllFiles = async (e) => {
+    e.preventDefault();
     try {
       await axios.delete(`${API_URL}/deleteAllFiles`);
       setDeleteFileMsg('Successfully deleted all files.');
@@ -83,7 +84,7 @@ const FileLibrary = () => {
                   <td className="file-description">{description}</td>
                   <td className="file-mimetype">{file_mimetype}</td>
                   <td>
-                    <a 
+                    <a
                       href="#/"
                       onClick={() =>
                         downloadFile(_id, file_path, file_mimetype)
@@ -93,7 +94,7 @@ const FileLibrary = () => {
                     </a>
                   </td>
                   <td>
-                    <a 
+                    <a
                       href="#/"
                       onClick={() =>
                         deleteOneFile(_id)
@@ -114,12 +115,12 @@ const FileLibrary = () => {
           )}
         </tbody>
       </table>
-      <Form className="search-form" onSubmit={deleteAllFiles}>
+      <Form className="search-form" onSubmit={e => deleteAllFiles(e)}>
         <Button variant="danger" type="submit">
-              Delete all files
+          Delete all files
         </Button>
       </Form>
-      
+
     </div>
   );
 };
