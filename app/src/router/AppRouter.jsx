@@ -46,6 +46,10 @@ const AppRouter = () => {
         checkToken();
     }, []);
 
+    if (! userData.user) {
+        return null;
+    }
+
     return (
         <UserContext.Provider value={{ userData, setUserData }} >
             <BrowserRouter>
