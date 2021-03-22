@@ -6,16 +6,16 @@ import { API_URL } from '../../utils/constants';
 
 const FileLibrary = () => {
   const [filesList, setFilesList] = useState([]);
-  const [errorMsg, setErrorMsg] = useState('');
+  const [errorMsgTwo, setErrorMsgTwo] = useState('');
   const [deleteFileMsg, setDeleteFileMsg] = useState(''); // TODO: add delete file message tehe
   useEffect(() => {
     const getFilesList = async () => {
       try {
         const { data } = await axios.get(`${API_URL}/getAllFiles`);
-        setErrorMsg('');
+        setErrorMsgTwo('');
         setFilesList(data);
       } catch (error) {
-        error.response && setErrorMsg(error.response.data);
+        error.response && setErrorMsgTwo(error.response.data);
       }
     };
 
@@ -29,11 +29,11 @@ const FileLibrary = () => {
       });
       const split = path.split('/');
       const filename = split[split.length - 1];
-      setErrorMsg('');
+      setErrorMsgTwo('');
       return download(result.data, filename, mimetype);
     } catch (error) {
       if (error.response && error.response.status === 400) {
-        setErrorMsg('Error while downloading file. Try again later');
+        setErrorMsgTwo('Error while downloading file. Try again later');
       }
     }
   };
@@ -42,10 +42,10 @@ const FileLibrary = () => {
     try {
 
       await axios.delete(`${API_URL}/deleteOneFile/${id}`);
-      setErrorMsg('');
+      setErrorMsgTwo('');
     } catch (error) {
       if (error.response && error.response.status === 400) {
-        setErrorMsg('Error while deleting file. Try again later');
+        setErrorMsgTwo('Error while deleting file. Try again later');
       }
     }
   };
@@ -64,7 +64,7 @@ const FileLibrary = () => {
 
   return (
     <div className="files-container">
-      {errorMsg && <p className="errorMsg">{errorMsg}</p>}
+      {errorMsgTwo && <p className="errorMsg">{errorMsgTwo}</p>}
       <table className="files-table">
         <thead>
           <tr>

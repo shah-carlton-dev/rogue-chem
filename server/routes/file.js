@@ -34,11 +34,12 @@ Router.post(
   upload.single('file'),
   async (req, res) => {
     try {
-      const { title, description } = req.body;
+      const { title, description, keywords } = req.body;
       const { path, mimetype } = req.file;
       const file = new File({
         title,
         description,
+        keywords, 
         file_path: path,
         file_mimetype: mimetype
       });

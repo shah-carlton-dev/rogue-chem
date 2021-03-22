@@ -1,7 +1,8 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Form, Row, Col, Button } from 'react-bootstrap';
 import Dropzone from 'react-dropzone';
 import axios from 'axios';
+import download from 'downloadjs';
 import { API_URL } from '../../utils/constants';
 import { useHistory } from 'react-router-dom';
 
@@ -12,16 +13,37 @@ const FileUpload = (props) => {
     title: '',
     description: ''
   });
+  const [keywords, setKeywords] = useState([]);
+  const [keyword, setkeyword] = useState('');
+  const [filesList, setFilesList] = useState([]);
+  const [errorMsgTwo, setErrorMsgTwo] = useState('');
+  const [deleteFileMsg, setDeleteFileMsg] = useState(''); // TODO: add delete file message tehe
   const [errorMsg, setErrorMsg] = useState('');
   const [isPreviewAvailable, setIsPreviewAvailable] = useState(false); // state to show preview only for images
   const dropRef = useRef(); // React ref for managing the hover state of droppable area
 
+  useEffect(() => {
+    getFilesList();
+  }, []);
+
+  const getFilesList = async () => {
+    try {
+      const { data } = await axios.get(`${API_URL}/getAllFiles`);
+      setErrorMsgTwo('');
+      setFilesList(data);
+    } catch (error) {
+      error.response && setErrorMsgTwo(error.response.data);
+    }
+  };
+  
   const handleInputChange = (event) => {
     setState({
       ...state,
       [event.target.name]: event.target.value
     });
   };
+
+
 
   const onDrop = (files) => {
     const [uploadedFile] = files;
@@ -43,7 +65,7 @@ const FileUpload = (props) => {
     }
   };
   const handleOnSubmit = async (event) => {
-    // event.preventDefault();
+    event.preventDefault();
     try {
       const { title, description } = state;
       if (title.trim() !== '' && description.trim() !== '') {
@@ -52,14 +74,15 @@ const FileUpload = (props) => {
           formData.append('file', file);
           formData.append('title', title);
           formData.append('description', description);
-
+          formData.append('keywords', keywords);
+          console.log(keywords);
+          console.log(formData);
           setErrorMsg('');
           await axios.post(`${API_URL}/upload`, formData, {
             headers: {
               'Content-Type': 'multipart/form-data'
             }
           });
-          props.history.push('/list');
         } else {
           setErrorMsg('Please select a file to add.');
         }
@@ -69,11 +92,82 @@ const FileUpload = (props) => {
     } catch (error) {
       error.response && setErrorMsg(error.response.data);
     }
+    setState({
+      title: '',
+      description: ''
+    });
+    setFile(null);
+    setPreviewSrc('');
+    await getFilesList();
   };
+
+  const downloadFile = async (id, path, mimetype) => {
+    try {
+      const result = await axios.get(`${API_URL}/download/${id}`, {
+        responseType: 'blob'
+      });
+      const split = path.split('/');
+      const filename = split[split.length - 1];
+      setErrorMsgTwo('');
+      return download(result.data, filename, mimetype);
+    } catch (error) {
+      if (error.response && error.response.status === 400) {
+        setErrorMsgTwo('Error while downloading file. Try again later');
+      }
+    }
+  };
+
+  const deleteOneFile = async (e, id) => {
+    e.preventDefault();
+    try {
+
+      await axios.delete(`${API_URL}/deleteOneFile/${id}`);
+      setErrorMsgTwo('');
+    } catch (error) {
+      if (error.response && error.response.status === 400) {
+        setErrorMsgTwo('Error while deleting file. Try again later');
+      }
+    }
+    await getFilesList();
+  };
+
+  const deleteAllFiles = async (e) => {
+    e.preventDefault();
+    try {
+      await axios.delete(`${API_URL}/deleteAllFiles`);
+      setDeleteFileMsg('Successfully deleted all files.');
+    } catch (error) {
+      if (error.response && error.response.status === 400) {
+        setDeleteFileMsg('Error while deleting all files. Please try again later.');
+      }
+    }
+    await getFilesList();
+  };
+
+  const deleteKeyword = (index) => {
+    var newKeywords = keywords;
+    if (index > -1) {
+      newKeywords.splice(index, 1);
+    }
+    setKeywords(newKeywords);
+  }
+
+  const addKeyword = (e) => {
+    e.preventDefault();
+    var newKeywordList = keywords;
+    newKeywordList.push(keyword);
+    setKeywords(newKeywordList);
+    console.log(keywords);
+    document.getElementById("keywordInput").value = '';
+  }
+
+  const handleKeywordInput = (event) => {
+    setkeyword(event.target.value);
+  }
 
   return (
     <React.Fragment>
-      <Form className="search-form" onSubmit={handleOnSubmit}>
+      <Form className="search-form " onSubmit={handleOnSubmit}>
         {errorMsg && <p className="errorMsg">{errorMsg}</p>}
         <Row>
           <Col>
@@ -105,13 +199,26 @@ const FileUpload = (props) => {
           <Col>
             <Form.Group controlId="keywords">
               <Form.Control
+                id="keywordInput"
                 type="text"
                 name="keywords"
-                value={state.keywords || ''}
-                placeholder="Type a keyword then hit enter to add another."
-                onChange={handleInputChange}
+                //value={''}
+                placeholder="Type a keyword/phrase."
+                onChange={(e) => handleKeywordInput(e)}
               />
-            </Form.Group>
+            </Form.Group> 
+            <Button type="submit" class="btn btn-primary mb-2" onClick={(e) => addKeyword(e)}>add keyword</Button>
+          </Col>
+        </Row>
+        <Row>
+          <Col>
+            <h5>Keywords:</h5>
+            <ul>
+              {keywords.map((keywrd, index) => (
+            
+                  <li key={index}>{keywrd} <a href="#/" onClick={() => deleteKeyword(index)}>delete</a></li>
+              ))}
+            </ul>
           </Col>
         </Row>
         <div className="upload-section">
@@ -152,6 +259,65 @@ const FileUpload = (props) => {
           Submit
           </Button>
       </Form>
+      <div className="files-container">
+      {errorMsgTwo && <p className="errorMsg">{errorMsgTwo}</p>}
+      <table className="files-table">
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Description</th>
+            <th>File type</th>
+            <th>Download File</th>
+            <th>Delete File</th>
+          </tr>
+        </thead>
+        <tbody>
+          {filesList.length > 0 ? (
+            filesList.map(
+              ({ _id, title, description, file_path, file_mimetype }) => (
+                <tr key={_id}>
+                  <td className="file-title">{title}</td>
+                  <td className="file-description">{description}</td>
+                  <td className="file-mimetype">{file_mimetype}</td>
+                  <td>
+                    <a
+                      href="#/"
+                      onClick={() =>
+                        downloadFile(_id, file_path, file_mimetype)
+                      }
+                    >
+                      Download
+                    </a>
+                  </td>
+                  <td>
+                    <a
+                      href="#/"
+                      onClick={(e) =>
+                        deleteOneFile(e, _id)
+                      }
+                    >
+                      Delete
+                    </a>
+                  </td>
+                </tr>
+              )
+            )
+          ) : (
+            <tr>
+              <td colSpan={5} style={{ fontWeight: '300' }}>
+                No files found. Please add some.
+              </td>
+            </tr>
+          )}
+        </tbody>
+      </table>
+      <Form className="search-form" onSubmit={e => deleteAllFiles(e)}>
+        <Button variant="danger" type="submit">
+          Delete all files
+        </Button>
+      </Form>
+
+    </div>
     </React.Fragment>
   );
 };

@@ -45,9 +45,10 @@ const AppRouter = () => {
         checkToken();
     }, []);
 
-    if (!userData.user) {
-        return null;
-    }
+    // Returning null outside a method in the app router is a BAD idea.
+    //if (!userData.user) {
+    //    return null;
+    //}
 
     return (
         <UserContext.Provider value={{ userData, setUserData }} >

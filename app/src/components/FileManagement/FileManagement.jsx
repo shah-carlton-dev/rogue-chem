@@ -9,7 +9,7 @@ const FileManagement = (props) => {
             <h1>File Management</h1>
             <div className="container">
                 <FileUpload></FileUpload>
-                <FileLibrary></FileLibrary>
+
             </div>
             
         </React.Fragment>

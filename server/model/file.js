@@ -13,6 +13,9 @@ const fileSchema = mongoose.Schema(
       required: true,
       trim: true
     },
+    keywords: {
+      type: Array,
+    },
     file_path: {
       type: String,
       required: true
