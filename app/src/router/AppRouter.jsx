@@ -3,17 +3,23 @@ import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import Home from '../components/Home';
 import Login from '../components/Login/Login';
 import FileManagement from '../components/FileManagement/FileManagement';
+import CourseManagement from '../components/CourseManagement/CourseManagement';
 import Header from '../components/Header';
 import UserContext from "../context/UserContext.js";
 import Axios from "axios";
 import { API_URL } from '../utils/constants';
 import { useHistory } from "react-router-dom";
+import "../styles/AppRouter.css";
 
 const AppRouter = () => {
     const history = useHistory();
     const [userData, setUserData] = useState({});
 
     useEffect(() => {
+        setUserData({
+            token: 0,
+            user: {}
+        });
         const checkToken = async () => {
             try {
                 let token = localStorage.getItem("auth-token");
@@ -45,21 +51,18 @@ const AppRouter = () => {
         checkToken();
     }, []);
 
-    // Returning null outside a method in the app router is a BAD idea.
-    //if (!userData.user) {
-    //    return null;
-    //}
-
     return (
+        // !userData.user ? <div className="loader"></div> : 
         <UserContext.Provider value={{ userData, setUserData }} >
             <BrowserRouter>
                 <Header />
                 <Switch>
-                    {userData.user ?
+                    {userData.user && Object.keys(userData.user).length > 0 ?
                         <>
                             <Route component={Login} path="/login" />
                             <Route component={Home} path="/home" />
                             <Route component={FileManagement} path="/file-management" />
+                            <Route component={CourseManagement} path="/course-management" />
                         </> :
                         <>
                             <Route component={Login} path={"/login" | "/home" | "/file-management"} />

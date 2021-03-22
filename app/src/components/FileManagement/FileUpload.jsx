@@ -4,6 +4,7 @@ import Dropzone from 'react-dropzone';
 import axios from 'axios';
 import download from 'downloadjs';
 import { API_URL } from '../../utils/constants';
+import '../../styles/FileManagement.scss';
 import { useHistory } from 'react-router-dom';
 
 const FileUpload = (props) => {
@@ -35,7 +36,7 @@ const FileUpload = (props) => {
       error.response && setErrorMsgTwo(error.response.data);
     }
   };
-  
+
   const handleInputChange = (event) => {
     setState({
       ...state,
@@ -96,6 +97,7 @@ const FileUpload = (props) => {
       title: '',
       description: ''
     });
+    setKeywords([]);
     setFile(null);
     setPreviewSrc('');
     await getFilesList();
@@ -159,6 +161,7 @@ const FileUpload = (props) => {
     setKeywords(newKeywordList);
     console.log(keywords);
     document.getElementById("keywordInput").value = '';
+    setkeyword('');
   }
 
   const handleKeywordInput = (event) => {
@@ -203,22 +206,23 @@ const FileUpload = (props) => {
                 type="text"
                 name="keywords"
                 //value={''}
-                placeholder="Type a keyword/phrase."
+                placeholder="Type a keyword/phrase"
                 onChange={(e) => handleKeywordInput(e)}
               />
-            </Form.Group> 
-            <Button type="submit" class="btn btn-primary mb-2" onClick={(e) => addKeyword(e)}>add keyword</Button>
+            </Form.Group>
+            <ul className="keyword-list">
+              {keywords.map((keywrd, index) => (
+                <li key={index}>{keywrd}<a href="#/" onClick={() => deleteKeyword(index)}>(x)</a></li>
+              ))}
+            </ul>
+            <Button type="submit" className="btn btn-primary mb-2" onClick={(e) => addKeyword(e)}>add keyword</Button>
           </Col>
         </Row>
         <Row>
           <Col>
             <h5>Keywords:</h5>
-            <ul>
-              {keywords.map((keywrd, index) => (
-            
-                  <li key={index}>{keywrd} <a href="#/" onClick={() => deleteKeyword(index)}>delete</a></li>
-              ))}
-            </ul>
+
+
           </Col>
         </Row>
         <div className="upload-section">
@@ -260,65 +264,65 @@ const FileUpload = (props) => {
           </Button>
       </Form>
       <div className="files-container">
-      {errorMsgTwo && <p className="errorMsg">{errorMsgTwo}</p>}
-      <table className="files-table">
-        <thead>
-          <tr>
-            <th>Title</th>
-            <th>Description</th>
-            <th>File type</th>
-            <th>Download File</th>
-            <th>Delete File</th>
-          </tr>
-        </thead>
-        <tbody>
-          {filesList.length > 0 ? (
-            filesList.map(
-              ({ _id, title, description, file_path, file_mimetype }) => (
-                <tr key={_id}>
-                  <td className="file-title">{title}</td>
-                  <td className="file-description">{description}</td>
-                  <td className="file-mimetype">{file_mimetype}</td>
-                  <td>
-                    <a
-                      href="#/"
-                      onClick={() =>
-                        downloadFile(_id, file_path, file_mimetype)
-                      }
-                    >
-                      Download
-                    </a>
-                  </td>
-                  <td>
-                    <a
-                      href="#/"
-                      onClick={(e) =>
-                        deleteOneFile(e, _id)
-                      }
-                    >
-                      Delete
-                    </a>
-                  </td>
-                </tr>
-              )
-            )
-          ) : (
+        {errorMsgTwo && <p className="errorMsg">{errorMsgTwo}</p>}
+        <table className="files-table">
+          <thead>
             <tr>
-              <td colSpan={5} style={{ fontWeight: '300' }}>
-                No files found. Please add some.
-              </td>
+              <th>Title</th>
+              <th>Description</th>
+              <th>File type</th>
+              <th>Download File</th>
+              <th>Delete File</th>
             </tr>
-          )}
-        </tbody>
-      </table>
-      <Form className="search-form" onSubmit={e => deleteAllFiles(e)}>
-        <Button variant="danger" type="submit">
-          Delete all files
+          </thead>
+          <tbody>
+            {filesList.length > 0 ? (
+              filesList.map(
+                ({ _id, title, description, file_path, file_mimetype }) => (
+                  <tr key={_id}>
+                    <td className="file-title">{title}</td>
+                    <td className="file-description">{description}</td>
+                    <td className="file-mimetype">{file_mimetype}</td>
+                    <td>
+                      <a
+                        href="#/"
+                        onClick={() =>
+                          downloadFile(_id, file_path, file_mimetype)
+                        }
+                      >
+                        Download
+                    </a>
+                    </td>
+                    <td>
+                      <a
+                        href="#/"
+                        onClick={(e) =>
+                          deleteOneFile(e, _id)
+                        }
+                      >
+                        Delete
+                    </a>
+                    </td>
+                  </tr>
+                )
+              )
+            ) : (
+              <tr>
+                <td colSpan={5} style={{ fontWeight: '300' }}>
+                  No files found. Please add some.
+              </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+        <Form className="search-form" onSubmit={e => deleteAllFiles(e)}>
+          <Button variant="danger" type="submit">
+            Delete all files
         </Button>
-      </Form>
+        </Form>
 
-    </div>
-    </React.Fragment>
+      </div>
+    </React.Fragment >
   );
 };
 

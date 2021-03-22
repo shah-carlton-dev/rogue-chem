@@ -17,7 +17,7 @@ Router.post('/adminCreate',
             let salt = await bcrypt.genSalt();
             password = await bcrypt.hash(password, salt);
             const admin = new Admin({
-                username, password, email, fname, lname, courses, messages
+                username, password, email, fname, lname, courses, messages, admin: true
             });
             await admin.save();
             res.status(200).send(admin);
@@ -35,7 +35,12 @@ Router.post('/studentCreate',
             let salt = await bcrypt.genSalt();
             password = await bcrypt.hash(password, salt);
             const student = new Student({
-                username, password, email, fname, lname
+                username,
+                password,
+                email,
+                fname,
+                lname,
+                admin: false
             });
             await student.save();
             res.status(200).send(student);

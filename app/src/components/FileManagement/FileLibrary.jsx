@@ -115,11 +115,9 @@ const FileLibrary = () => {
           )}
         </tbody>
       </table>
-      <Form className="search-form" onSubmit={e => deleteAllFiles(e)}>
-        <Button variant="danger" type="submit">
+      <Button variant="danger" onClick={e => deleteAllFiles(e)}>
           Delete all files
         </Button>
-      </Form>
 
     </div>
   );

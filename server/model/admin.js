@@ -9,7 +9,8 @@ const adminSchema = mongoose.Schema(
         fname: String,
         lname: String,
         courses: Array,
-        messages: Array
+        messages: Array,
+        admin: Boolean
     },
     {
         timestamps: true

@@ -8,9 +8,12 @@ const Header = () => {
 	const { userData, setUserData } = useContext(UserContext);
 
 	const logout = () => {
-		history.push("/");
-		setUserData({});
 		localStorage.clear();
+		setUserData({
+			token: 0,
+			user: {}
+		});
+		history.push("/login");
 	}
 
 	return (
@@ -18,8 +21,15 @@ const Header = () => {
 			<Navbar.Brand className="mr-auto logo-nav">Rogue Chem</Navbar.Brand>
 			<Nav className="ml-auto">
 				<Nav.Link as={Link} to="/home"> Home </Nav.Link>
-				<Nav.Link as={Link} to="/file-management">File Management</Nav.Link>
-				{userData.user
+				{userData && userData.user && userData.user.admin
+					? <>
+						<Nav.Link as={Link} to="/file-management">File Management</Nav.Link>
+						<Nav.Link as={Link} to="/course-management">Course Management</Nav.Link>
+					</>
+					: <></>
+				}
+
+				{userData && userData.user && Object.keys(userData.user).length > 0
 					? (<Nav.Link onClick={() => logout()} to="/login"> Logout </Nav.Link>)
 					: (<Nav.Link as={Link} to="/login">Login</Nav.Link>)
 				}

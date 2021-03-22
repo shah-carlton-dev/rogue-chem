@@ -17,7 +17,7 @@ const Login = (props) => {
         return username.length > 0 && password.length > 0;
     }
 
-    useEffect(() => userData.user ? history.push("/home") : null, [])
+    useEffect(() => (userData.user == null || Object.keys(userData.user).length > 0)? history.push("/home") : history.push("/login"), [])
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -25,13 +25,14 @@ const Login = (props) => {
         const url = API_URL + "/users/login";
         try {
             await Axios.post(url, user).then((res) => {
+                console.log(res);
                 setUserData({
                     token: res.data.token,
                     user: res.data.existing
                 });
                 localStorage.setItem("auth-token", res.data.token);
+                history.push('/home');
             });
-            history.push('/home')
         } catch (err) {
             console.log(err);
         }

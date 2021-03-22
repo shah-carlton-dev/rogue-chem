@@ -29,7 +29,11 @@ const studentSchema = mongoose.Schema(
         starredFiles: Array,
         bookmarkedFiles: Array,
         completedSections: Array,
-        completedFiles: Array
+        completedFiles: Array,
+        admin: {
+            type: Boolean,
+            required: true
+        },
     }, {
         timestamps: true
     }

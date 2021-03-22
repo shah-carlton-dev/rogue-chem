@@ -2,6 +2,7 @@ import React from 'react';
 import FileUpload from './FileUpload';
 import FileLibrary from './FileLibrary';
 import '../../styles/FileManagement.scss';
+
 const FileManagement = (props) => {
 
     return (
@@ -9,9 +10,7 @@ const FileManagement = (props) => {
             <h1>File Management</h1>
             <div className="container">
                 <FileUpload></FileUpload>
-
             </div>
-            
         </React.Fragment>
     );
 };
