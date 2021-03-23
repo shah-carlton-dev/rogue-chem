@@ -25,7 +25,6 @@ const Login = (props) => {
         const url = API_URL + "/users/login";
         try {
             await Axios.post(url, user).then((res) => {
-                console.log(res);
                 setUserData({
                     token: res.data.token,
                     user: res.data.existing
