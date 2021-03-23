@@ -4,7 +4,6 @@ import { Card, Button } from "react-bootstrap";
 const SectionBlock = (props) => {
     return (
         <Card style={{ width: '18rem' }} key={props.section._id}>
-            {console.log(props)}
             <Card.Body>
                 <Card.Title>{props.section.name}</Card.Title>
                 <Card.Text>

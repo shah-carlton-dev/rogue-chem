@@ -1,5 +1,5 @@
-# API Documentation
-Full endpoint documentation along with example API calls:
+# Rogue Chem API Documentation
+Full endpoint documentation with example API calls:
 
 ## Files (/)
 
@@ -127,27 +127,32 @@ curl --request PUT \
 }'
 ```
 
-### GET /courses/sections
-Returns all the associated sections for a given course.
+### GET /courses/sections/:id
+Returns all the sections for a given course. Requires the course id in the URL.
 
 Example: 
 ```
 curl --request GET \
-  --url http://localhost:3030/courses/sections \
-  --header 'Content-Type: application/json' \
-  --data '{
-	"course_id":""
-}'
+  --url http://localhost:3030/courses/sections/:id \
+```
+
+### GET /courses/files/:id
+Returns all the files in a section for a given course. Requires the section id in the URL.
+
+Example: 
+```
+curl --request GET \
+  --url http://localhost:3030/courses/files/:id \
 ```
 
 ### PUT /courses/addFile
-Adds a file to the files array in a course.
+Adds a file to the files array in a section. Uses the id to create a reference and the activeSection to target the correct section.
 
 Example: 
 ```
 ```
 
-## USERS
+## Users
 ### Data schema:
 ```
 admin: {
