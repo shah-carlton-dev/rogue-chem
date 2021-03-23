@@ -127,6 +127,19 @@ curl --request PUT \
 }'
 ```
 
+### GET /courses/sections
+Returns all the associated sections for a given course.
+
+Example: 
+```
+curl --request GET \
+  --url http://localhost:3030/courses/sections \
+  --header 'Content-Type: application/json' \
+  --data '{
+	"course_id":""
+}'
+```
+
 ### PUT /courses/addFile
 Adds a file to the files array in a course.
 
