@@ -2,6 +2,8 @@ import React, { useContext } from 'react';
 import { Navbar, Nav, Button } from 'react-bootstrap';
 import { Link, useHistory } from 'react-router-dom';
 import UserContext from "../context/UserContext.js";
+import logo from "../assets/navlogo.png";
+import "../styles/Header.css";
 
 const Header = () => {
 	const history = useHistory();
@@ -17,9 +19,10 @@ const Header = () => {
 	}
 
 	return (
-		<Navbar sticky="top" bg="light" variant="light" className="navbar">
-			<Navbar.Brand className="mr-auto logo-nav">Rogue Chem</Navbar.Brand>
-			<Nav className="ml-auto">
+		
+		<Navbar sticky="top" className="navbar gradient">
+			<Navbar.Brand className="mr-auto px-2 logo-nav"><img src={logo}></img></Navbar.Brand>
+			<Nav className="ml-auto nav-text">
 				<Nav.Link as={Link} to="/home"> Home </Nav.Link>
 				{userData && userData.user && userData.user.admin
 					? <>

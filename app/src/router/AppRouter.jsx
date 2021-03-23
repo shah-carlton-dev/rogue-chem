@@ -52,7 +52,7 @@ const AppRouter = () => {
     }, []);
 
     return (
-        // !userData.user ? <div className="loader"></div> : 
+        // userData === {} ? <div className="loader"></div> : will make sexy loading icon
         <UserContext.Provider value={{ userData, setUserData }} >
             <BrowserRouter>
                 <Header />

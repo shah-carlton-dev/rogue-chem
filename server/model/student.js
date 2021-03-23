@@ -34,9 +34,8 @@ const studentSchema = mongoose.Schema(
             type: Boolean,
             required: true
         },
-    }, {
-        timestamps: true
-    }
+    },
+    { timestamps: true }
 );
 
 const Student = users_db.model('Student', studentSchema);

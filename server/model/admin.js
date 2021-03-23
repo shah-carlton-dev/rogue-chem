@@ -12,9 +12,7 @@ const adminSchema = mongoose.Schema(
         messages: Array,
         admin: Boolean
     },
-    {
-        timestamps: true
-    }
+    { timestamps: true }
 );
 
 const Admin = users_db.model('Admin', adminSchema);

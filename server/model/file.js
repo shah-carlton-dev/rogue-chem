@@ -25,9 +25,7 @@ const fileSchema = mongoose.Schema(
       required: true
     }
   },
-  {
-    timestamps: true
-  }
+  { timestamps: true }
 );
 
 const File = courses_db.model('File', fileSchema);  // param1: singular name (will look for lowercase, plural version of schema)
