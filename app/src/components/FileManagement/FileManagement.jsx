@@ -1,6 +1,4 @@
 import React from 'react';
-import FileUpload from './FileUpload';
-import VideoUpload from './VideoUpload';
 import '../../styles/FileManagement.scss';
 import {NavLink} from 'react-router-dom';
 const FileManagement = (props) => {
@@ -18,10 +16,6 @@ const FileManagement = (props) => {
                     </NavLink>
                 </nav>
             </div>            
-            <div className="container">
-                <FileUpload></FileUpload>
-                <VideoUpload></VideoUpload>
-            </div>
         </React.Fragment>
     );
 };

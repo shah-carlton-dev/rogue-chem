@@ -229,13 +229,6 @@ const FileUpload = (props) => {
             <Button type="submit" className="btn btn-primary mb-2" onClick={(e) => addKeyword(e)}>add keyword</Button>
           </Col>
         </Row>
-        <Row>
-          <Col>
-            <h5>Keywords:</h5>
-
-
-          </Col>
-        </Row>
         <div className="upload-section">
           <Dropzone
             onDrop={onDrop}

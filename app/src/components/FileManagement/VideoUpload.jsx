@@ -1,6 +1,5 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Form, Row, Col, Button } from 'react-bootstrap';
-import Dropzone from 'react-dropzone';
 import axios from 'axios';
 import download from 'downloadjs';
 import { API_URL } from '../../utils/constants';
@@ -8,30 +7,26 @@ import '../../styles/FileManagement.scss';
 import { useHistory } from 'react-router-dom';
 import { NavLink } from 'react-router-dom';
 const VideoUpload = (props) => {
-  const [file, setFile] = useState(null); // state for storing actual image
-  const [previewSrc, setPreviewSrc] = useState(''); // state for storing previewImage
   const [state, setState] = useState({
+    utl: '',
     title: '',
     description: ''
   });
   const [keywords, setKeywords] = useState([]);
   const [keyword, setkeyword] = useState('');
-  const [filesList, setFilesList] = useState([]);
+  const [videosList, setVideosList] = useState([]);
   const [errorMsgTwo, setErrorMsgTwo] = useState('');
-  const [deleteFileMsg, setDeleteFileMsg] = useState(''); // TODO: add delete file message tehe
   const [errorMsg, setErrorMsg] = useState('');
-  const [isPreviewAvailable, setIsPreviewAvailable] = useState(false); // state to show preview only for images
-  const dropRef = useRef(); // React ref for managing the hover state of droppable area
 
   useEffect(() => {
-    getFilesList();
+    getVideosList();
   }, []);
 
-  const getFilesList = async () => {
+  const getVideosList = async () => {
     try {
-      const { data } = await axios.get(`${API_URL}/getAllFiles`);
+      const { data } = await axios.get(`${API_URL}/getAllVideos`);
       setErrorMsgTwo('');
-      setFilesList(data);
+      setVideosList(data);
     } catch (error) {
       error.response && setErrorMsgTwo(error.response.data);
     }
@@ -44,49 +39,19 @@ const VideoUpload = (props) => {
     });
   };
 
-
-
-  const onDrop = (files) => {
-    const [uploadedFile] = files;
-    setFile(uploadedFile);
-
-    const fileReader = new FileReader();
-    fileReader.onload = () => {
-      setPreviewSrc(fileReader.result);
-    };
-    fileReader.readAsDataURL(uploadedFile);
-    setIsPreviewAvailable(uploadedFile.name.match(/\.(jpeg|jpg|png)$/));
-    dropRef.current.style.border = '2px dashed #e9ebeb';
-  };
-  const updateBorder = (dragState) => {
-    if (dragState === 'over') {
-      dropRef.current.style.border = '2px solid #000';
-    } else if (dragState === 'leave') {
-      dropRef.current.style.border = '4px dashed #e9ebeb';
-    }
-  };
   const handleOnSubmit = async (event) => {
     event.preventDefault();
     try {
-      const { title, description } = state;
-      if (title.trim() !== '' && description.trim() !== '') {
-        if (file) {
-          const formData = new FormData();
-          formData.append('file', file);
-          formData.append('title', title);
-          formData.append('description', description);
-          formData.append('keywords', keywords);
-          console.log(keywords);
-          console.log(formData);
+      const { url, title, description } = state;
+      if (title.trim() !== '' && description.trim() !== '' && url.trim() !== '') {
+          const formData = {
+            url,
+            title,
+            description,
+            keywords
+          }
           setErrorMsg('');
-          await axios.post(`${API_URL}/upload`, formData, {
-            headers: {
-              'Content-Type': 'multipart/form-data'
-            }
-          });
-        } else {
-          setErrorMsg('Please select a file to add.');
-        }
+          await axios.post(`${API_URL}/uploadVideo`, formData);
       } else {
         setErrorMsg('Please enter all the field values.');
       }
@@ -94,56 +59,37 @@ const VideoUpload = (props) => {
       error.response && setErrorMsg(error.response.data);
     }
     setState({
+      url: '',
       title: '',
       description: ''
     });
     setKeywords([]);
-    setFile(null);
-    setPreviewSrc('');
-    await getFilesList();
+    await getVideosList();
   };
 
-  const downloadFile = async (id, path, mimetype) => {
-    try {
-      const result = await axios.get(`${API_URL}/download/${id}`, {
-        responseType: 'blob'
-      });
-      const split = path.split('/');
-      const filename = split[split.length - 1];
-      setErrorMsgTwo('');
-      return download(result.data, filename, mimetype);
-    } catch (error) {
-      if (error.response && error.response.status === 400) {
-        setErrorMsgTwo('Error while downloading file. Try again later');
-      }
-    }
-  };
-
-  const deleteOneFile = async (e, id) => {
+  const deleteOneVideo = async (e, id) => {
     e.preventDefault();
     try {
-
-      await axios.delete(`${API_URL}/deleteOneFile/${id}`);
+      await axios.delete(`${API_URL}/deleteOneVideo/${id}`);
       setErrorMsgTwo('');
     } catch (error) {
       if (error.response && error.response.status === 400) {
-        setErrorMsgTwo('Error while deleting file. Try again later');
+        console.log('Error while deleting video. Try again later');
       }
     }
-    await getFilesList();
+    await getVideosList();
   };
 
-  const deleteAllFiles = async (e) => {
+  const deleteAllVideos = async (e) => {
     e.preventDefault();
     try {
-      await axios.delete(`${API_URL}/deleteAllFiles`);
-      setDeleteFileMsg('Successfully deleted all files.');
+      await axios.delete(`${API_URL}/deleteAllVideos`);
     } catch (error) {
       if (error.response && error.response.status === 400) {
-        setDeleteFileMsg('Error while deleting all files. Please try again later.');
+        console.log('error deleting all videos');
       }
     }
-    await getFilesList();
+    await getVideosList();
   };
 
   const deleteKeyword = (index) => {
@@ -183,6 +129,19 @@ const VideoUpload = (props) => {
      </div>  
      <Form className="search-form " onSubmit={handleOnSubmit}>
        {errorMsg && <p className="errorMsg">{errorMsg}</p>}
+       <Row>
+         <Col>
+           <Form.Group controlId="title">
+             <Form.Control
+               type="text"
+               name="url"
+               value={state.url || ''}
+               placeholder="Enter url"
+               onChange={handleInputChange}
+             />
+           </Form.Group>
+         </Col>
+       </Row>
        <Row>
          <Col>
            <Form.Group controlId="title">
@@ -229,47 +188,6 @@ const VideoUpload = (props) => {
            <Button type="submit" className="btn btn-primary mb-2" onClick={(e) => addKeyword(e)}>add keyword</Button>
          </Col>
        </Row>
-       <Row>
-         <Col>
-           <h5>Keywords:</h5>
-
-
-         </Col>
-       </Row>
-       <div className="upload-section">
-         <Dropzone
-           onDrop={onDrop}
-           onDragEnter={() => updateBorder('over')}
-           onDragLeave={() => updateBorder('leave')}
-         >
-           {({ getRootProps, getInputProps }) => (
-             <div {...getRootProps({ className: 'drop-zone' })} ref={dropRef}>
-               <input {...getInputProps()} />
-               <p>Drag and drop a file OR click here to select a file</p>
-               {file && (
-                 <div>
-                   <strong>Selected file:</strong> {file.name}
-                 </div>
-               )}
-             </div>
-           )}
-         </Dropzone>
-         {previewSrc ? (
-           isPreviewAvailable ? (
-             <div className="image-preview">
-               <img className="preview-image" src={previewSrc} alt="Preview" />
-             </div>
-           ) : (
-             <div className="preview-message">
-               <p>No preview available for this file</p>
-             </div>
-           )
-         ) : (
-           <div className="preview-message">
-             <p>Image preview will be shown here after selection</p>
-           </div>
-         )}
-       </div>
        <Button variant="primary" type="submit">
          Submit
          </Button>
@@ -279,36 +197,25 @@ const VideoUpload = (props) => {
        <table className="files-table">
          <thead>
            <tr>
+             <th>URL</th>
              <th>Title</th>
              <th>Description</th>
-             <th>File type</th>
-             <th>Download File</th>
              <th>Delete File</th>
            </tr>
          </thead>
          <tbody>
-           {filesList.length > 0 ? (
-             filesList.map(
-               ({ _id, title, description, file_path, file_mimetype }) => (
+           {videosList.length > 0 ? (
+             videosList.map(
+               ({ _id, url, title, description }) => (
                  <tr key={_id}>
+                   <td className="file-url">{url}</td>
                    <td className="file-title">{title}</td>
                    <td className="file-description">{description}</td>
-                   <td className="file-mimetype">{file_mimetype}</td>
-                   <td>
-                     <a
-                       href="#/"
-                       onClick={() =>
-                         downloadFile(_id, file_path, file_mimetype)
-                       }
-                     >
-                       Download
-                   </a>
-                   </td>
                    <td>
                      <a
                        href="#/"
                        onClick={(e) =>
-                         deleteOneFile(e, _id)
+                         deleteOneVideo(e, _id)
                        }
                      >
                        Delete
@@ -320,18 +227,17 @@ const VideoUpload = (props) => {
            ) : (
              <tr>
                <td colSpan={5} style={{ fontWeight: '300' }}>
-                 No files found. Please add some.
+                 No videos found. Please add some.
              </td>
              </tr>
            )}
          </tbody>
        </table>
-       <Form className="search-form" onSubmit={e => deleteAllFiles(e)}>
+       <Form className="search-form" onSubmit={e => deleteAllVideos(e)}>
          <Button variant="danger" type="submit">
-           Delete all files
+           Delete all videos
        </Button>
        </Form>
-
      </div>
     </div>
    </React.Fragment >

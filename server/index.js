@@ -27,8 +27,10 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // router setup 
 const fileRouter = require('./routes/file');
+const videoRouter = require('./routes/video');
 const usersRouter = require('./routes/users');
 app.use(fileRouter);
+app.use(videoRouter);
 app.use('/users', usersRouter);
 
 // catch 404 and forward to error handler

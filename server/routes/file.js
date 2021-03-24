@@ -91,6 +91,7 @@ Router.delete('/deleteOneFile/:id', async (req, res) => {
       return;
     });
     await File.findByIdAndDelete(req.params.id);
+    res.status(200).send('File deleted')
   } catch (error) {
     res.status(400).send('Error while dropping files collection. Try again later.');
   }
@@ -110,6 +111,7 @@ Router.delete('/deleteAllFiles', async (req, res) => {
           }
         })
       });
+    res.status(200).send('files deleted.')
   } catch (error) {
     res.status(400).send('Error while dropping files collection. Try again later.');
   }
