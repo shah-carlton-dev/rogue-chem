@@ -1,7 +1,7 @@
-# API Documentation
-Full endpoint documentation along with example API calls:
+# Rogue Chem API Documentation
+Full endpoint documentation with example API calls:
 
-## Files 
+## Files (/)
 
 ### Data scheme (WIP):
 ```
@@ -62,7 +62,97 @@ Example:
  });
 ```
 
-## USERS
+## Courses (/courses)
+
+### Data schema (WIP):
+The sections and files attributes contain references to the relevant sections and files for easy searching.
+
+Course:
+```
+{
+    published: Boolean,
+    name: String,
+    description: String,
+    sections: Array,
+    files: Array
+}
+```
+
+Section:
+```
+{
+    course_id: mongoose.ObjectId,
+    name: String,
+    description: String,
+    files: Array
+}
+```
+
+### POST /courses/create
+Creates a new course. Only creates the course, sections and files must be added separately. ```published``` will default to ```false```
+
+Example:
+```
+curl --request POST \
+  --url http://localhost:3030/courses/create \
+  --header 'Content-Type: application/json' \
+  --data '{
+	"name": "",
+	"description": ""
+}'
+```
+
+### GET /courses
+Returns array of courses objects.
+
+Example:
+```
+curl --request GET \
+  --url http://localhost:3030/courses/ \
+  --header 'Content-Type: application/json'
+```
+
+### PUT /courses/addSection
+Adds a section to the sections array in a course.
+
+Example: 
+```
+curl --request PUT \
+  --url http://localhost:3030/courses/addSection \
+  --header 'Content-Type: application/json' \
+  --data '{
+	"course_id":"",
+	"name": "",
+	"description": ""
+}'
+```
+
+### GET /courses/sections/:id
+Returns all the sections for a given course. Requires the course id in the URL.
+
+Example: 
+```
+curl --request GET \
+  --url http://localhost:3030/courses/sections/:id \
+```
+
+### GET /courses/files/:id
+Returns all the files in a section for a given course. Requires the section id in the URL.
+
+Example: 
+```
+curl --request GET \
+  --url http://localhost:3030/courses/files/:id \
+```
+
+### PUT /courses/addFile
+Adds a file to the files array in a section. Uses the id to create a reference and the activeSection to target the correct section.
+
+Example: 
+```
+```
+
+## Users
 ### Data schema:
 ```
 admin: {
@@ -92,7 +182,7 @@ student: {
 }
 ```
 
-## POST /users/adminCreate
+### POST /users/adminCreate
 Creates a new admin user. This will only be accessible by a direct request.
 
 Example:
@@ -109,7 +199,7 @@ Example:
   }' http://localhost:3030/users/adminCreate
 ```
 
-## POST /users/studentCreate
+### POST /users/studentCreate
 Creates a new student profile. Do not need to include any information beyond profile info.
 
 Example:
@@ -126,7 +216,7 @@ curl --request POST \
     }'
 ```
 
-## POST /users/validateToken
+### POST /users/validateToken
 Checks JWT for validity. If valid, returns information on user; if not, returns false.
 
 Example:
@@ -136,7 +226,7 @@ curl --request POST \
   --header 'auth-token: (auth token as string)'
 ```
 
-## POST /users/login
+### POST /users/login
 Logs a user in by username and password. Returns user info and JWT if successful.
 
 Example:
