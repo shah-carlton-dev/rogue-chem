@@ -6,7 +6,7 @@ import download from 'downloadjs';
 import { API_URL } from '../../utils/constants';
 import '../../styles/FileManagement.scss';
 import { useHistory } from 'react-router-dom';
-
+import { NavLink} from 'react-router-dom';  
 const FileUpload = (props) => {
   const [file, setFile] = useState(null); // state for storing actual image
   const [previewSrc, setPreviewSrc] = useState(''); // state for storing previewImage
@@ -170,6 +170,17 @@ const FileUpload = (props) => {
 
   return (
     <React.Fragment>
+     <div class="container">
+     <div className="header">
+          <nav>
+              <NavLink activeClassName="active" to="/fileUpload">
+                  File Upload
+              </NavLink>
+              <NavLink activeClassName="active" to="/videoUpload">
+                  Video Upload
+              </NavLink>
+          </nav>
+      </div>  
       <Form className="search-form " onSubmit={handleOnSubmit}>
         {errorMsg && <p className="errorMsg">{errorMsg}</p>}
         <Row>
@@ -322,6 +333,7 @@ const FileUpload = (props) => {
         </Form>
 
       </div>
+     </div>
     </React.Fragment >
   );
 };
