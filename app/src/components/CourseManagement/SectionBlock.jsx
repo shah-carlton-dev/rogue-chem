@@ -9,7 +9,10 @@ const SectionBlock = (props) => {
                 <Card.Text>
                     {props.section.description}
                 </Card.Text>
-                <Button variant="outline-dark" onClick={() => props.clickHandler(props.section._id)}>Manage</Button>
+                <div className="section-buttons">
+                    <Button className="mr-5" variant="outline-dark" onClick={() => props.clickHandler(props.section._id)}>Manage</Button>
+                    <Button className="" variant="outline-danger" onClick={() => props.deleteHandler(props.section._id)}>Delete</Button>
+                </div>
             </Card.Body>
         </Card>
     )

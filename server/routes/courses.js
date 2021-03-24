@@ -17,7 +17,19 @@ Router.post('/create', async (req, res) => {
             published: false
         });
         await course.save();
-        res.send('Course created successfully.');
+        await Course.find().then(r => res.send(r));
+        //res.send('Course created successfully.');
+    } catch (error) {
+        res.status(400).send('Error while creating course. Try again later.');
+    }
+});
+
+Router.delete('/delete/:id', async (req, res) => {
+    try {
+        const course_id = req.params.id;
+        await Course.findByIdAndDelete(mongoose.Types.ObjectId(course_id)).then(async (r) => {
+            await Course.find().then(r2 => res.send(r2));
+        });
     } catch (error) {
         res.status(400).send('Error while creating course. Try again later.');
     }
@@ -32,7 +44,7 @@ Router.get('/', async (req, res) => {
     }
 });
 
-Router.put('/addSection', async (req, res) => {
+Router.post('/addSection', async (req, res) => {
     try {
         let { course_id, name, description } = req.body;
         course_id = mongoose.Types.ObjectId(course_id);
@@ -51,6 +63,21 @@ Router.put('/addSection', async (req, res) => {
             const sections = await Section.find();
             res.send(sections);
         });
+    } catch (err) {
+        res.status(400).send("Error adding a section. Try again later");
+    }
+});
+
+Router.delete('/deleteSection/:id', async (req, res) => {
+    try {
+        let section_id = req.params.id;
+        section_id = mongoose.Types.ObjectId(section_id);
+        await Course.find().then(list => list.forEach(async (c) => {
+            await Course.findByIdAndUpdate(c._id, { "$pull": { "sections": section_id } });
+        }));
+        await Section.findByIdAndDelete(section_id);
+        await Course.find().then(r => res.send(r).status(200));
+        res.status(304);
     } catch (err) {
         res.status(400).send("Error adding a section. Try again later");
     }

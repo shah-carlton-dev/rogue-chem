@@ -1,10 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import { API_URL } from "../../utils/constants.js";
 import Axios from "axios";
 import download from 'downloadjs';
+import { useHistory } from 'react-router'
 
 const FileList = (props) => {
-    const { files } = props;
+    const { files, removeFile } = props;
+    const [refresh, setRefresh] = useState(false);
 
     const downloadFile = async (id, path, mimetype) => {
         try {
@@ -21,6 +23,11 @@ const FileList = (props) => {
         }
     };
 
+    const removeHandler = (id) => {
+        removeFile(id);
+        setRefresh(!refresh);
+    }
+
     return (<>
         <table className="files-table">
             <thead>
@@ -33,7 +40,7 @@ const FileList = (props) => {
                 </tr>
             </thead>
             <tbody>
-                {files.map(
+                {files.length > 0 ? files.map(
                     ({ _id, title, description, file_path, file_mimetype }) => (
                         <tr key={_id}>
                             <td className="file-title">{title}</td>
@@ -45,13 +52,13 @@ const FileList = (props) => {
 										</a>
                             </td>
                             <td>
-                                <a href="#/" onClick={() => props.removeFile(_id)} >
+                                <a href="#/" onClick={() => removeHandler(_id)} >
                                     Remove
-										</a>
+								</a>
                             </td>
                         </tr>
                     )
-                )}
+                ) : <></>}
             </tbody>
         </table>
     </>)

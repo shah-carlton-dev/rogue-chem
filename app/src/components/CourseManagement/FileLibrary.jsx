@@ -6,6 +6,7 @@ import { API_URL } from '../../utils/constants';
 const FileLibrary = (props) => {
 	const [filesList, setFilesList] = useState([]);
 	const [errorMsg, setErrorMsg] = useState('');
+	const [refresh, setRefresh] = useState(false);
 	const { addFile, files } = props;
 
 	useEffect(() => {
@@ -16,9 +17,8 @@ const FileLibrary = (props) => {
 		try {
 			const { data } = await axios.get(API_URL + "/getAllFiles");
 			setErrorMsg('');
-			console.log(data);
-			console.log(files);
-			setFilesList(data.filter((f) => !files.includes(f)));
+			// setFilesList(data.filter((f) => !files.includes(f)));
+			setFilesList(data);
 		} catch (error) {
 			error.response && setErrorMsg(error.response.data);
 		}
@@ -39,6 +39,11 @@ const FileLibrary = (props) => {
 			}
 		}
 	};
+
+	const addHandler = (id) => {
+		addFile(id);
+		setRefresh(!refresh);
+	}
 
 	return (
 		<div className="files-container">
@@ -67,9 +72,11 @@ const FileLibrary = (props) => {
 										</a>
 									</td>
 									<td>
-										<a href="#/" onClick={() => addFile(_id)} >
-											Add
-										</a>
+										{
+											files.map(f => f._id).includes(_id) ? <></> :
+												<a href="#/" onClick={() => addHandler(_id)} > Add</a>
+										}
+
 									</td>
 								</tr>
 							)

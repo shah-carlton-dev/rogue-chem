@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Axios from "axios";
-import { Card, Button } from "react-bootstrap";
+import "../../styles/FileDisplay.css";
 import FileLibrary from "./FileLibrary.jsx"
 import FileList from "./FileList.jsx"
 import { API_URL } from "../../utils/constants.js";
@@ -31,13 +31,13 @@ const FileDisplay = (props) => {
     };
 
     return (<>
-        <h5>Files in {course.name + ' / ' + section.name}</h5>
+        <h5>Existing files </h5>
         { files.length === 0
             ? <p> No existing files in this folder </p>
             : <FileList files={files} removeFile={(id) => removeFile(id)}></FileList>
         }
         <br></br>
-        <h5>Add files to {course.name + ' / ' + section.name}</h5>
+        <h5>Add files </h5>
         <FileLibrary addFile={(id) => addFile(id)} files={files}></FileLibrary>
     </>);
 };
