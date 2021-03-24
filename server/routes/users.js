@@ -71,7 +71,7 @@ Router.post('/validateToken', async (req, res) => {
             await Admin.findById(verified.id, (err, user) => {
                 if (err) {
                     console.log(err);
-                    res.status(401).send("Error finding admin");
+                    res.status(400).send("Error finding admin");
                 }
                 existing = user;
             });
@@ -79,12 +79,7 @@ Router.post('/validateToken', async (req, res) => {
                 res.status(400).send("Account not found");
             }
         }
-        // ----------------
-        await Student.findById(verified.id, (err, user) => {
-            existing = user;
-        });
         if (existing == null) res.send(false);
-
         res.send({
             valid: true,
             token: token,

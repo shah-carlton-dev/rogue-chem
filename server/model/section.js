@@ -3,8 +3,7 @@ const { courses_db } = require('../db/db');
 
 const sectionSchema = mongoose.Schema(
     {
-        parent: String,
-        child: String,
+        course_id: mongoose.ObjectId,
         name: String,
         description: String,
         files: Array

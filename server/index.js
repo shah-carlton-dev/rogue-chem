@@ -28,8 +28,10 @@ app.use(express.static(path.join(__dirname, 'public')));
 // router setup 
 const fileRouter = require('./routes/file');
 const usersRouter = require('./routes/users');
+const coursesRouter = require('./routes/courses.js');
 app.use(fileRouter);
 app.use('/users', usersRouter);
+app.use('/courses', coursesRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
