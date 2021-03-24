@@ -7,7 +7,7 @@ const FileLibrary = (props) => {
 	const [filesList, setFilesList] = useState([]);
 	const [errorMsg, setErrorMsg] = useState('');
 	const [refresh, setRefresh] = useState(false);
-	const { addFile, files } = props;
+	const { files, addFile } = props;
 
 	useEffect(() => {
 		getFilesList();

@@ -18,29 +18,41 @@ const CourseManagement = (props) => {
     const [activeCourse, setActiveCourse] = useState({});
     const [activeSection, setActiveSection] = useState({});
     const [sections, setSections] = useState([]);
-    const [files, setFiles] = useState([]);
     const [showCreateCourse, setShowCreateCourse] = useState(false);
     const [showCreateSection, setShowCreateSection] = useState(false);
-    const history = useHistory();
+    const [courseUpdate, setCourseUpdate] = useState(false);
+    const [sectionUpdate, setSectionUpdate] = useState(false);
 
     useEffect(() => {
-        getCoursesList();
-    }, []);
+        getCourses();
+    }, [courseUpdate]);
 
-    const getCoursesList = async () => {
-        await Axios.get(API_URL + "/courses/").then((res) => setCourses(res.data));
+    useEffect(() => {
+        getSections();
+    }, [sectionUpdate]);
+
+    const getCourses = async () => {
+        await Axios.get(API_URL + "/courses/").then((res) => {
+            setCourses(res.data);
+        });
+    }
+
+    const getSections = async () => {
+        await Axios.get(API_URL + "/courses/sections/" + activeCourse._id).then(res => {
+            setSections(res.data);
+        });
+
     }
 
     const showSections = async (id) => {
+        setSectionUpdate(!sectionUpdate);
         setActiveCourse(courses.filter(c => c._id === id)[0]);
-        await Axios.get(API_URL + "/courses/sections/" + id).then(res => setSections(res.data));
         setShowCourseList(false);
         setShowSectionList(true);
     }
 
     const showFiles = async (id) => {
         setActiveSection(sections.filter(s => s._id === id)[0]);
-        await Axios.get(API_URL + "/courses/files/" + id).then(res => setFiles(res.data));
         setShowSectionList(false);
         setShowFileList(true);
     }
@@ -64,7 +76,8 @@ const CourseManagement = (props) => {
         if (save) {
             await Axios.post(API_URL + "/courses/create", data).then(res => {
                 setCourses(res.data);
-            })
+                setCourseUpdate(!courseUpdate);
+            });
         };
         setShowCreateCourse(false);
     }
@@ -79,19 +92,25 @@ const CourseManagement = (props) => {
             }
             await Axios.post(API_URL + "/courses/addSection", data).then(res => {
                 setSections(res.data.filter(d => d.course_id === activeCourse._id));
-            })
+                setSectionUpdate(!sectionUpdate);
+            });
         };
         setShowCreateSection(false);
     }
 
     const deleteCourse = async (id) => {
-        await Axios.delete(API_URL + "/courses/delete/" + id).then(res => setCourses(res.data));
+        await Axios.delete(API_URL + "/courses/delete/" + id).then(res => {
+            setCourses(res.data);
+            setCourseUpdate(!courseUpdate);
+        });
     }
 
     const deleteSection = async (id) => {
         await Axios.delete(API_URL + "/courses/deleteSection/" + id).then(res => {
             setCourses(res.data);
             setSections(courses.filter(c => c._id == activeCourse._id)[0].sections);
+            setSectionUpdate(!sectionUpdate);
+            setCourseUpdate(!courseUpdate);
         });
     }
 
@@ -121,7 +140,7 @@ const CourseManagement = (props) => {
                 (showFileList) ? <>
                     <Button variant="link" onClick={backToSections}>back to core folders</Button>
                     <h4>{activeCourse.name + " / " + activeSection.name + " / "}Files</h4>
-                    <FileDisplay course={activeCourse} section={activeSection} files={files} setFiles={setFiles}></FileDisplay>
+                    <FileDisplay course={activeCourse} section={activeSection} ></FileDisplay>
                 </> :
                     <></>
             }

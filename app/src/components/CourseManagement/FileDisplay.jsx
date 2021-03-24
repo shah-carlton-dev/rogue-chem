@@ -6,12 +6,29 @@ import FileList from "./FileList.jsx"
 import { API_URL } from "../../utils/constants.js";
 
 const FileDisplay = (props) => {
-    const { course, section, files, setFiles } = props;
+    const { course, section } = props;
+    const [files, setFiles] = useState([]);
+    const [fileUpdate, setFileUpdate] = useState(false);
+
+    useEffect(() => {
+        getFiles();
+    }, [fileUpdate]);
+
+    useEffect(() => {
+        getFiles();
+    }, []);
+
+    const getFiles = async () => {
+        await Axios.get(API_URL + "/courses/files/" + section._id).then(res => setFiles(res.data));
+    }
 
     const addFile = async (id) => {
         try {
             const req = { "file_id": id, "section_id": section._id }
-            await Axios.put(API_URL + "/courses/addFile", req).then(res => setFiles(res.data));
+            await Axios.put(API_URL + "/courses/addFile", req).then(res => {
+                setFiles(res.data);
+                setFileUpdate(!fileUpdate);
+            });
         } catch (error) {
             if (error.response && error.response.status === 400) {
                 console.log(error.response.data);
@@ -22,7 +39,10 @@ const FileDisplay = (props) => {
     const removeFile = async (id) => {
         try {
             const req = { "file_id": id, "section_id": section._id }
-            await Axios.put(API_URL + "/courses/removeFile", req).then(res => setFiles(res.data));
+            await Axios.put(API_URL + "/courses/removeFile", req).then(res => {
+                setFiles(res.data);
+                setFileUpdate(!fileUpdate);
+            });
         } catch (error) {
             if (error.response && error.response.status === 400) {
                 console.log(error.response.data);
@@ -38,7 +58,7 @@ const FileDisplay = (props) => {
         }
         <br></br>
         <h5>Add files </h5>
-        <FileLibrary addFile={(id) => addFile(id)} files={files}></FileLibrary>
+        <FileLibrary files={files} addFile={(id) => addFile(id)} ></FileLibrary>
     </>);
 };
 
