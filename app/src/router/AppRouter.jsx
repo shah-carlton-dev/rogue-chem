@@ -22,61 +22,59 @@ const AppRouter = () => {
             token: 0,
             user: {}
         });
-        const checkToken = async () => {
-            try {
-                let token = localStorage.getItem("auth-token");
-                if (token == null) return;
-                let url = API_URL + "/users/validateToken";
-                return Axios.post(url, null, {
-                    headers: { "auth-token": token }
-                }).then((tokenRes) => {
-                    if (!tokenRes) {
-                        console.log("Error :(");
-                    }
-                    if (tokenRes.data.valid) {
-                        setUserData({
-                            token: tokenRes.data.token,
-                            user: tokenRes.data.user,
-                        });
-                    } else {
-                        setUserData({
-                            token: 0,
-                            user: {}
-                        })
-                        return;
-                    }
-                });
-            } catch (err) {
-                console.log(err);
-            }
-        };
         checkToken();
     }, []);
 
-    return (
-        // userData === {} ? <div className="loader"></div> : will make sexy loading icon
-        <UserContext.Provider value={{ userData, setUserData }} >
-            <BrowserRouter>
-                <Header />
-                <Switch>
-                    {userData.user && Object.keys(userData.user).length > 0 ?
-                        <>
-                            <Route component={Login} path="/login" />
-                            <Route component={Home} path="/home" />
-                            <Route component={FileManagement} path="/file-management" />
-                            <Route component={CourseManagement} path="/course-management" />
-                            <Route component={FileUpload} path="/fileUpload" />
-                            <Route component={VideoUpload} path="/videoUpload" />
-                        </> :
-                        <>
-                            <Route component={Login} path={"/login" | "/home" | "/file-management"} />
-                        </>
-                    }
-                    <Route component={Login} path="/" exact={true} />
-                </Switch>
-            </BrowserRouter>
-        </UserContext.Provider>
+    const checkToken = async () => {
+        try {
+            let token = localStorage.getItem("auth-token");
+            if (token == null) return;
+            let url = API_URL + "/users/validateToken";
+            return Axios.post(url, { "auth-token": token }).then((tokenRes) => {
+                if (!tokenRes) {
+                    console.log("Error :(");
+                }
+                if (tokenRes.data.valid) {
+                    setUserData({
+                        token: tokenRes.data.token,
+                        user: tokenRes.data.user,
+                    });
+                } else {
+                    setUserData({
+                        token: 0,
+                        user: {}
+                    })
+                }
+            });
+        } catch (err) {
+            console.log(err);
+        }
+    };
 
+    return (
+        // userData.token === 0 ? <div className="loader"></div> : <>
+            <UserContext.Provider value={{ userData, setUserData }} >
+                <BrowserRouter>
+                    <Header />
+                    <Switch>
+                        {userData.user && Object.keys(userData.user).length > 0 ?
+                            <>
+                                <Route component={Login} path="/login" />
+                                <Route component={Home} path="/home" />
+                                <Route component={FileManagement} path="/file-management" />
+                                <Route component={CourseManagement} path="/course-management" />
+                                <Route component={FileUpload} path="/fileUpload" />
+                                <Route component={VideoUpload} path="/videoUpload" />
+                            </> :
+                            <>
+                                <Route component={Login} path={"/login" | "/home" | "/file-management"} />
+                            </>
+                        }
+                        <Route component={Login} path="/" exact={true} />
+                    </Switch>
+                </BrowserRouter>
+            </UserContext.Provider>
+        // </>
     );
 };
 
