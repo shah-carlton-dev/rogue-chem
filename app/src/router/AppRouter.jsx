@@ -53,7 +53,7 @@ const AppRouter = () => {
     };
 
     return (
-        // userData.token === 0 ? <div className="loader"></div> : <>
+        userData.token === 0 ? <div className="loader"></div> : <>
             <UserContext.Provider value={{ userData, setUserData }} >
                 <BrowserRouter>
                     <Header />
@@ -76,7 +76,7 @@ const AppRouter = () => {
                     </Switch>
                 </BrowserRouter>
             </UserContext.Provider>
-        // </>
+        </>
     );
 };
 
