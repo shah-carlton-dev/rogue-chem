@@ -20,9 +20,9 @@ Router.post('/adminCreate',
                 username, password, email, fname, lname, courses, messages, admin: true
             });
             await admin.save();
-            res.status(200).send(admin);
+            res.send(admin).status(200);
         } catch (err) {
-            res.status(400).send('Error while creating admin');
+            res.send('Error while creating admin').status(400);
             console.log(err);
         }
     }
@@ -43,9 +43,9 @@ Router.post('/studentCreate',
                 admin: false
             });
             await student.save();
-            res.status(200).send(student);
+            res.send(student).status(200);
         } catch (err) {
-            res.status(400).send('Error while creating student user');
+            res.send('Error while creating student user').status(400);
             console.log(err);
         }
     }
@@ -53,40 +53,36 @@ Router.post('/studentCreate',
 
 Router.post('/validateToken', async (req, res) => {
     try {
-        const token = req.header("auth-token");
-        if (!token) res.send(false);
+        const token = req.body["auth-token"];
+        if (!token) { res.send(false).status(301); return; }
 
         const verified = jwt.verify(token, constants.jwt_pass);
-        if (!verified) res.send(false);
+        if (!verified) { res.send(false).status(302); return; }
 
         let existing;
         await Student.findById(verified.id, (err, user) => {
-            if(err) {
+            if (err) {
                 console.log(err);
-                res.status(400).send("Error finding user");
+                res.send("Error finding user").status(400);
             }
             existing = user;
         });
-        if (!existing) {
+        if (!existing || existing == null) {
             await Admin.findById(verified.id, (err, user) => {
                 if (err) {
                     console.log(err);
-                    res.status(400).send("Error finding admin");
+                    res.send("Error finding account").status(400);
                 }
                 existing = user;
             });
-            if (!existing) {
-                res.status(400).send("Account not found");
-            }
+            if (existing == null) { res.send(false).status(303); return; }
         }
-        if (existing == null) res.send(false);
         res.send({
             valid: true,
             token: token,
             user: existing
-        });
+        }).status(200);
     } catch (err) {
-        res.status(500).send('Error validating token');
         console.log(err);
     }
 })
@@ -98,7 +94,7 @@ Router.post('/login', async (req, res) => {
         await Student.findOne({ username }, (err, user) => {
             if (err) {
                 console.log(err);
-                res.status(400).send("Error finding user");
+                res.send("Error finding user").status(400);
             }
             existing = user;
         });
@@ -106,20 +102,17 @@ Router.post('/login', async (req, res) => {
             await Admin.findOne({ username }, (err, user) => {
                 if (err) {
                     console.log(err);
-                    res.status(401).send("Error finding admin");
+                    res.send("Error finding account").status(401);
                 }
                 existing = user;
             });
-            if (!existing) {
-                res.status(400).send("Account not found");
-            }
         }
         const pass = await bcrypt.compare(password, existing.password);
         if (!pass) {
-            res.status(400).send("Invalid password");
+            res.send("Invalid password").status(400);
         }
         const token = jwt.sign({ id: existing._id }, constants.jwt_pass);
-        res.status(200).send({ existing, token });
+        res.send({ existing, token }).status(200);
     }
     catch (err) {
         res.status(400).send('Error logging in');

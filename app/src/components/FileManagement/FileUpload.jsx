@@ -6,7 +6,7 @@ import download from 'downloadjs';
 import { API_URL } from '../../utils/constants';
 import '../../styles/FileManagement.scss';
 import { useHistory } from 'react-router-dom';
-import { NavLink} from 'react-router-dom';  
+import { NavLink } from 'react-router-dom';
 const FileUpload = (props) => {
   const [file, setFile] = useState(null); // state for storing actual image
   const [previewSrc, setPreviewSrc] = useState(''); // state for storing previewImage
@@ -170,14 +170,16 @@ const FileUpload = (props) => {
 
   return (
     <React.Fragment>
-     <div class="container">
-     <div className="header">
+      <div class="container">
+        <h1>File Upload</h1>
+
+        <div className="header">
           <nav>
-              <NavLink activeClassName="active" to="/fileUpload">
-                  File Upload
+            <NavLink activeClassName="active" to="/fileUpload">
+              File Upload
               </NavLink>
-              <NavLink activeClassName="active" to="/videoUpload">
-                  Video Upload
+            <NavLink activeClassName="active" to="/videoUpload">
+              Video Upload
               </NavLink>
           </nav>
       </div>  
@@ -257,79 +259,74 @@ const FileUpload = (props) => {
               </div>
             ) : (
               <div className="preview-message">
-                <p>No preview available for this file</p>
+                <p>Image preview will be shown here after selection</p>
               </div>
-            )
-          ) : (
-            <div className="preview-message">
-              <p>Image preview will be shown here after selection</p>
-            </div>
-          )}
-        </div>
-        <Button variant="primary" type="submit">
-          Submit
-          </Button>
-      </Form>
-      <div className="files-container">
-        {errorMsgTwo && <p className="errorMsg">{errorMsgTwo}</p>}
-        <table className="files-table">
-          <thead>
-            <tr>
-              <th>Title</th>
-              <th>Description</th>
-              <th>File type</th>
-              <th>Download File</th>
-              <th>Delete File</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filesList.length > 0 ? (
-              filesList.map(
-                ({ _id, title, description, file_path, file_mimetype }) => (
-                  <tr key={_id}>
-                    <td className="file-title">{title}</td>
-                    <td className="file-description">{description}</td>
-                    <td className="file-mimetype">{file_mimetype}</td>
-                    <td>
-                      <a
-                        href="#/"
-                        onClick={() =>
-                          downloadFile(_id, file_path, file_mimetype)
-                        }
-                      >
-                        Download
-                    </a>
-                    </td>
-                    <td>
-                      <a
-                        href="#/"
-                        onClick={(e) =>
-                          deleteOneFile(e, _id)
-                        }
-                      >
-                        Delete
-                    </a>
-                    </td>
-                  </tr>
-                )
-              )
-            ) : (
-              <tr>
-                <td colSpan={5} style={{ fontWeight: '300' }}>
-                  No files found. Please add some.
-              </td>
-              </tr>
             )}
-          </tbody>
-        </table>
-        <Form className="search-form" onSubmit={e => deleteAllFiles(e)}>
-          <Button variant="danger" type="submit">
-            Delete all files
-        </Button>
+          </div>
+          <Button variant="primary" type="submit">
+            Submit
+          </Button>
         </Form>
+        <div className="files-container">
+          {errorMsgTwo && <p className="errorMsg">{errorMsgTwo}</p>}
+          <table className="files-table">
+            <thead>
+              <tr>
+                <th>Title</th>
+                <th>Description</th>
+                <th>File type</th>
+                <th>Download File</th>
+                <th>Delete File</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filesList.length > 0 ? (
+                filesList.map(
+                  ({ _id, title, description, file_path, file_mimetype }) => (
+                    <tr key={_id}>
+                      <td className="file-title">{title}</td>
+                      <td className="file-description">{description}</td>
+                      <td className="file-mimetype">{file_mimetype}</td>
+                      <td>
+                        <a
+                          href="#/"
+                          onClick={() =>
+                            downloadFile(_id, file_path, file_mimetype)
+                          }
+                        >
+                          Download
+                    </a>
+                      </td>
+                      <td>
+                        <a
+                          href="#/"
+                          onClick={(e) =>
+                            deleteOneFile(e, _id)
+                          }
+                        >
+                          Delete
+                    </a>
+                      </td>
+                    </tr>
+                  )
+                )
+              ) : (
+                <tr>
+                  <td colSpan={5} style={{ fontWeight: '300' }}>
+                    No files found. Please add some.
+              </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+          <Form className="search-form" onSubmit={e => deleteAllFiles(e)}>
+            <Button variant="danger" type="submit">
+              Delete all files
+        </Button>
+          </Form>
 
+        </div>
       </div>
-     </div>
     </React.Fragment >
   );
 };

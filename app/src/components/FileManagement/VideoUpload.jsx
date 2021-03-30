@@ -44,14 +44,14 @@ const VideoUpload = (props) => {
     try {
       const { url, title, description } = state;
       if (title.trim() !== '' && description.trim() !== '' && url.trim() !== '') {
-          const formData = {
-            url,
-            title,
-            description,
-            keywords
-          }
-          setErrorMsg('');
-          await axios.post(`${API_URL}/uploadVideo`, formData);
+        const formData = {
+          url,
+          title,
+          description,
+          keywords
+        }
+        setErrorMsg('');
+        await axios.post(`${API_URL}/uploadVideo`, formData);
       } else {
         setErrorMsg('Please enter all the field values.');
       }
@@ -116,14 +116,16 @@ const VideoUpload = (props) => {
 
   return (
     <React.Fragment>
-    <div class="container">
-    <div className="header">
-         <nav>
-             <NavLink activeClassName="active" to="/fileUpload">
-                 File Upload
+      <div class="container">
+        <h1>Video Upload</h1>
+
+        <div className="header">
+          <nav>
+            <NavLink activeClassName="active" to="/fileUpload">
+              File Upload
              </NavLink>
-             <NavLink activeClassName="active" to="/videoUpload">
-                 Video Upload
+            <NavLink activeClassName="active" to="/videoUpload">
+              Video Upload
              </NavLink>
          </nav>
      </div>  
@@ -194,56 +196,56 @@ const VideoUpload = (props) => {
        <Button variant="primary" type="submit">
          Submit
          </Button>
-     </Form>
-     <div className="files-container">
-       {errorMsgTwo && <p className="errorMsg">{errorMsgTwo}</p>}
-       <table className="files-table">
-         <thead>
-           <tr>
-             <th>URL</th>
-             <th>Title</th>
-             <th>Description</th>
-             <th>Delete File</th>
-           </tr>
-         </thead>
-         <tbody>
-           {videosList.length > 0 ? (
-             videosList.map(
-               ({ _id, url, title, description }) => (
-                 <tr key={_id}>
-                   <td className="file-url">{url}</td>
-                   <td className="file-title">{title}</td>
-                   <td className="file-description">{description}</td>
-                   <td>
-                     <a
-                       href="#/"
-                       onClick={(e) =>
-                         deleteOneVideo(e, _id)
-                       }
-                     >
-                       Delete
+        </Form>
+        <div className="files-container">
+          {errorMsgTwo && <p className="errorMsg">{errorMsgTwo}</p>}
+          <table className="files-table">
+            <thead>
+              <tr>
+                <th>URL</th>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Delete File</th>
+              </tr>
+            </thead>
+            <tbody>
+              {videosList.length > 0 ? (
+                videosList.map(
+                  ({ _id, url, title, description }) => (
+                    <tr key={_id}>
+                      <td className="file-url">{url}</td>
+                      <td className="file-title">{title}</td>
+                      <td className="file-description">{description}</td>
+                      <td>
+                        <a
+                          href="#/"
+                          onClick={(e) =>
+                            deleteOneVideo(e, _id)
+                          }
+                        >
+                          Delete
                    </a>
-                   </td>
-                 </tr>
-               )
-             )
-           ) : (
-             <tr>
-               <td colSpan={5} style={{ fontWeight: '300' }}>
-                 No videos found. Please add some.
+                      </td>
+                    </tr>
+                  )
+                )
+              ) : (
+                <tr>
+                  <td colSpan={5} style={{ fontWeight: '300' }}>
+                    No videos found. Please add some.
              </td>
-             </tr>
-           )}
-         </tbody>
-       </table>
-       <Form className="search-form" onSubmit={e => deleteAllVideos(e)}>
-         <Button variant="danger" type="submit">
-           Delete all videos
+                </tr>
+              )}
+            </tbody>
+          </table>
+          <Form className="search-form" onSubmit={e => deleteAllVideos(e)}>
+            <Button variant="danger" type="submit">
+              Delete all videos
        </Button>
-       </Form>
-     </div>
-    </div>
-   </React.Fragment >
+          </Form>
+        </div>
+      </div>
+    </React.Fragment >
   );
 };
 
