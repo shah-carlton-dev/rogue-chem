@@ -127,6 +127,9 @@ const VideoUpload = (props) => {
              </NavLink>
          </nav>
      </div>  
+     <Row>
+       <h1>Video Upload</h1>
+     </Row>
      <Form className="search-form " onSubmit={handleOnSubmit}>
        {errorMsg && <p className="errorMsg">{errorMsg}</p>}
        <Row>

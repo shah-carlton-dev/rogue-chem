@@ -181,6 +181,9 @@ const FileUpload = (props) => {
               </NavLink>
           </nav>
       </div>  
+      <Row>
+        <h1>File Upload</h1>
+      </Row>
       <Form className="search-form " onSubmit={handleOnSubmit}>
         {errorMsg && <p className="errorMsg">{errorMsg}</p>}
         <Row>

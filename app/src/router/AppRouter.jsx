@@ -9,6 +9,7 @@ import UserContext from "../context/UserContext.js";
 import Axios from "axios";
 import FileUpload from '../components/FileManagement/FileUpload';
 import VideoUpload from '../components/FileManagement/VideoUpload';
+import SampleRender from '../components/VideoRender/SampleRender';
 import { API_URL } from '../utils/constants';
 import { useHistory } from "react-router-dom";
 import "../styles/AppRouter.css";
@@ -67,6 +68,7 @@ const AppRouter = () => {
                             <Route component={CourseManagement} path="/course-management" />
                             <Route component={FileUpload} path="/fileUpload" />
                             <Route component={VideoUpload} path="/videoUpload" />
+                            <Route component={SampleRender} path="/sampleRender" />
                         </> :
                         <>
                             <Route component={Login} path={"/login" | "/home" | "/file-management"} />
