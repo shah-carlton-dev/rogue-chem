@@ -12,7 +12,7 @@ const Header = () => {
 	const logout = () => {
 		localStorage.clear();
 		setUserData({
-			token: 0,
+			token: 1,
 			user: {}
 		});
 		history.push("/login");
