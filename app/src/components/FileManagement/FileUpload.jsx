@@ -182,86 +182,86 @@ const FileUpload = (props) => {
               Video Upload
               </NavLink>
           </nav>
-      </div>  
-      <Row>
-        <h1>File Upload</h1>
-      </Row>
-      <Form className="search-form " onSubmit={handleOnSubmit}>
-        {errorMsg && <p className="errorMsg">{errorMsg}</p>}
+        </div>
         <Row>
-          <Col>
-            <Form.Group controlId="title">
-              <Form.Control
-                type="text"
-                name="title"
-                value={state.title || ''}
-                placeholder="Enter title"
-                onChange={handleInputChange}
-              />
-            </Form.Group>
-          </Col>
+          <h1>File Upload</h1>
         </Row>
-        <Row>
-          <Col>
-            <Form.Group controlId="description">
-              <Form.Control
-                type="text"
-                name="description"
-                value={state.description || ''}
-                placeholder="Enter description"
-                onChange={handleInputChange}
-              />
-            </Form.Group>
-          </Col>
-        </Row>
-        <Row>
-          <Col>
-            <Form.Group controlId="keywords">
-              <Form.Control
-                id="keywordInput"
-                type="text"
-                name="keywords"
-                //value={''}
-                placeholder="Type a keyword/phrase"
-                onChange={(e) => handleKeywordInput(e)}
-              />
-            </Form.Group>
-            <ul className="keyword-list">
-              {keywords.map((keywrd, index) => (
-                <li key={index}>{keywrd}<a href="#/" onClick={() => deleteKeyword(index)}>(x)</a></li>
-              ))}
-            </ul>
-            <Button type="submit" className="btn btn-primary mb-2" onClick={(e) => addKeyword(e)}>add keyword</Button>
-          </Col>
-        </Row>
-        <div className="upload-section">
-          <Dropzone
-            onDrop={onDrop}
-            onDragEnter={() => updateBorder('over')}
-            onDragLeave={() => updateBorder('leave')}
-          >
-            {({ getRootProps, getInputProps }) => (
-              <div {...getRootProps({ className: 'drop-zone' })} ref={dropRef}>
-                <input {...getInputProps()} />
-                <p>Drag and drop a file OR click here to select a file</p>
-                {file && (
-                  <div>
-                    <strong>Selected file:</strong> {file.name}
-                  </div>
-                )}
-              </div>
-            )}
-          </Dropzone>
-          {previewSrc ? (
-            isPreviewAvailable ? (
-              <div className="image-preview">
-                <img className="preview-image" src={previewSrc} alt="Preview" />
-              </div>
-            ) : (
-              <div className="preview-message">
-                <p>Image preview will be shown here after selection</p>
-              </div>
-            )}
+        <Form className="search-form " onSubmit={handleOnSubmit}>
+          {errorMsg && <p className="errorMsg">{errorMsg}</p>}
+          <Row>
+            <Col>
+              <Form.Group controlId="title">
+                <Form.Control
+                  type="text"
+                  name="title"
+                  value={state.title || ''}
+                  placeholder="Enter title"
+                  onChange={handleInputChange}
+                />
+              </Form.Group>
+            </Col>
+          </Row>
+          <Row>
+            <Col>
+              <Form.Group controlId="description">
+                <Form.Control
+                  type="text"
+                  name="description"
+                  value={state.description || ''}
+                  placeholder="Enter description"
+                  onChange={handleInputChange}
+                />
+              </Form.Group>
+            </Col>
+          </Row>
+          <Row>
+            <Col>
+              <Form.Group controlId="keywords">
+                <Form.Control
+                  id="keywordInput"
+                  type="text"
+                  name="keywords"
+                  //value={''}
+                  placeholder="Type a keyword/phrase"
+                  onChange={(e) => handleKeywordInput(e)}
+                />
+              </Form.Group>
+              <ul className="keyword-list">
+                {keywords.map((keywrd, index) => (
+                  <li key={index}>{keywrd}<a href="#/" onClick={() => deleteKeyword(index)}>(x)</a></li>
+                ))}
+              </ul>
+              <Button type="submit" className="btn btn-primary mb-2" onClick={(e) => addKeyword(e)}>add keyword</Button>
+            </Col>
+          </Row>
+          <div className="upload-section">
+            <Dropzone
+              onDrop={onDrop}
+              onDragEnter={() => updateBorder('over')}
+              onDragLeave={() => updateBorder('leave')}
+            >
+              {({ getRootProps, getInputProps }) => (
+                <div {...getRootProps({ className: 'drop-zone' })} ref={dropRef}>
+                  <input {...getInputProps()} />
+                  <p>Drag and drop a file OR click here to select a file</p>
+                  {file && (
+                    <div>
+                      <strong>Selected file:</strong> {file.name}
+                    </div>
+                  )}
+                </div>
+              )}
+            </Dropzone>
+            {previewSrc ? (
+              isPreviewAvailable ? (
+                <div className="image-preview">
+                  <img className="preview-image" src={previewSrc} alt="Preview" />
+                </div>
+              ) : (
+                <div className="preview-message">
+                  <p>Image preview will be shown here after selection</p>
+                </div>
+              )):<></>}
           </div>
           <Button variant="primary" type="submit">
             Submit
