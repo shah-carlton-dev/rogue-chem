@@ -42,7 +42,7 @@ const AppRouter = () => {
                     });
                 } else {
                     setUserData({
-                        token: 0,
+                        token: 1,
                         user: {}
                     })
                 }
@@ -53,8 +53,8 @@ const AppRouter = () => {
     };
 
     return (
-        userData.token === 0 ? <div className="loader"></div> : <>
-            <UserContext.Provider value={{ userData, setUserData }} >
+        <UserContext.Provider value={{ userData, setUserData }} >
+            {userData.token === 0 ? <div className="loader"></div> : <>
                 <BrowserRouter>
                     <Header />
                     <Switch>
@@ -75,8 +75,8 @@ const AppRouter = () => {
                         <Route component={Login} path="/" exact={true} />
                     </Switch>
                 </BrowserRouter>
-            </UserContext.Provider>
-        </>
+            </>}
+        </UserContext.Provider>
     );
 };
 
