@@ -20,7 +20,7 @@ const SampleRender = (props) => {
         <>
         <Container>
             <Row>
-                {videos.map(video => <VideoView video={video}/>)}
+                {videos.map(video => <VideoView key={video._id} video={video}/>)}
             </Row>
         </Container>
         </>

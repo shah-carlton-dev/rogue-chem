@@ -1,0 +1,11 @@
+@media (min-width: 576px) {
+    .modal-dialog {
+        max-width: 650px !important;
+        margin: 1.75rem auto;
+        min-width: 80%;
+    }
+}
+
+.center-video {
+    text-align: center;
+}

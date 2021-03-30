@@ -1,22 +1,38 @@
-import React from 'react';
-
-import {Card} from 'react-bootstrap';
+import React, { useState } from 'react';
+import { Modal, Button } from 'react-bootstrap';
+import '../../styles/VideoView.css';
 const VideoView = (props) => {
-    return(
+    const [show, setShow] = useState(false);
+
+    const handleClose = () => setShow(false);
+    const handleShow = () => setShow(true);
+    // const modalStyle = {width: '90vw'};
+    return (
         <>
-        <Card style={{ width: '20vw' }}>
-            <Card.Body>
-                <Card.Title>{props.video.title}</Card.Title>
-                <Card.Text>
-                <iframe src={props.video.url} width="640" height="480" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>
-                <p>{props.video.description}</p>
-                </Card.Text>
-            </Card.Body>
-        </Card>
+            <Button variant="primary" onClick={handleShow}>
+                Open {props.video.title}
+            </Button>
+            <Modal show={show} onHide={handleClose} dialogClassName="modal-dialog">
+                <Modal.Header closeButton>
+                    <Modal.Title>{props.video.title}</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>{props.video.description}</Modal.Body>
+                <div className="center-video">
+                    <iframe src={props.video.url} width="640" height="480" frameorder="0" allow="autoplay; fullscreen; picture-in-picture" allowFullScreen></iframe>
+                </div>
+                <Modal.Footer>
+                    {/* <Button variant="secondary" onClick={handleClose}>
+                    Close
+                </Button>
+                <Button variant="primary" onClick={handleClose}>
+                    Save Changes
+                </Button> */}
+                </Modal.Footer>
+            </Modal>
         </>
     )
-    
-    
+
+
 }
 
 export default VideoView;
