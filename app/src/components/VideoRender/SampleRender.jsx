@@ -6,16 +6,15 @@ import { API_URL } from '../../utils/constants';
 
 const SampleRender = (props) => {
     const [videos, setVideos] =  useState([]);
-
     useEffect( () => {
-        async function fetchData() {
-            const result = await axios.get(`${API_URL}/getAllVideos`);
-            const data = result.data;
-            setVideos(data);
-            console.log(data);
-        }
         fetchData();
     }, [])
+    async function fetchData() {
+        const result = await axios.get(`${API_URL}/getAllVideos`);
+        const data = result.data;
+        setVideos(data);
+        console.log(data);
+    }
 
     return(
         <>

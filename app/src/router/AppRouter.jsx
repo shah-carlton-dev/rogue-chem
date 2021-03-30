@@ -66,6 +66,7 @@ const AppRouter = () => {
                                 <Route component={CourseManagement} path="/course-management" />
                                 <Route component={FileUpload} path="/fileUpload" />
                                 <Route component={VideoUpload} path="/videoUpload" />
+                                <Route component={SampleRender} path="/sampleRender" />
                             </> :
                             <>
                                 <Route component={Login} path={"/login" | "/home" | "/file-management"} />
