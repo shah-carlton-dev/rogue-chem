@@ -19,8 +19,8 @@ const Login = (props) => {
 
     useEffect(() => (userData.user == null || Object.keys(userData.user).length > 0)? history.push("/home") : history.push("/login"), [])
 
-    const handleSubmit = async (event) => {
-        event.preventDefault();
+    const handleSubmit = async (e) => {
+        e.preventDefault();
         const user = { username, password };
         const url = API_URL + "/users/login";
         try {
@@ -33,7 +33,12 @@ const Login = (props) => {
                 history.push('/home');
             });
         } catch (err) {
-            console.log(err);
+            if(err.status!=200) {
+                console.log("bad!");
+            }
+            if (err.response != undefined) {
+                console.log(err.response.data);
+            }
         }
     }
 
