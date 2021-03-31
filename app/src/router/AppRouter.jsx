@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import Home from '../components/Home';
-import Login from '../components/Login/Login';
+import LoginSignup from '../components/Login/LoginSignup';
+import Signup from '../components/Login/LoginSignup';
 import FileManagement from '../components/FileManagement/FileManagement';
 import CourseManagement from '../components/CourseManagement/CourseManagement';
 import Header from '../components/Header';
@@ -15,14 +16,13 @@ import { useHistory } from "react-router-dom";
 import "../styles/AppRouter.css";
 
 const AppRouter = () => {
-    const history = useHistory();
     const [userData, setUserData] = useState({});
 
     useEffect(() => {
-        setUserData({
-            token: 0,
-            user: {}
-        });
+        // setUserData({
+        //     token: 0,
+        //     user: {}
+        // });
         checkToken();
     }, []);
 
@@ -54,28 +54,29 @@ const AppRouter = () => {
 
     return (
         <UserContext.Provider value={{ userData, setUserData }} >
-            {userData.token === 0 ? <div className="loader"></div> : <>
-                <BrowserRouter>
-                    <Header />
-                    <Switch>
-                        {userData.user && Object.keys(userData.user).length > 0 ?
-                            <>
-                                <Route component={Login} path="/login" />
-                                <Route component={Home} path="/home" />
-                                <Route component={FileManagement} path="/file-management" />
-                                <Route component={CourseManagement} path="/course-management" />
-                                <Route component={FileUpload} path="/fileUpload" />
-                                <Route component={VideoUpload} path="/videoUpload" />
-                                <Route component={SampleRender} path="/sampleRender" />
-                            </> :
-                            <>
-                                <Route component={Login} path={"/login" | "/home" | "/file-management"} />
-                            </>
-                        }
-                        <Route component={Login} path="/" exact={true} />
-                    </Switch>
-                </BrowserRouter>
-            </>}
+            {/* {userData.token === 0 ? <div className="loader"></div> : <> */}
+            <BrowserRouter>
+                <Header />
+                <Switch>
+                    {userData.user && Object.keys(userData.user).length > 0 ?
+                        <>
+                            <Route component={LoginSignup} path="/login" />
+                            <Route component={Home} path="/home" />
+                            <Route component={FileManagement} path="/file-management" />
+                            <Route component={CourseManagement} path="/course-management" />
+                            <Route component={FileUpload} path="/fileUpload" />
+                            <Route component={VideoUpload} path="/videoUpload" />
+                            <Route component={SampleRender} path="/sampleRender" />
+                        </> :
+                        <>
+                            <Route component={Signup} path="/signup"/>
+                            <Route component={LoginSignup} path={"/login" | "/home"} />
+                        </>
+                    }
+                    <Route component={LoginSignup} path="/" exact={true} />
+                </Switch>
+            </BrowserRouter>
+            {/* </>} */}
         </UserContext.Provider>
     );
 };

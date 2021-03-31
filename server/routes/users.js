@@ -52,13 +52,13 @@ Router.post('/studentCreate',
 Router.post('/validateToken', async (req, res) => {
     try {
         const token = req.body["auth-token"];
-        if (!token) { return res.send(false).status(301); return; }
+        if (!token) { return res.send(false).status(301); }
 
         const verified = jwt.verify(token, constants.jwt_pass);
-        if (!verified) { return res.send(false).status(302); return; }
+        if (!verified) { return res.send(false).status(302); }
 
         let existing;
-        await Student.findById(verified.id, (err, user) => {
+        await Student.findById(verified.id, "-password -createdAt -updatedAt -__v", (err, user) => {
             if (err) {
                 console.log(err);
                 return res.send("Error finding user").status(400);
