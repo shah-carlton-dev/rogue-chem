@@ -3,8 +3,15 @@ const { users_db } = require('../db/db');
 
 const adminSchema = mongoose.Schema(
     {
-        username: String,
-        password: String,
+        username: {
+            type: String,
+            required: true,
+        },
+        password: {
+            type: String,
+            required: true,
+            select: false
+        },
         email: String,
         fname: String,
         lname: String,

@@ -6,17 +6,13 @@ import FileList from "./FileList.jsx"
 import { API_URL } from "../../utils/constants.js";
 
 const FileDisplay = (props) => {
-    const { course, section } = props;
+    const { section } = props;
     const [files, setFiles] = useState([]);
     const [fileUpdate, setFileUpdate] = useState(false);
 
     useEffect(() => {
         getFiles();
     }, [fileUpdate]);
-
-    useEffect(() => {
-        getFiles();
-    }, []);
 
     const getFiles = async () => {
         await Axios.get(API_URL + "/courses/files/" + section._id).then(res => setFiles(res.data));

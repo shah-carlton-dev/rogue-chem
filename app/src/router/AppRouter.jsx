@@ -12,7 +12,6 @@ import FileUpload from '../components/FileManagement/FileUpload';
 import VideoUpload from '../components/FileManagement/VideoUpload';
 import SampleRender from '../components/VideoRender/SampleRender';
 import { API_URL } from '../utils/constants';
-import { useHistory } from "react-router-dom";
 import "../styles/AppRouter.css";
 
 const AppRouter = () => {

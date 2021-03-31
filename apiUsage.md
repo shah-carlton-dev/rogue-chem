@@ -112,13 +112,13 @@ curl --request GET \
   --header 'Content-Type: application/json'
 ```
 
-### PUT /courses/addSection
-Adds a section to the sections array in a course.
+### PUT /courses/createSection
+Creates a new section and adds it to the sections array in a course.
 
 Example: 
 ```
 curl --request PUT \
-  --url http://localhost:3030/courses/addSection \
+  --url http://localhost:3030/courses/createSection \
   --header 'Content-Type: application/json' \
   --data '{
 	"course_id":"",
@@ -150,6 +150,15 @@ Adds a file to the files array in a section. Uses the id to create a reference a
 
 Example: 
 ```
+```
+
+### GET /courses/allSections
+Returns all sections in the DB. Used for adding an already-built section to a course.
+
+Example: 
+```
+curl --request GET \
+  --url http://localhost:3030/courses/allSections \
 ```
 
 ## Users

@@ -3,7 +3,7 @@ import { Form, Container, Button } from "react-bootstrap";
 import "../../styles/Login.scss";
 
 const Login = (props) => {
-    const { handleLogin, setSignup } = props.things;
+    const { handleLogin, setSignup, signupSuccess } = props.things;
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
 
@@ -12,9 +12,13 @@ const Login = (props) => {
     }
 
     return (
-        <>
+        < Container className="login pt-2 col-md-6">
             <h3 className="text-center pt-2">Sign in to your account here</h3>
-
+            {
+                signupSuccess ? (
+                    <p>Successfully created an account! Log in using your credentials.</p>
+                ) : (<></>)
+            }
             <Form onSubmit={(e) => handleLogin(e, {username, password})} className="pt-3">
                 <Form.Group size="lg" controlId="username">
                     <Form.Label>Username</Form.Label>
@@ -38,15 +42,16 @@ const Login = (props) => {
                     Sign in
                             </Button>
             </Form>
+            <br/>
             <div className="donthaveanaccount">
                 {"Don't have an account? "}
                 <span onClick={() => setSignup(true)}>
                     <a href="#">
-                        Sign up.
+                        Sign up here.
                                 </a>
                 </span>
             </div>
-        </>
+        </Container>
     )
 }
 

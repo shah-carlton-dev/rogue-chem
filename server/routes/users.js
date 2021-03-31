@@ -30,21 +30,33 @@ Router.post('/adminCreate',
 Router.post('/studentCreate',
     async (req, res) => {
         try {
+            let existing;
             let { username, password, email, fname, lname } = req.body;
-            let salt = await bcrypt.genSalt();
-            password = await bcrypt.hash(password, salt);
-            const student = new Student({
-                username,
-                password,
-                email,
-                fname,
-                lname,
-                admin: false
+            // check username, email are unique
+            await Student.exists({ "username": username }).then(async exists => {
+                existing = exists;
+                if (exists) return res.status(400).send("Username already exists. Enter another one.");
+                else await Student.exists({ "email": email }).then(exists => {
+                    existing = exists;
+                    if (exists) return res.status(400).send("Email already in use. Enter another one.");
+                });
             });
-            await student.save();
-            return res.send(student).status(200);
+            if (!existing) {
+                let salt = await bcrypt.genSalt();
+                password = await bcrypt.hash(password, salt);
+                const student = new Student({
+                    username,
+                    password,
+                    email,
+                    fname,
+                    lname,
+                    admin: false
+                });
+                await student.save();
+                return res.send(student).status(200);
+            }
         } catch (err) {
-            return res.send('Error while creating student user').status(400);
+            return res.send('Error while creating new user').status(400);
         }
     }
 );
@@ -58,13 +70,13 @@ Router.post('/validateToken', async (req, res) => {
         if (!verified) { return res.send(false).status(302); }
 
         let existing;
-        await Student.findById(verified.id, "-password -createdAt -updatedAt -__v", (err, user) => {
+        await Student.findById(verified.id, (err, user) => {
             if (err) {
                 console.log(err);
                 return res.send("Error finding user").status(400);
             }
             existing = user;
-        });
+        }).select("-password");
         if (!existing || existing == null) {
             await Admin.findById(verified.id, (err, user) => {
                 if (err) {
@@ -72,7 +84,7 @@ Router.post('/validateToken', async (req, res) => {
                     return res.send("Error finding account").status(400);
                 }
                 existing = user;
-            });
+            }).select("-password");
             if (existing == null) { return res.send(false).status(303); }
         }
         return res.send({
@@ -103,19 +115,18 @@ Router.post('/login', async (req, res) => {
                     return res.send("Error finding account").status(400);
                 }
                 existing = user;
-            });
+            }).select("+password -createdAt -updatedAt");
         }
-        let pass;
-        try {
-            pass = await bcrypt.compare(password, existing.password).then(a => null, (a) => console.log("poo"));
-        } catch (e) {
-            return res.send('Invalid password. Nice try, bot.').status(400);
-        }
-        const token = jwt.sign({ id: existing._id }, constants.jwt_pass);
-        return res.send({ existing, token }).status(200);
+        const pass = await bcrypt.compare(password, existing.password).then(a => {
+            if (!pass) return res.status(400).send('Invalid password. Nice try, bot.');
+            else {
+                const token = jwt.sign({ id: existing._id }, constants.jwt_pass);
+                return res.send({ existing, token }).status(200);
+            }
+        });
     }
     catch (err) {
-        return res.send("Error logging in - try again").status(400);
+        return res.send("Error logging in. Please try again.").status(400);
     }
 });
 

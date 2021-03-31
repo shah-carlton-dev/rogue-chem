@@ -1,9 +1,8 @@
 import React, { useEffect, useState, useContext } from "react";
-import { Form, Container, Button } from "react-bootstrap";
+import { Form, Col, Button, Container } from "react-bootstrap";
 import "../../styles/Login.scss";
 
 const Signup = (props) => {
-    const [emailErr, setEmailErr] = useState("");
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [passwordC, setPasswordC] = useState("");
@@ -20,12 +19,10 @@ const Signup = (props) => {
         let isValid = true;
         if (email === "") {
             isValid = false;
-            // setEmailErr("Enter an email address");
         } else if (typeof email !== "undefined") {
             const pattern = new RegExp(/^(("[\w-\s]+")|([\w-]+(?:\.[\w-]+)*)|("[\w-\s]+")([\w-]+(?:\.[\w-]+)*))(@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$)|(@\[?((25[0-5]\.|2[0-4][0-9]\.|1[0-9]{2}\.|[0-9]{1,2}\.))((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\.){2}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\]?$)/i);
             if (!pattern.test(email)) {
                 isValid = false;
-                // setEmailErr("Please enter valid email address.");
             }
         }
         return isValid;
@@ -36,9 +33,10 @@ const Signup = (props) => {
     }
 
     return (
-        <>
+        <Container className="signup pt-2 pb-5 col-md-8">
             <Button variant="link" onClick={() => setSignup(false)}>back to login</Button>
             <h3 className="text-center pt-2">Create an account here</h3>
+            <p className="text-center">Making an account here does not give you access to a Rogue Chem course. You'll need to purchase access on the main website at <a href="https://www.roguechem.com" target="_blank" rel="noreferrer">roguechem.com </a>. You can then enter your access code and begin learning!</p>
             <Form onSubmit={(e) => handleSignup(e, { username, password, email, fname, lname })} className="pt-3">
                 <h5>Account Info</h5>
                 <Form.Group size="lg" controlId="username">
@@ -79,30 +77,34 @@ const Signup = (props) => {
                     />
                 </Form.Group>
                 <Form.Row>
-                    <Form.Group className="flname" size="lg" controlId="password">
-                        <Form.Label>First name</Form.Label>
-                        <Form.Control
-                            type="text"
-                            autoComplete="current-password"
-                            value={fname}
-                            onChange={(e) => setFname(e.target.value)}
-                        />
-                    </Form.Group>
-                    <Form.Group className="flname" size="lg" controlId="passwordConf">
-                        <Form.Label>Last name</Form.Label>
-                        <Form.Control
-                            type="text"
-                            autoComplete="current-password"
-                            value={lname}
-                            onChange={(e) => setLname(e.target.value)}
-                        />
-                    </Form.Group>
+                    <Col>
+                        <Form.Group className="flname" size="lg" controlId="password">
+                            <Form.Label>First name</Form.Label>
+                            <Form.Control
+                                type="text"
+                                autoComplete="current-password"
+                                value={fname}
+                                onChange={(e) => setFname(e.target.value)}
+                            />
+                        </Form.Group>
+                    </Col>
+                    <Col>
+                        <Form.Group className="flname" size="lg" controlId="passwordConf">
+                            <Form.Label>Last name</Form.Label>
+                            <Form.Control
+                                type="text"
+                                autoComplete="current-password"
+                                value={lname}
+                                onChange={(e) => setLname(e.target.value)}
+                            />
+                        </Form.Group>
+                    </Col>
                 </Form.Row>
                 <Button block size="md" variant="outline-dark" type="submit" disabled={!validateForm()}>
                     Create account
                             </Button>
             </Form>
-        </>
+        </Container>
     )
 }
 

@@ -12,6 +12,7 @@ const LoginSignup = (props) => {
     const history = useHistory();
     const { userData, setUserData } = useContext(UserContext);
     const [signup, setSignup] = useState(false);
+    const [signupSuccess, setSignupSuccess] = useState(false);
 
     useEffect(() => {
         (userData.user !== null || Object.keys(userData.user).length > 0) ?
@@ -34,7 +35,7 @@ const LoginSignup = (props) => {
             });
         } catch (err) {
             if (err.response != undefined) {
-                console.log(err.response.data);
+                alert(err.response.data);
             }
         }
     }
@@ -45,22 +46,19 @@ const LoginSignup = (props) => {
         const url = API_URL + "/users/studentCreate";
         try {
             await Axios.post(url, user).then((res) => {
-                // setUserData({
-                //     token: res.data.token,
-                //     user: res.data.existing
-                // });
-                console.log(res);
+                setSignupSuccess(true);
                 setSignup(false);
             });
         } catch (err) {
             if (err.response != undefined) {
-                console.log(err.response.data);
+                alert(err.response.data);
+                // set up err handling based on index of email or username to show on front
             }
         }
     }
 
     const loginProps = {
-        handleLogin, setSignup
+        handleLogin, setSignup, signupSuccess
     }
 
     const signupProps = {
@@ -69,16 +67,13 @@ const LoginSignup = (props) => {
 
     return (
         <>
-            <Container className="login pt-2 col-md-6">
-                {
-                    signup ? <>
-                        <Signup things={signupProps}></Signup>
-                    </> : <>
-                        <Login things={loginProps}></Login>
-                    </>
-                }
-
-            </Container>
+            {
+                signup ? <>
+                    <Signup things={signupProps}></Signup>
+                </> : <>
+                    <Login things={loginProps}></Login>
+                </>
+            }
         </>
     )
 };
