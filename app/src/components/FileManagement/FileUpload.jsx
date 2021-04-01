@@ -169,7 +169,7 @@ const FileUpload = (props) => {
 
   return (
     <React.Fragment>
-      <div class="container">
+      <div className="container">
         <h1>File Upload</h1>
 
         <div className="header">

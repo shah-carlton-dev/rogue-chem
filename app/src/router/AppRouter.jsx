@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
-import Home from '../components/Home';
+import Home from '../components/Dashboard/Home';
 import LoginSignup from '../components/Login/LoginSignup';
 import Signup from '../components/Login/LoginSignup';
 import FileManagement from '../components/FileManagement/FileManagement';
@@ -61,8 +61,8 @@ const AppRouter = () => {
                         <>
                             <Route component={LoginSignup} path="/login" />
                             <Route component={Home} path="/home" />
-                            <Route component={FileManagement} path="/file-management" />
-                            <Route component={CourseManagement} path="/course-management" />
+                            <Route component={FileManagement} path="/management/files" />
+                            <Route component={CourseManagement} path="/management/courses" />
                             <Route component={FileUpload} path="/fileUpload" />
                             <Route component={VideoUpload} path="/videoUpload" />
                             <Route component={SampleRender} path="/sampleRender" />

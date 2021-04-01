@@ -20,7 +20,7 @@ const SectionsList = (props) => {
                 {
                     filterSections().length === 0 ? (
                         <Col className="text-center mt-3">
-                            <p className="italicize">No folders yet. You can make one!</p>
+                            <p className="italicize">No folders yet. You can make one in the other tab!</p>
                         </Col>
                     ) :
                         filterSections().map(section => (
@@ -28,7 +28,7 @@ const SectionsList = (props) => {
                                 <Card className="my-2">
                                     <Card.Body>
                                         <Card.Title>{section.name}</Card.Title>
-                                        <Card.Subtitle>{section.description}</Card.Subtitle>
+                                        <Card.Subtitle className="card-folder-description">{section.description}</Card.Subtitle>
                                     </Card.Body>
                                     <Card.Footer className="text-muted">
                                         <Card.Link href="#" onClick={() => handler(section._id)}>add to course</Card.Link>

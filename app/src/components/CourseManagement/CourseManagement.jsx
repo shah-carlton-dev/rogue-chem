@@ -166,7 +166,7 @@ const CourseManagement = (props) => {
                     <Button variant="link" onClick={backToCourses}>back to courses</Button> / <Button variant="link" onClick={() => setShowCreateSection(true)}>add a core folder</Button>
                     <h4 className="">{activeCourse.name + " / "}Core Folders</h4>
                     <hr/>
-                    <p>Be careful deleting folders. The folder will be deleted across all courses. Use the remove button to unassociate it from the current course.</p>
+                    <p>Be careful deleting folders - it will be permanently deleted across all courses. Use the remove button to unassociate it from the current course.</p>
                     <Row>
                         {sections.length === 0 ? <Col className="text-center mt-5"><p className="italicize">No existing core folders. Go ahead and create one!</p> </Col> : sections.map(s => <Col className="py-2" key={s._id} xs={4}><SectionBlock section={s} clickHandler={showFiles} deleteHandler={deleteSection} removeHandler={removeSection} /></Col>)}
                     </Row> </> :

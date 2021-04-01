@@ -26,8 +26,8 @@ const Header = () => {
 				<Nav.Link as={Link} to="/home"> Home </Nav.Link>
 				{userData && userData.user && userData.user.admin
 					? <>
-						<Nav.Link as={Link} to="/file-management">File Management</Nav.Link>
-						<Nav.Link as={Link} to="/course-management">Course Management</Nav.Link>
+						<Nav.Link as={Link} to="/management/files">File Management</Nav.Link>
+						<Nav.Link as={Link} to="/management/courses">Course Management</Nav.Link>
 						<Nav.Link as={Link} to="/sampleRender"> Sample Render </Nav.Link>
 					</>
 					: <></>

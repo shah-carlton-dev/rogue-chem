@@ -42,12 +42,12 @@ const SectionCreateModal = (props) => {
                 <Modal.Title>Add a Core Folder</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                <Nav variant="tabs" defaultActiveKey="#" className="mb-4">
+                <Nav fill variant="tabs" defaultActiveKey="#" className="mb-4">
                     <Nav.Item>
-                        <Nav.Link onClick={() => { showAdd(true) }}>Add existing folder</Nav.Link>
+                        <Nav.Link href="#" onClick={() => { showAdd(true) }}>Add existing folder</Nav.Link>
                     </Nav.Item>
                     <Nav.Item>
-                        <Nav.Link onClick={() => { showAdd(false) }}>Create new folder</Nav.Link>
+                        <Nav.Link eventKey="create" onClick={() => { showAdd(false) }}>Create new folder</Nav.Link>
                     </Nav.Item>
                 </Nav>
                 {
