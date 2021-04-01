@@ -126,7 +126,7 @@ Router.post('/login', async (req, res) => {
                     if (err) return res.send("Error finding user").status(400);
                     else existing = user;
                 }).then(async existing => {
-                    if (existing === null) return res.status(400).send("User not found.");
+                    if (existing === null) return res.status(400).send("User not found. Check that the username is correct.");
                     await bcrypt.compare(password, existing.password).then(resp => {
                         if (!resp) return res.status(400).send('Invalid password. Nice try, bot.');
                         else {
