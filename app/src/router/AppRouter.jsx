@@ -18,10 +18,10 @@ const AppRouter = () => {
     const [userData, setUserData] = useState({});
 
     useEffect(() => {
-        // setUserData({
-        //     token: 0,
-        //     user: {}
-        // });
+        setUserData({
+            token: 0,
+            user: {}
+        });
         checkToken();
     }, []);
 
@@ -53,7 +53,7 @@ const AppRouter = () => {
 
     return (
         <UserContext.Provider value={{ userData, setUserData }} >
-            {/* {userData.token === 0 ? <div className="loader"></div> : <> */}
+            {userData.token === 0 ? <div className="loader"></div> : <>
             <BrowserRouter>
                 <Header />
                 <Switch>
@@ -75,7 +75,7 @@ const AppRouter = () => {
                     <Route component={LoginSignup} path="/" exact={true} />
                 </Switch>
             </BrowserRouter>
-            {/* </>} */}
+            </>}
         </UserContext.Provider>
     );
 };

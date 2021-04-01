@@ -1,0 +1,24 @@
+.donthaveanaccount {
+    text-align: center;
+}
+
+.loginpage-messages {
+    height: 8vh;
+    position: relative;
+    text-align: center;
+}
+
+.loginerror {
+    position: absolute;
+    bottom: 0;
+    right: 20%;
+    left: 20%;
+    color: #fb1f4b;
+}
+
+.newuser-message {
+    position: absolute;
+    bottom: 0;
+    right: 10%;
+    left: 10%;
+}

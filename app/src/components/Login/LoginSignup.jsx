@@ -1,9 +1,8 @@
 import React, { useEffect, useState, useContext } from "react";
-import { Form, Container, Button } from "react-bootstrap";
-import "../../styles/Login.scss";
+import "../../styles/LoginSignup.css";
 import Axios from "axios";
 import UserContext from '../../context/UserContext.js';
-import { useHistory, Link } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { API_URL } from '../../utils/constants';
 import Login from "./Login.jsx";
 import Signup from "./Signup.jsx";
@@ -13,11 +12,17 @@ const LoginSignup = (props) => {
     const { userData, setUserData } = useContext(UserContext);
     const [signup, setSignup] = useState(false);
     const [signupSuccess, setSignupSuccess] = useState(false);
+    const [loginError, setLoginError] = useState("");
+
 
     useEffect(() => {
         (userData.user !== null || Object.keys(userData.user).length > 0) ?
             history.push("/home") : history.push("/login")
     }, [])
+
+    useEffect(() => {
+        setLoginError("");
+    },[signup]);
 
     const handleLogin = async (e, loginInfo) => {
         e.preventDefault();
@@ -25,7 +30,7 @@ const LoginSignup = (props) => {
         const url = API_URL + "/users/login";
         try {
             await Axios.post(url, user).then((res) => {
-                console.log(res);
+                delete res.data.existing.password;
                 setUserData({
                     token: res.data.token,
                     user: res.data.existing
@@ -35,7 +40,7 @@ const LoginSignup = (props) => {
             });
         } catch (err) {
             if (err.response != undefined) {
-                alert(err.response.data);
+                setLoginError(err.response.data);
             }
         }
     }
@@ -58,7 +63,7 @@ const LoginSignup = (props) => {
     }
 
     const loginProps = {
-        handleLogin, setSignup, signupSuccess
+        handleLogin, setSignup, signupSuccess, loginError
     }
 
     const signupProps = {

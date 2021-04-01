@@ -150,6 +150,7 @@ Router.put('/addFile', async (req, res) => {
                 res.send(f.files).status(304);
             })
         );
+
     } catch (err) {
         res.status(400).send("Error adding file to folder. Try again later");
     }
@@ -171,11 +172,27 @@ Router.put('/removeFile', async (req, res) => {
 Router.put('/removeSection', async (req, res) => {
     try {
         const { section_id, course_id } = req.body;
+        let sections;
         await Course.findByIdAndUpdate(mongoose.Types.ObjectId(course_id), { "$pull": { "sections": mongoose.Types.ObjectId(section_id) } }).then(async () =>
-            await Course.findById(mongoose.Types.ObjectId(course_id)).then(c => {
-                res.send(c.sections).status(304);
+            await Course.findById(mongoose.Types.ObjectId(course_id)).then(async c => {
+                sections = c.sections;
+                let sectionList = [];
+                try {
+                    if (sections.length === 0) res.send(sectionList).status(304);
+                    await sections.forEach(async (s_id) => {
+                        await Section.findById(mongoose.Types.ObjectId(s_id)).then((sec) => {
+                            sectionList.push(sec);
+                            if (sections.length === sectionList.length) {
+                                return res.send(sectionList).status(304);
+                            }
+                        })
+                    });
+                } catch (err) {
+                    res.status(400).send("Error collecting sections for course");
+                }
             })
         );
+
     } catch (err) {
         res.status(400).send("Error removing folder from course. Try again later");
     }
@@ -184,11 +201,42 @@ Router.put('/removeSection', async (req, res) => {
 Router.put('/addSection', async (req, res) => {
     try {
         const { section_id, course_id } = req.body;
+        let sections;
         await Course.findByIdAndUpdate(mongoose.Types.ObjectId(course_id), { "$push": { "sections": mongoose.Types.ObjectId(section_id) } }).then(async () =>
-            await Course.findById(mongoose.Types.ObjectId(course_id)).then(c => {
-                res.send(c.sections).status(304);
+            await Course.findById(mongoose.Types.ObjectId(course_id)).then(async c => {
+                sections = c.sections;
+                let sectionList = [];
+                try {
+                    if (sections.length === 0) res.send(sectionList).status(304);
+                    await sections.forEach(async (s_id) => {
+                        await Section.findById(mongoose.Types.ObjectId(s_id)).then((sec) => {
+                            sectionList.push(sec);
+                            if (sections.length === sectionList.length) {
+                                return res.send(sectionList).status(304);
+                            }
+                        })
+                    });
+                } catch (err) {
+                    res.status(400).send("Error collecting sections for course");
+                }
             })
         );
+        let sectionList = [];
+        try {
+            if (sections.length === 0) res.send(sectionList).status(304);
+            await sections.forEach(async (s_id) => {
+                await Section.findById(mongoose.Types.ObjectId(s_id)).then((sec) => {
+                    sectionList.push(sec);
+                    if (sections.length === sectionList.length) {
+                        return res.send(sectionList).status(304);
+                    }
+                    console.log(sectionList)
+                })
+            });
+        } catch (err) {
+            res.status(400).send("Error collecting sections for course");
+        }
+
     } catch (err) {
         res.status(400).send("Error adding folder to course. Try again later");
     }

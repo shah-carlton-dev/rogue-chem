@@ -82,8 +82,8 @@ const FileLibrary = (props) => {
 							)
 						)
 					) : (
-						<tr>
-							<td colSpan={5}> No new files found. Add files in the file management tab.</td>
+						<tr className="text-center">
+							<td className="italicize" colSpan={5}> No new files found. Add files in the File Management tab.</td>
 						</tr>
 					)}
 				</tbody>

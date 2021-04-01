@@ -1,9 +1,9 @@
 import React, { useEffect, useState, useContext } from "react";
 import { Form, Container, Button } from "react-bootstrap";
-import "../../styles/Login.scss";
+import "../../styles/LoginSignup.css";
 
 const Login = (props) => {
-    const { handleLogin, setSignup, signupSuccess } = props.things;
+    const { handleLogin, setSignup, signupSuccess, loginError } = props.things;
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
 
@@ -14,12 +14,17 @@ const Login = (props) => {
     return (
         < Container className="login pt-2 col-md-6">
             <h3 className="text-center pt-2">Sign in to your account here</h3>
-            {
-                signupSuccess ? (
-                    <p>Successfully created an account! Log in using your credentials.</p>
-                ) : (<></>)
-            }
-            <Form onSubmit={(e) => handleLogin(e, {username, password})} className="pt-3">
+            <div className="loginpage-messages">
+                {loginError === "" ? (signupSuccess ? (
+                    <p className="newuser-message italicize">Successfully created an account! Log in using your credentials.</p>
+                ) : (<></>)) : (
+                    <div className="text-center">
+                        <p className="loginerror italicize">{loginError}</p>
+                    </div>
+                )
+                }
+            </div>
+            <Form onSubmit={(e) => handleLogin(e, { username, password })} className="pt-3">
                 <Form.Group size="lg" controlId="username">
                     <Form.Label>Username</Form.Label>
                     <Form.Control
@@ -40,9 +45,9 @@ const Login = (props) => {
                 </Form.Group>
                 <Button block size="md" variant="outline-dark" type="submit" disabled={!validateForm()}>
                     Sign in
-                            </Button>
+                </Button>
             </Form>
-            <br/>
+            <br />
             <div className="donthaveanaccount">
                 {"Don't have an account? "}
                 <span onClick={() => setSignup(true)}>
@@ -51,7 +56,7 @@ const Login = (props) => {
                                 </a>
                 </span>
             </div>
-        </Container>
+        </Container >
     )
 }
 

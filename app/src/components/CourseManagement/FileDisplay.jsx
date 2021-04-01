@@ -49,10 +49,10 @@ const FileDisplay = (props) => {
     return (<>
         <h5>Existing files </h5>
         { files.length === 0
-            ? <p> No existing files in this folder </p>
+            ? <div className="text-center my-3"><p className="italicize"> No existing files in this folder. Add them from below. </p></div>
             : <FileList files={files} removeFile={(id) => removeFile(id)}></FileList>
         }
-        <br></br>
+        <hr/>
         <h5>Add files </h5>
         <FileLibrary files={files} addFile={(id) => addFile(id)} ></FileLibrary>
     </>);

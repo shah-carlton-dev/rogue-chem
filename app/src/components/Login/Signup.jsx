@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext } from "react";
 import { Form, Col, Button, Container } from "react-bootstrap";
-import "../../styles/Login.scss";
+import "../../styles/LoginSignup.css";
 
 const Signup = (props) => {
     const [username, setUsername] = useState("");

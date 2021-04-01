@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { Modal, Button, Form } from "react-bootstrap";
+import { Modal, Button, Form, Nav } from "react-bootstrap";
 import Axios from "axios";
 import { API_URL } from '../../utils/constants';
 import SectionsList from "./SectionsList.jsx";
+import { NavLink } from "react-router-dom";
 
 const SectionCreateModal = (props) => {
-    let { handleClose, course, defaultName, defaultDescription, addHandler } = props;
+    let { handleClose, sections, defaultName, defaultDescription, addHandler } = props;
     defaultName = (defaultName === undefined ? "" : defaultName);
     defaultDescription = (defaultDescription === undefined ? "" : defaultDescription);
     const [name, setName] = useState(defaultName);
@@ -18,30 +19,41 @@ const SectionCreateModal = (props) => {
         getAllSections();
     }, [useExisting])
 
+    useEffect(() => {
+        setUseExisting(true);
+    }, [])
+
     const getAllSections = async () => {
         const url = API_URL + "/courses/allSections";
-        Axios.get(url).then(res => setAllSections(res.data));
+        Axios.get(url).then(res => {
+            setAllSections(res.data);
+            setUpdateSections(!updateSections);
+        });
     }
+
+    const showAdd = (bool) => {
+        setUseExisting(bool);
+    }
+
 
     return (
         <>
             <Modal.Header>
-                <Modal.Title>Create Core Folder</Modal.Title>
+                <Modal.Title>Add a Core Folder</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                {
-                    useExisting ? (
-                        <Button variant="link" onClick={() => { setUseExisting(false) }}>back to create new folder</Button>
-                    ) : (
-                        <Button variant="link" onClick={() => { setUseExisting(true) }}>add existing folder</Button>
-                    )
-                }
-
+                <Nav variant="tabs" defaultActiveKey="#" className="mb-4">
+                    <Nav.Item>
+                        <Nav.Link onClick={() => { showAdd(true) }}>Add existing folder</Nav.Link>
+                    </Nav.Item>
+                    <Nav.Item>
+                        <Nav.Link onClick={() => { showAdd(false) }}>Create new folder</Nav.Link>
+                    </Nav.Item>
+                </Nav>
                 {
                     useExisting ? (<>
                         <Form>
-                            <SectionsList sections={allSections} handler={addHandler} course={course}></SectionsList>
-
+                            <SectionsList allSections={allSections} handler={addHandler} sections={sections}></SectionsList>
                         </Form>
                     </>) : (<>
                         <Form>
