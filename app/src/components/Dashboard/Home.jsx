@@ -9,25 +9,21 @@ const Home = (props) => {
 
     return (
         <div className="home-wrapper">
-            {/* <Container className="ml-0 mr-0 p-0"> */}
-            <Row className="top-nav">
-                <Col>
-                   <pre>Welcome, {userData.user.fname}         also will have the dashboard nav items here</pre>
-
-                    </Col>
-            </Row>
             <Row className="fill-homepage">
                 <Col xs={2} className="ml-2 sidebar">
                     <Sidebar />
                 </Col>
                 <Col>
-                    <p className="text-center"></p>
-
+                    <Row className="top-nav">
+                        <Col xs={3}>
+                            <p>Welcome, {userData.user.fname}</p>
+                        </Col>
+                        <Col>
+                            <p>dashboard nav links, search, etc will be here</p>
+                        </Col>
+                    </Row>
                 </Col>
             </Row>
-
-
-            {/* </Container> */}
         </div>
     );
 };

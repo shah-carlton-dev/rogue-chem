@@ -18,7 +18,7 @@ const VideoView = (props) => {
                 </Modal.Header>
                 <Modal.Body>{props.video.description}</Modal.Body>
                 <div className="center-video">
-                    <iframe src={props.video.url} width="640" height="480" frameorder="0" allow="autoplay; fullscreen; picture-in-picture" allowFullScreen></iframe>
+                    <iframe title={props.video.title} src={props.video.url} width="640" height="480" frameorder="0" allow="autoplay; fullscreen; picture-in-picture" allowFullScreen></iframe>
                 </div>
                 <Modal.Footer>
                     {/* <Button variant="secondary" onClick={handleClose}>

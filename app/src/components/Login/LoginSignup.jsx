@@ -39,7 +39,7 @@ const LoginSignup = (props) => {
                 history.push('/home');
             });
         } catch (err) {
-            if (err.response != undefined) {
+            if (err.response !== undefined) {
                 setLoginError(err.response.data);
             }
         }
@@ -55,7 +55,7 @@ const LoginSignup = (props) => {
                 setSignup(false);
             });
         } catch (err) {
-            if (err.response != undefined) {
+            if (err.response !== undefined) {
                 alert(err.response.data);
                 // set up err handling based on index of email or username to show on front
             }
