@@ -4,8 +4,12 @@ import axios from 'axios';
 import download from 'downloadjs';
 import { API_URL } from '../../utils/constants';
 import '../../styles/FileManagement.scss';
+import { useHistory } from "react-router-dom";
 
 const VideoUpload = (props) => {
+  const history = useHistory();
+  sessionStorage.clear();
+  sessionStorage.setItem("last-route", history.location.pathname);
 
   const [state, setState] = useState({
     utl: '',

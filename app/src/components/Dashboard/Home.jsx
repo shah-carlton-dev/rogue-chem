@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import UserContext from "../../context/UserContext.js";
-import { Container, Row, Col, Card, Form } from "react-bootstrap";
+import { Row, Col } from "react-bootstrap";
 import { Switch, Route } from 'react-router-dom';
 import Sidebar from "./Sidebar.jsx"
 import "../../styles/Home.css";
@@ -13,6 +13,7 @@ import ProfileManagement from '../UserDash/ProfileManagement.jsx';
 import UserProgress from '../UserDash/UserProgress.jsx';
 import AdminProgress from '../AdminDash/AdminProgress.jsx';
 import AdminStats from '../AdminDash/AdminStats.jsx';
+import Messages from './Messages.jsx';
 
 const Home = (props) => {
     const { userData, setUserData } = useContext(UserContext);
@@ -34,6 +35,7 @@ const Home = (props) => {
                     </Row>
                     <Switch>
                         <Route component={Courses} exact path="/home" />
+                        <Route component={Messages} path="/home/messages" />
                         {userData.user.admin ?
                             <> {/* admin routes */}
                                 <Route component={CourseManagement} path="/home/management/courses" />

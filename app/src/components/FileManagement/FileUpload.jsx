@@ -5,8 +5,12 @@ import axios from 'axios';
 import download from 'downloadjs';
 import { API_URL } from '../../utils/constants';
 import '../../styles/FileManagement.scss';
+import { useHistory } from "react-router-dom";
 
 const FileUpload = (props) => {
+	const history = useHistory();
+	sessionStorage.clear();
+	sessionStorage.setItem("last-route", history.location.pathname);
 	const [file, setFile] = useState(null); // state for storing actual image
 	const [previewSrc, setPreviewSrc] = useState(''); // state for storing previewImage
 	const [state, setState] = useState({
