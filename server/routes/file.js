@@ -71,7 +71,7 @@ Router.get('/getAllFiles', async (req, res) => {
   }
 });
 
-Router.get('/download/:id', async (req, res) => {
+Router.get('/getFile/:id', async (req, res) => {
   try {
     const file = await File.findById(req.params.id);
     res.set({
