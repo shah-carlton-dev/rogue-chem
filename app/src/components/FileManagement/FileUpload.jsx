@@ -172,7 +172,7 @@ const FileUpload = (props) => {
       <div className="container">
         <h1>File Upload</h1>
 
-        <div className="header">
+        {/* <div className="header">
           <nav>
             <NavLink activeClassName="active" to="/fileUpload">
               File Upload
@@ -181,10 +181,10 @@ const FileUpload = (props) => {
               Video Upload
               </NavLink>
           </nav>
-        </div>
-        <Row>
+        </div> */}
+        {/* <Row>
           <h1>File Upload</h1>
-        </Row>
+        </Row> */}
         <Form className="search-form " onSubmit={handleOnSubmit}>
           {errorMsg && <p className="errorMsg">{errorMsg}</p>}
           <Row>

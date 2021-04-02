@@ -3,11 +3,11 @@ import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import Home from '../components/Dashboard/Home';
 import LoginSignup from '../components/Login/LoginSignup';
 import Signup from '../components/Login/LoginSignup';
-import FileManagement from '../components/FileManagement/FileManagement';
-import CourseManagement from '../components/CourseManagement/CourseManagement';
 import Header from '../components/Header';
 import UserContext from "../context/UserContext.js";
 import Axios from "axios";
+import FileManagement from '../components/FileManagement/FileManagement';
+import CourseManagement from '../components/CourseManagement/CourseManagement';
 import FileUpload from '../components/FileManagement/FileUpload';
 import VideoUpload from '../components/FileManagement/VideoUpload';
 import SampleRender from '../components/VideoRender/SampleRender';
@@ -53,7 +53,7 @@ const AppRouter = () => {
 
     return (
         <UserContext.Provider value={{ userData, setUserData }} >
-            {userData.token === 0 ? <div className="loader"></div> : <>
+            {/* {userData.token === 0 ? <div className="loader"></div> : <> */}
             <BrowserRouter>
                 <Header />
                 <Switch>
@@ -61,11 +61,6 @@ const AppRouter = () => {
                         <>
                             <Route component={LoginSignup} path="/login" />
                             <Route component={Home} path="/home" />
-                            <Route component={FileManagement} path="/management/files" />
-                            <Route component={CourseManagement} path="/management/courses" />
-                            <Route component={FileUpload} path="/fileUpload" />
-                            <Route component={VideoUpload} path="/videoUpload" />
-                            <Route component={SampleRender} path="/sampleRender" />
                         </> :
                         <>
                             <Route component={Signup} path="/signup"/>
@@ -75,7 +70,7 @@ const AppRouter = () => {
                     <Route component={LoginSignup} path="/" exact={true} />
                 </Switch>
             </BrowserRouter>
-            </>}
+            {/* </>} */}
         </UserContext.Provider>
     );
 };

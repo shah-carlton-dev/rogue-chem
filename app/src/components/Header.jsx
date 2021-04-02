@@ -24,15 +24,6 @@ const Header = () => {
 			<Navbar.Brand className="mr-auto px-2 logo-nav"><img src={logo}></img></Navbar.Brand>
 			<Nav className="ml-auto nav-text">
 				<Nav.Link as={Link} to="/home"> Home </Nav.Link>
-				{userData && userData.user && userData.user.admin
-					? <>
-						<Nav.Link as={Link} to="/management/files">File Management</Nav.Link>
-						<Nav.Link as={Link} to="/management/courses">Course Management</Nav.Link>
-						<Nav.Link as={Link} to="/sampleRender"> Sample Render </Nav.Link>
-					</>
-					: <></>
-				}
-
 				{userData && userData.user && Object.keys(userData.user).length > 0
 					? (<Nav.Link onClick={() => logout()} to="/login"> Logout </Nav.Link>)
 					: (<Nav.Link as={Link} to="/login">Login</Nav.Link>)

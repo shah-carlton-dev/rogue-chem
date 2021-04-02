@@ -119,7 +119,7 @@ const VideoUpload = (props) => {
       <div className="container">
         <h1>Video Upload</h1>
 
-        <div className="header">
+        {/* <div className="header">
           <nav>
             <NavLink activeClassName="active" to="/fileUpload">
               File Upload
@@ -127,74 +127,74 @@ const VideoUpload = (props) => {
             <NavLink activeClassName="active" to="/videoUpload">
               Video Upload
              </NavLink>
-         </nav>
-     </div>  
-     <Row>
-       <h1>Video Upload</h1>
-     </Row>
-     <Form className="search-form " onSubmit={handleOnSubmit}>
-       {errorMsg && <p className="errorMsg">{errorMsg}</p>}
-       <Row>
-         <Col>
-           <Form.Group controlId="title">
-             <Form.Control
-               type="text"
-               name="url"
-               value={state.url || ''}
-               placeholder="Enter url"
-               onChange={handleInputChange}
-             />
-           </Form.Group>
-         </Col>
-       </Row>
-       <Row>
-         <Col>
-           <Form.Group controlId="title">
-             <Form.Control
-               type="text"
-               name="title"
-               value={state.title || ''}
-               placeholder="Enter title"
-               onChange={handleInputChange}
-             />
-           </Form.Group>
-         </Col>
-       </Row>
-       <Row>
-         <Col>
-           <Form.Group controlId="description">
-             <Form.Control
-               type="text"
-               name="description"
-               value={state.description || ''}
-               placeholder="Enter description"
-               onChange={handleInputChange}
-             />
-           </Form.Group>
-         </Col>
-       </Row>
-       <Row>
-         <Col>
-           <Form.Group controlId="keywords">
-             <Form.Control
-               id="keywordInput"
-               type="text"
-               name="keywords"
-               //value={''}
-               placeholder="Type a keyword/phrase"
-               onChange={(e) => handleKeywordInput(e)}
-             />
-           </Form.Group>
-           <ul className="keyword-list">
-             {keywords.map((keywrd, index) => (
-               <li key={index}>{keywrd}<a href="#/" onClick={() => deleteKeyword(index)}>(x)</a></li>
-             ))}
-           </ul>
-           <Button type="submit" className="btn btn-primary mb-2" onClick={(e) => addKeyword(e)}>add keyword</Button>
-         </Col>
-       </Row>
-       <Button variant="primary" type="submit">
-         Submit
+          </nav>
+        </div> */}
+        {/* <Row>
+          <h1>Video Upload</h1>
+        </Row> */}
+        <Form className="search-form " onSubmit={handleOnSubmit}>
+          {errorMsg && <p className="errorMsg">{errorMsg}</p>}
+          <Row>
+            <Col>
+              <Form.Group controlId="title">
+                <Form.Control
+                  type="text"
+                  name="url"
+                  value={state.url || ''}
+                  placeholder="Enter url"
+                  onChange={handleInputChange}
+                />
+              </Form.Group>
+            </Col>
+          </Row>
+          <Row>
+            <Col>
+              <Form.Group controlId="title">
+                <Form.Control
+                  type="text"
+                  name="title"
+                  value={state.title || ''}
+                  placeholder="Enter title"
+                  onChange={handleInputChange}
+                />
+              </Form.Group>
+            </Col>
+          </Row>
+          <Row>
+            <Col>
+              <Form.Group controlId="description">
+                <Form.Control
+                  type="text"
+                  name="description"
+                  value={state.description || ''}
+                  placeholder="Enter description"
+                  onChange={handleInputChange}
+                />
+              </Form.Group>
+            </Col>
+          </Row>
+          <Row>
+            <Col>
+              <Form.Group controlId="keywords">
+                <Form.Control
+                  id="keywordInput"
+                  type="text"
+                  name="keywords"
+                  //value={''}
+                  placeholder="Type a keyword/phrase"
+                  onChange={(e) => handleKeywordInput(e)}
+                />
+              </Form.Group>
+              <ul className="keyword-list">
+                {keywords.map((keywrd, index) => (
+                  <li key={index}>{keywrd}<a href="#/" onClick={() => deleteKeyword(index)}>(x)</a></li>
+                ))}
+              </ul>
+              <Button type="submit" className="btn btn-primary mb-2" onClick={(e) => addKeyword(e)}>add keyword</Button>
+            </Col>
+          </Row>
+          <Button variant="primary" type="submit">
+            Submit
          </Button>
         </Form>
         <div className="files-container">

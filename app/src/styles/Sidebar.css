@@ -8,7 +8,7 @@
 .side-navigation-panel ul {
     list-style-type: none;
     margin: 0;
-    padding: 0
+    padding: 0;
 }
 
 .side-navigation-panel .side-navigation-panel-select .side-navigation-panel-select-wrap .side-navigation-panel-select-option {
@@ -19,7 +19,7 @@
     padding: .75rem;
     --tw-text-opacity: 1;
     color: rgba(55, 65, 81, var(--tw-text-opacity));
-    width: 100%
+    width: 100%;
 }
 
 .side-navigation-panel .side-navigation-panel-select .side-navigation-panel-select-wrap .side-navigation-panel-select-option .side-navigation-panel-select-option-wrap {

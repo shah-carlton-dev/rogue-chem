@@ -20,11 +20,15 @@ const Sidebar = () => {
                 subNav: [
                     {
                         title: 'Files',
-                        itemId: '/management/files',
+                        itemId: '/home/management/files',
+                    },
+                    {
+                        title: 'Videos',
+                        itemId: '/home/management/videos',
                     },
                     {
                         title: 'Courses',
-                        itemId: '/management/courses',
+                        itemId: '/home/management/courses',
                     },
                 ],
             },
@@ -34,13 +38,17 @@ const Sidebar = () => {
                 subNav: [
                     {
                         title: 'Progress',
-                        itemId: '/usage/progress',
+                        itemId: '/home/usage/progress',
                     },
                     {
                         title: 'Statistics',
-                        itemId: '/usage/stats',
+                        itemId: '/home/usage/stats',
                     },
                 ],
+            },
+            {
+                title: 'Sample Render',
+                itemId: '/home/sample'
             },
         ]
     ) : (
@@ -50,10 +58,10 @@ const Sidebar = () => {
                 itemId: '/home',
             }, {
                 title: 'Progress',
-                itemId: '/progress',
+                itemId: '/home/progress',
             }, {
                 title: 'Profile',
-                itemId: '/profile'
+                itemId: '/home/profile'
             }]
     );
 
