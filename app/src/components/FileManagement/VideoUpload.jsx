@@ -4,9 +4,9 @@ import axios from 'axios';
 import download from 'downloadjs';
 import { API_URL } from '../../utils/constants';
 import '../../styles/FileManagement.scss';
-import { useHistory } from 'react-router-dom';
-import { NavLink } from 'react-router-dom';
+
 const VideoUpload = (props) => {
+
   const [state, setState] = useState({
     utl: '',
     title: '',
