@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import Axios from "axios";
-import { useHistory } from "react-router-dom";
 import CourseBlock from "./CourseBlock.jsx";
 import SectionBlock from "./SectionBlock.jsx";
 import FileDisplay from "./FileDisplay.jsx"
@@ -38,10 +37,11 @@ const CourseManagement = (props) => {
     }
 
     const getSections = async () => {
-        await Axios.get(API_URL + "/courses/sections/" + activeCourse._id).then(res => {
-            setSections(res.data);
-        });
-
+        try {
+            await Axios.get(API_URL + "/courses/sections/" + activeCourse._id).then(res => {
+                setSections(res.data);
+            });
+        } catch (err) { }
     }
 
     const showSections = async (id) => {
@@ -90,7 +90,7 @@ const CourseManagement = (props) => {
                 name,
                 description
             }
-            await Axios.post(API_URL + "/courses/addSection", data).then(res => {
+            await Axios.post(API_URL + "/courses/createSection", data).then(res => {
                 setSections(res.data.filter(d => d.course_id === activeCourse._id));
                 setSectionUpdate(!sectionUpdate);
             });
@@ -108,10 +108,34 @@ const CourseManagement = (props) => {
     const deleteSection = async (id) => {
         await Axios.delete(API_URL + "/courses/deleteSection/" + id).then(res => {
             setCourses(res.data);
-            setSections(courses.filter(c => c._id == activeCourse._id)[0].sections);
+            setSections(courses.filter(c => c._id === activeCourse._id)[0].sections);
             setSectionUpdate(!sectionUpdate);
             setCourseUpdate(!courseUpdate);
         });
+    }
+
+    const removeSection = async (id) => {
+        const data = {
+            "section_id": id,
+            "course_id": activeCourse._id
+        }
+        const url = API_URL + "/courses/removeSection";
+        await Axios.put(url, data).then(res => setSections(res.data));
+        setSectionUpdate(!sectionUpdate);
+        setCourseUpdate(!courseUpdate);
+    }
+
+    const addExisting = async (section_id) => {
+        const data = {
+            "section_id": section_id,
+            "course_id": activeCourse._id
+        }
+        const url = API_URL + "/courses/addSection";
+        await Axios.put(url, data).then(res => setSections(res.data)).then(() => {
+            setSectionUpdate(!sectionUpdate);
+            setCourseUpdate(!courseUpdate);
+        });
+        setShowCreateSection(false);
     }
 
     return (<>
@@ -121,18 +145,30 @@ const CourseManagement = (props) => {
                 (showCourseList) ? <>
                     <Button variant="link" onClick={() => setShowCreateCourse(true)}>create new course</Button>
                     <h4>Courses</h4>
-                    <h6>Be careful deleting courses. It is permanent and they will not be recoverable.</h6>
+                    <hr/>
+                    <p>Be careful deleting courses. This action is permanent and they will not be recoverable.</p>
                     <Row>
-                        {courses.map(c => <Col className="py-2" key={c._id}><CourseBlock course={c} clickHandler={showSections} deleteHandler={deleteCourse} /></Col>)}
-                    </Row> </> :
-                    <></>
+                        {
+                            courses.length === 0 ? (<>
+                                <Col className="text-center mt-5">
+                                    <p className="italicize">No courses here. Start by creating one!</p>
+                                </Col>
+                            </>) : (<>
+                                {courses.map(c => <Col className="py-2" key={c._id}><CourseBlock course={c} clickHandler={showSections} deleteHandler={deleteCourse} /></Col>)}
+                            </>)
+                        }
+                    </Row>
+
+                </> : <></>
             }
             {
                 (showSectionList) ? <>
-                    <Button variant="link" onClick={backToCourses}>back to courses</Button> / <Button variant="link" onClick={() => setShowCreateSection(true)}>create new core folder</Button>
+                    <Button variant="link" onClick={backToCourses}>back to courses</Button> / <Button variant="link" onClick={() => setShowCreateSection(true)}>add a core folder</Button>
                     <h4 className="">{activeCourse.name + " / "}Core Folders</h4>
+                    <hr/>
+                    <p>Be careful deleting folders - it will be permanently deleted across all courses. Use the remove button to unassociate it from the current course.</p>
                     <Row>
-                        {sections.length === 0 ? <p>No existing core folders</p> : sections.map(s => <Col className="py-2" key={s._id}><SectionBlock section={s} clickHandler={showFiles} deleteHandler={deleteSection} /></Col>)}
+                        {sections.length === 0 ? <Col className="text-center mt-5"><p className="italicize">No existing core folders. Go ahead and create one!</p> </Col> : sections.map(s => <Col className="py-2" key={s._id} xs={4}><SectionBlock section={s} clickHandler={showFiles} deleteHandler={deleteSection} removeHandler={removeSection} /></Col>)}
                     </Row> </> :
                     <></>
             }
@@ -140,7 +176,8 @@ const CourseManagement = (props) => {
                 (showFileList) ? <>
                     <Button variant="link" onClick={backToSections}>back to core folders</Button>
                     <h4>{activeCourse.name + " / " + activeSection.name + " / "}Files</h4>
-                    <FileDisplay course={activeCourse} section={activeSection} ></FileDisplay>
+                    <hr/>
+                    <FileDisplay section={activeSection} ></FileDisplay>
                 </> :
                     <></>
             }
@@ -149,7 +186,7 @@ const CourseManagement = (props) => {
             <CourseCreateModal handleClose={handleCourseClose} />
         </Modal>
         <Modal show={showCreateSection}>
-            <SectionCreateModal handleClose={handleSectionClose} course={activeCourse} />
+            <SectionCreateModal handleClose={handleSectionClose} sections={sections} addHandler={addExisting} />
         </Modal>
     </>
     );

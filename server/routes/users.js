@@ -30,21 +30,33 @@ Router.post('/adminCreate',
 Router.post('/studentCreate',
     async (req, res) => {
         try {
+            let existing;
             let { username, password, email, fname, lname } = req.body;
-            let salt = await bcrypt.genSalt();
-            password = await bcrypt.hash(password, salt);
-            const student = new Student({
-                username,
-                password,
-                email,
-                fname,
-                lname,
-                admin: false
+            // check username, email are unique
+            await Student.exists({ "username": username }).then(async exists => {
+                existing = exists;
+                if (exists) return res.status(400).send("Username already exists. Enter another one.");
+                else await Student.exists({ "email": email }).then(exists => {
+                    existing = exists;
+                    if (exists) return res.status(400).send("Email already in use. Enter another one.");
+                });
             });
-            await student.save();
-            return res.send(student).status(200);
+            if (!existing) {
+                let salt = await bcrypt.genSalt();
+                password = await bcrypt.hash(password, salt);
+                const student = new Student({
+                    username,
+                    password,
+                    email,
+                    fname,
+                    lname,
+                    admin: false
+                });
+                await student.save();
+                return res.send(student).status(200);
+            }
         } catch (err) {
-            return res.send('Error while creating student user').status(400);
+            return res.send('Error while creating new user').status(400);
         }
     }
 );
@@ -52,34 +64,37 @@ Router.post('/studentCreate',
 Router.post('/validateToken', async (req, res) => {
     try {
         const token = req.body["auth-token"];
-        if (!token) { return res.send(false).status(301); return; }
-
+        if (!token) { return res.send(false).status(400); }
         const verified = jwt.verify(token, constants.jwt_pass);
-        if (!verified) { return res.send(false).status(302); return; }
+        if (!verified) { return res.send(false).status(400); }
 
-        let existing;
+        let existing; // will be assigned to an existing user if one exists
         await Student.findById(verified.id, (err, user) => {
             if (err) {
-                console.log(err);
-                return res.send("Error finding user").status(400);
+                return res.send(false).status(400);
             }
             existing = user;
+            if (user != null) {
+                return res.status(200).send({
+                    valid: true,
+                    token: token,
+                    user: existing
+                });
+            }
+        }).then(async () => {
+            if (!existing) {
+                await Admin.findById(verified.id, (err, user) => {
+                    existing = user;
+                }).then(existing => {
+                    if (existing === null) return res.status(400).send(false);
+                    else return res.status(200).send({
+                        valid: true,
+                        token: token,
+                        user: existing
+                    });
+                })
+            }
         });
-        if (!existing || existing == null) {
-            await Admin.findById(verified.id, (err, user) => {
-                if (err) {
-                    console.log(err);
-                    return res.send("Error finding account").status(400);
-                }
-                existing = user;
-            });
-            if (existing == null) { return res.send(false).status(303); }
-        }
-        return res.send({
-            valid: true,
-            token: token,
-            user: existing
-        }).status(200);
     } catch (err) {
         return res.send("Could not validate token").status(304);
     }
@@ -89,33 +104,46 @@ Router.post('/login', async (req, res) => {
     try {
         let existing; // will be assigned to an existing user if one exists
         let { username, password } = req.body;
-        await Student.findOne({ username }, (err, user) => {
-            if (err) {
-                console.log(err);
-                return res.send("Error finding user").status(400);
+        await Student.findOne({ username }).then(async (user, err) => {
+            if (err) return res.send("Error finding user").status(400);
+            if (user != null) {
+                await bcrypt.compare(password, user.password).then(resp => {
+                    if (!resp) return res.status(400).send('Invalid password. Nice try, bot.');
+                    else {
+                        const token = jwt.sign({ id: user._id }, constants.jwt_pass);
+                        delete user.password;
+                        return res.status(200).send({
+                            existing: user,
+                            token
+                        });
+                    }
+                });
             }
             existing = user;
-        });
-        if (!existing) {
-            await Admin.findOne({ username }, (err, user) => {
-                if (err) {
-                    console.log(err);
-                    return res.send("Error finding account").status(400);
-                }
-                existing = user;
-            });
-        }
-        let pass;
-        try {
-            pass = await bcrypt.compare(password, existing.password).then(a => null, (a) => console.log("poo"));
-        } catch (e) {
-            return res.send('Invalid password. Nice try, bot.').status(400);
-        }
-        const token = jwt.sign({ id: existing._id }, constants.jwt_pass);
-        return res.send({ existing, token }).status(200);
-    }
-    catch (err) {
-        return res.send("Error logging in - try again").status(400);
+        }).then(async () => {
+            if (!existing) {
+                await Admin.findOne({ username }, (err, user) => {
+                    if (err) return res.send("Error finding user").status(400);
+                    else existing = user;
+                }).then(async existing => {
+                    if (existing === null) return res.status(400).send("User not found. Check that the username is correct.");
+                    await bcrypt.compare(password, existing.password).then(resp => {
+                        if (!resp) return res.status(400).send('Invalid password. Nice try, bot.');
+                        else {
+                            const token = jwt.sign({ id: existing._id }, constants.jwt_pass);
+                            delete existing.password;
+                            return res.status(200).send({
+                                existing,
+                                token
+                            });
+                        }
+                    });
+                });
+            }
+        })
+    } catch (err) {
+        console.log(err);
+        return res.status(400).send("Error logging in. Please try again.");
     }
 });
 

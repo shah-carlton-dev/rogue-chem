@@ -1,0 +1,14 @@
+.fill-homepage {
+    height: calc(100vh - 66px); /* takes the remaining height after navbar */
+}
+
+.top-nav {
+    background-color: rgb(214, 214, 214);
+    text-align: center;
+    height: 4vh;
+    padding: 0px 15px;
+}
+
+.sidebar {
+    background-color: RGB(245,245,245);
+}

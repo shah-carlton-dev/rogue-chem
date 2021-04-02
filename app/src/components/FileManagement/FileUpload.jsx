@@ -5,7 +5,6 @@ import axios from 'axios';
 import download from 'downloadjs';
 import { API_URL } from '../../utils/constants';
 import '../../styles/FileManagement.scss';
-import { useHistory } from 'react-router-dom';
 import { NavLink } from 'react-router-dom';
 const FileUpload = (props) => {
   const [file, setFile] = useState(null); // state for storing actual image
@@ -170,7 +169,7 @@ const FileUpload = (props) => {
 
   return (
     <React.Fragment>
-      <div class="container">
+      <div className="container">
         <h1>File Upload</h1>
 
         <div className="header">

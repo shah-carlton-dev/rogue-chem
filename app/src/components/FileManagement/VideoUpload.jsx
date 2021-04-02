@@ -116,7 +116,7 @@ const VideoUpload = (props) => {
 
   return (
     <React.Fragment>
-      <div class="container">
+      <div className="container">
         <h1>Video Upload</h1>
 
         <div className="header">

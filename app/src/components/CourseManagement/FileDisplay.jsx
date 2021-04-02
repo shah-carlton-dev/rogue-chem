@@ -6,17 +6,13 @@ import FileList from "./FileList.jsx"
 import { API_URL } from "../../utils/constants.js";
 
 const FileDisplay = (props) => {
-    const { course, section } = props;
+    const { section } = props;
     const [files, setFiles] = useState([]);
     const [fileUpdate, setFileUpdate] = useState(false);
 
     useEffect(() => {
         getFiles();
     }, [fileUpdate]);
-
-    useEffect(() => {
-        getFiles();
-    }, []);
 
     const getFiles = async () => {
         await Axios.get(API_URL + "/courses/files/" + section._id).then(res => setFiles(res.data));
@@ -53,10 +49,10 @@ const FileDisplay = (props) => {
     return (<>
         <h5>Existing files </h5>
         { files.length === 0
-            ? <p> No existing files in this folder </p>
+            ? <div className="text-center my-3"><p className="italicize"> No existing files in this folder. Add them from below. </p></div>
             : <FileList files={files} removeFile={(id) => removeFile(id)}></FileList>
         }
-        <br></br>
+        <hr/>
         <h5>Add files </h5>
         <FileLibrary files={files} addFile={(id) => addFile(id)} ></FileLibrary>
     </>);
