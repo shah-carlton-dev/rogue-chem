@@ -44,16 +44,16 @@ const SampleRender = (props) => {
     }
     return (
         <>
-            <Container>
-                <Row>
-                    {videos.map(video => <VideoView key={video._id} video={video} />)}
-                </Row>
-            </Container>
-            <Container>
-                <Row>
-                    {files.map(file => <PDFView key={file._id} file={getFile(file._id)} />)}
-                </Row>
-            </Container>
+        <Container>
+            <Row>
+                {videos.map(video => <VideoView key={video._id} video={video}/>)}
+            </Row>
+        </Container>
+        <Container>
+            <Row>
+                <PDFView></PDFView>
+            </Row>
+        </Container>
         </>
     );
 }
