@@ -23,7 +23,6 @@ const Header = () => {
 		<Navbar sticky="top" className="navbar gradient">
 			<Navbar.Brand className="mr-auto px-2 logo-nav"><img src={logo}></img></Navbar.Brand>
 			<Nav className="ml-auto nav-text">
-				<Nav.Link as={Link} to="/home"> Home </Nav.Link>
 				{userData && userData.user && Object.keys(userData.user).length > 0
 					? (<Nav.Link onClick={() => logout()} to="/login"> Logout </Nav.Link>)
 					: (<Nav.Link as={Link} to="/login">Login</Nav.Link>)

@@ -8,8 +8,13 @@ import SectionCreateModal from "./SectionCreateModal";
 import { Container, Row, Col, Button, Modal } from "react-bootstrap";
 import { API_URL } from '../../utils/constants';
 import "../../styles/CourseManagement.css";
+import {useHistory} from "react-router-dom";
 
 const CourseManagement = (props) => {
+    const history = useHistory();
+    sessionStorage.clear();
+    sessionStorage.setItem("last-route", history.location.pathname);
+
     const [courses, setCourses] = useState([]);
     const [showCourseList, setShowCourseList] = useState(true);
     const [showSectionList, setShowSectionList] = useState(false);

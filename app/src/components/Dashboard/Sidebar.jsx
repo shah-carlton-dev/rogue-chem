@@ -15,8 +15,11 @@ const Sidebar = () => {
                 itemId: '/home',
             },
             {
+                title: 'Messages',
+                itemId: '/home/messages'
+            },
+            {
                 title: 'Management',
-                //itemId: '/management',
                 subNav: [
                     {
                         title: 'Files',
@@ -56,6 +59,9 @@ const Sidebar = () => {
             {
                 title: 'Home',
                 itemId: '/home',
+            }, {
+                title: 'Messages',
+                itemId: '/home/messages',
             }, {
                 title: 'Progress',
                 itemId: '/home/progress',

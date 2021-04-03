@@ -1,17 +1,21 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios'; 
+import axios from 'axios';
 import { Container, Row, Col } from 'react-bootstrap';
 import VideoView from './VideoView';
 import PDFView from './PDFView';
 import { API_URL } from '../../utils/constants';
+import { useHistory } from "react-router-dom";
 
 const SampleRender = (props) => {
-    const [videos, setVideos] =  useState([]);
+    const history = useHistory();
+    sessionStorage.clear();
+    sessionStorage.setItem("last-route", history.location.pathname);
+    const [videos, setVideos] = useState([]);
     const [files, setFiles] = useState([]);
-    useEffect( () => {
+    useEffect(() => {
         fetchVideos();
     }, [])
-    useEffect( () => {
+    useEffect(() => {
         fetchFiles();
     }, [])
     async function fetchVideos() {
@@ -35,10 +39,10 @@ const SampleRender = (props) => {
         } catch (error) {
 
         }
-        
+
 
     }
-    return(
+    return (
         <>
         <Container>
             <Row>
@@ -54,4 +58,4 @@ const SampleRender = (props) => {
     );
 }
 
-export default SampleRender; 
+export default SampleRender;
