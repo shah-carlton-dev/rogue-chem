@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "@phuocng/react-pdf-viewer": "^1.7.0",
+    "pdfjs-dist": "^2.6.347"
+  }
+}

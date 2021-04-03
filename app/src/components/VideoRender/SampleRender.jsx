@@ -47,7 +47,7 @@ const SampleRender = (props) => {
         </Container>
         <Container>
             <Row>
-                {files.map(file => <PDFView key={file._id} file={getFile(file._id)}/>)}
+                <PDFView></PDFView>
             </Row>
         </Container>
         </>
