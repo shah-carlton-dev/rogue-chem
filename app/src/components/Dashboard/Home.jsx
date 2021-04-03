@@ -24,15 +24,7 @@ const Home = (props) => {
                 <Col xs={2} className="ml-2 sidebar">
                     <Sidebar />
                 </Col>
-                <Col>
-                    <Row className="top-nav">
-                        <Col xs={3}>
-                            <p>Welcome, {userData.user.fname}</p>
-                        </Col>
-                        <Col>
-                            <p>dashboard nav links, search, etc will be here</p>
-                        </Col>
-                    </Row>
+                <Col className="fill-width">
                     <Switch>
                         <Route component={Courses} exact path="/home" />
                         <Route component={Messages} path="/home/messages" />

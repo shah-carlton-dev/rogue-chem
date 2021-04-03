@@ -1,0 +1,55 @@
+body {
+    margin: 0px;
+}
+.container {
+    width: 100%;
+    height: calc(100vh - 96px);
+    display: flex;
+    flex-flow: nowrap column;
+    overflow: hidden;
+    padding: 0px;
+}
+
+.panel {    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0px;
+}
+
+.header {
+    min-height: 50px;
+    height: 100%;
+    flex-grow: 1;
+}
+
+.body {
+    flex-grow: 2;
+    display: flex;
+    flex-flow: row nowrap;
+}
+
+.content {
+    flex-grow: 2;  
+}
+
+.customHandle {
+    cursor: ns-resize;
+    width: 100px;
+    height: 6px;
+    border: 2px solid rgb(227, 227, 227);
+    z-index: 99990;
+    border-radius: 25px;
+}
+
+.customResizeBorder {
+    cursor: ns-resize;
+    height: 2px;
+    background: rgb(227, 227, 227);
+    overflow: visible;
+    display: flex;
+    align-items: center ;
+    align-content: center ;
+    justify-content: center;
+    z-index: 99999;
+}
