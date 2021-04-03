@@ -242,4 +242,27 @@ Router.put('/addSection', async (req, res) => {
     }
 });
 
+Router.post('/allData', async (req, res) => {
+    try {
+        console.log(req);
+
+        let { ids } = req.body;
+        if (ids.length === 0) return res.status(304).send(0);
+        let courses = [];
+        ids.forEach(async (i) => {
+            await Course.findById(mongoose.Types.ObjectId(i)).then((course) => {
+                courses.push(course);
+            }).then(() => {
+                // add full sections to the return object
+            }).then(() => {
+                return res.status(200).send(courses);
+            });
+        })
+        console.log(courses);
+
+    } catch (err) {
+        return res.status(400).send("Error collecting all course data for user");
+    }
+});
+
 module.exports = Router;

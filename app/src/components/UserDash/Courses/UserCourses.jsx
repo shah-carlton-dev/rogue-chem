@@ -2,6 +2,7 @@ import React from "react";
 import { useHistory } from "react-router-dom";
 import ResizePanel from "react-resize-panel";
 import '../../../styles/UserCourses.css';
+import CoursesDash from './CoursesDash.jsx';
 
 const UserCourses = (props) => {
     return (<>
@@ -10,7 +11,7 @@ const UserCourses = (props) => {
                 <div className='body'>
 
                     <div className='header panel'>
-                        <span>header</span>
+                        <CoursesDash/>
                     </div>
 
                 </div>

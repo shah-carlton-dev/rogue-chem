@@ -20,7 +20,7 @@ body {
 .header {
     min-height: 50px;
     height: 100%;
-    flex-grow: 1;
+    flex-grow: 3;
 }
 
 .body {
@@ -35,8 +35,8 @@ body {
 
 .customHandle {
     cursor: ns-resize;
-    width: 100px;
-    height: 6px;
+    width: 60px;
+    height: 4px;
     border: 2px solid rgb(227, 227, 227);
     z-index: 99990;
     border-radius: 25px;
