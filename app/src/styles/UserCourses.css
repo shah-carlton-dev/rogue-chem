@@ -19,18 +19,23 @@ body {
 
 .header {
     min-height: 50px;
+    height: 300px;
     height: 100%;
     flex-grow: 3;
+    overflow: hidden;
 }
 
 .body {
     flex-grow: 2;
     display: flex;
     flex-flow: row nowrap;
+    overflow: hidden;
 }
 
 .content {
+    overflow: hidden;
     flex-grow: 2;  
+    max-height: 30px;
 }
 
 .customHandle {
@@ -40,6 +45,7 @@ body {
     border: 2px solid rgb(227, 227, 227);
     z-index: 99990;
     border-radius: 25px;
+    margin-left: -45px;
 }
 
 .customResizeBorder {
@@ -52,4 +58,8 @@ body {
     align-content: center ;
     justify-content: center;
     z-index: 99999;
+}
+
+.right-border {
+    border-right: 2px solid rgb(227,227,227);
 }

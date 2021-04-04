@@ -243,23 +243,36 @@ Router.put('/addSection', async (req, res) => {
 });
 
 Router.post('/allData', async (req, res) => {
-    try {
-        console.log(req);
-
+    try { // want to return a fat object with all courses, sections, and file info - files can be fetched in a separate call from the frontend
         let { ids } = req.body;
         if (ids.length === 0) return res.status(304).send(0);
         let courses = [];
-        ids.forEach(async (i) => {
-            await Course.findById(mongoose.Types.ObjectId(i)).then((course) => {
-                courses.push(course);
-            }).then(() => {
-                // add full sections to the return object
-            }).then(() => {
-                return res.status(200).send(courses);
-            });
-        })
-        console.log(courses);
-
+        let sections = {};
+        try {
+            ids.forEach(async (i) => {
+                await Course.findById(mongoose.Types.ObjectId(i)).then((course) => {
+                    courses.push(course);
+                }).then(async () => {
+                    courses.forEach(async (course) => {
+                        let list = [];
+                        course.sections.forEach(async (section) => {
+                            await Section.findById(mongoose.Types.ObjectId(section)).then((sec => {
+                                list.push(sec);
+                                if (course.sections.length === list.length) {
+                                    sections[course.name] = list;
+                                    //console.log(sections);
+                                    courses[0].sections = sections[course.name];
+                                    return res.status(200).send(courses);
+                                }
+                            }))
+                        })
+                    })
+                })
+            })
+        } catch (err) {
+            console.log("Something weird happened.");
+            return res.status(304).send("Something weird happened. Refresh the page and try again");
+        }
     } catch (err) {
         return res.status(400).send("Error collecting all course data for user");
     }
