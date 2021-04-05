@@ -74,10 +74,7 @@ Router.get('/getAllFiles', async (req, res) => {
 Router.get('/getFile/:id', async (req, res) => {
   try {
     const file = await File.findById(req.params.id);
-    res.set({
-      'Content-Type': file.file_mimetype
-    });
-    res.sendFile(path.join(__dirname, '..', file.file_path));
+    res.send(file);
   } catch (error) {
     res.status(400).send('Error while downloading file. Try again later.');
   }

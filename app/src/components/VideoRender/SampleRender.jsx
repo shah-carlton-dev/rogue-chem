@@ -22,13 +22,13 @@ const SampleRender = (props) => {
         const result = await axios.get(`${API_URL}/getAllVideos`);
         const data = result.data;
         setVideos(data);
-        console.log(data);
+        // console.log(data);
     }
     async function fetchFiles() {
         const result = await axios.get(`${API_URL}/getAllFiles`);
         const data = result.data;
         setFiles(data);
-        console.log(data);
+        //  console.log(data);
     }
 
     async function getFile(id) {
