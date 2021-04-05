@@ -7,6 +7,7 @@ import CoursesDash from './CoursesDash.jsx';
 import FoldersList from './FoldersList.jsx';
 import { API_URL } from '../../../utils/constants.js';
 import Axios from "axios";
+import {Col} from "react-bootstrap";
 
 const UserCourses = (props) => {
     const { userData, setUserData } = useContext(UserContext);
@@ -42,20 +43,26 @@ const UserCourses = (props) => {
             <ResizePanel direction="s" handleClass="customHandle" borderClass="customResizeBorder" >
                 <div className='body'>
                     <div className='header panel'>
-                        <CoursesDash things={{retrieving, isError, courseData, isSelected}}/>
+                        <CoursesDash things={{ retrieving, isError, courseData, isSelected }} />
                     </div>
                 </div>
             </ResizePanel>
             <div className='body fill-bottom'>
-                <div className='content panel right-border'>
-                    <FoldersList data={courseData} selected={selected}/>
+                <Col xs={4}>
+                    <div className='content panel right-border'>
+                        <FoldersList data={courseData[selected]} />
+                    </div>
+                </Col>
+                <Col>
+                    <div className='content panel right-border'>
+                        content 2
                 </div>
-                <div className='content panel right-border'>
-                    content 2
+                </Col>
+                <Col>
+                    <div className='content panel'>
+                        content  3
                 </div>
-                <div className='content panel'>
-                    content  3
-                </div>
+                </Col>
             </div>
         </div>
     </>)
