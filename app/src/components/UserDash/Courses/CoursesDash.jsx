@@ -3,8 +3,7 @@ import CourseCard from "./CourseCard.jsx";
 import {Row, Col} from "react-bootstrap";
 
 const CoursesDash = (props) => {
-    const {retrieving, isError, courseData, isSelected} = props.things;
-    let index = 0;
+    const {retrieving, isError, courseData, setCourseChange} = props.things;
     return (<>
         {retrieving
             ? (<div className="dash-loader"></div>)
@@ -13,7 +12,7 @@ const CoursesDash = (props) => {
                         ? (<div className="coursedata-error italicize">Error retrieving courses. Try again later.</div>)
                         : (<div className="coursedata-message italicize">You don't have any courses. Start by purchasing one!</div>))
                 : (<Row>{courseData.map(course => 
-                    <Col><CourseCard course={course} isSelected={isSelected} index={index++}/></Col>
+                    <Col><CourseCard course={course} setCourseChange={setCourseChange}/></Col>
                 )}</Row>)
         }
     </>)

@@ -223,7 +223,7 @@ Router.put('/addSection', async (req, res) => {
         );
         let sectionList = [];
         try {
-            if (sections.length === 0) res.send(sectionList).status(304);
+            if (sections.length === 0) return res.send(sectionList).status(304);
             await sections.forEach(async (s_id) => {
                 await Section.findById(mongoose.Types.ObjectId(s_id)).then((sec) => {
                     sectionList.push(sec);
@@ -234,11 +234,10 @@ Router.put('/addSection', async (req, res) => {
                 })
             });
         } catch (err) {
-            res.status(400).send("Error collecting sections for course");
+            return res.status(400).send("Error collecting sections for course");
         }
-
     } catch (err) {
-        res.status(400).send("Error adding folder to course. Try again later");
+        return res.status(400).send("Error adding folder to course. Try again later");
     }
 });
 
@@ -253,20 +252,23 @@ Router.post('/allData', async (req, res) => {
                 await Course.findById(mongoose.Types.ObjectId(i)).then((course) => {
                     courses.push(course);
                 }).then(async () => {
-                    courses.forEach(async (course) => {
-                        let list = [];
-                        course.sections.forEach(async (section) => {
-                            await Section.findById(mongoose.Types.ObjectId(section)).then((sec => {
-                                list.push(sec);
-                                if (course.sections.length === list.length) {
-                                    sections[course.name] = list;
-                                    //console.log(sections);
-                                    courses[0].sections = sections[course.name];
-                                    return res.status(200).send(courses);
-                                }
-                            }))
-                        })
-                    })
+                    if(courses.length === ids.length) {
+                        console.log(courses);
+                        return res.send(courses).status(200);
+                    }
+                    // courses.forEach( course => {
+                    //     let list = []; // this will have a list of the sections
+                    //     course.sections.forEach(async section => {
+                    //         await Section.findById(mongoose.Types.ObjectId(section)).then((sec => {
+                    //             list.push(sec); // find each section and push to list
+                    //             if (course.sections.length === list.length) {
+                    //                 sections[course.name] = list;
+                    //                 courses[0].sections = sections[course.name];
+                    //                 return res.status(200).send(courses);
+                    //             }
+                    //         }))
+                    //     })
+                    // })
                 })
             })
         } catch (err) {

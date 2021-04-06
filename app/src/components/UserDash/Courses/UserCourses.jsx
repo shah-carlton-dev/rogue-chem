@@ -5,24 +5,56 @@ import ResizePanel from "react-resize-panel";
 import '../../../styles/UserCourses.css';
 import CoursesDash from './CoursesDash.jsx';
 import FoldersList from './FoldersList.jsx';
+import FilePreview from './FilePreview.jsx';
 import { API_URL } from '../../../utils/constants.js';
 import Axios from "axios";
-import {Col} from "react-bootstrap";
+import { Col } from "react-bootstrap";
 
 const UserCourses = (props) => {
     const { userData, setUserData } = useContext(UserContext);
     const [courseData, setCourseData] = useState([]);
     const [retrieving, setRetrieving] = useState(true);
     const [isError, setIsError] = useState(0);
-    const [selected, isSelected] = useState(0);
+    const [courseChange, setCourseChange] = useState(0);
+    const [sections, setSections] = useState([]);
+    const [sectionChange, setSectionChange] = useState(0);
+    const [files, setFiles] = useState([]);
 
     useEffect(() => {
         getCourseData();
     }, []);
 
+    useEffect(() => {
+        getSectionData(courseChange);
+    }, [courseChange]);
+
+    useEffect(() => {
+        getFileData(sectionChange);
+    }, [sectionChange]);
+
+    const getFileData = async (id) => {
+        const url = API_URL + '/courses/files/' + id;
+        await Axios.get(url).then((res) => {
+            console.log('file data');
+            console.log(res.data);
+            setFiles(res.data);
+        })
+    }
+
+    const getSectionData = async (id) => {
+        const url = API_URL + '/courses/sections/' + id;
+        await Axios.get(url).then((res) => {
+            console.log('section data');
+            console.log(res.data);
+            setSections(res.data);
+            setSectionChange(res.data[0]._id);
+        })
+    }
+
     const getCourseData = async () => {
         const url = API_URL + '/courses/allData';
         await Axios.post(url, { ids: userData.user.courses }).then((res) => {
+            console.log('course data');
             setRetrieving(false);
             if (res === 1) {
                 console.log("Error: " + res.data);
@@ -34,6 +66,7 @@ const UserCourses = (props) => {
             } else {
                 console.log(res.data);
                 setCourseData(res.data);
+                setCourseChange(res.data[0]._id);
             }
         });
     }
@@ -43,20 +76,20 @@ const UserCourses = (props) => {
             <ResizePanel direction="s" handleClass="customHandle" borderClass="customResizeBorder" >
                 <div className='body'>
                     <div className='header panel'>
-                        <CoursesDash things={{ retrieving, isError, courseData, isSelected }} />
+                        <CoursesDash things={{ retrieving, isError, courseData, setCourseChange }} />
                     </div>
                 </div>
             </ResizePanel>
             <div className='body fill-bottom'>
                 <Col xs={4}>
                     <div className='content panel right-border'>
-                        <FoldersList data={courseData[selected]} />
+                        <FoldersList data={sections} setSectionChange={setSectionChange}/>
                     </div>
                 </Col>
                 <Col>
                     <div className='content panel right-border'>
-                        content 2
-                </div>
+                        <FilePreview files={files}/>
+                    </div>
                 </Col>
                 <Col>
                     <div className='content panel'>
