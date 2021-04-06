@@ -3,7 +3,7 @@ import React from "react";
 const FoldersList = (props) => {
     const { data } = props;
     console.log(data);
-    return (<>
+    return (<div>
         {data !== null && data !== undefined
             ? <dl> {data.sections.map(section =>
                     <>
@@ -12,7 +12,7 @@ const FoldersList = (props) => {
                     </>
                 )}</dl> : <p>something bad</p>
         }
-    </>)
+    </div>)
 }
 
 export default FoldersList;
