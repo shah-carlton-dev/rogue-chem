@@ -9,8 +9,8 @@ const Preview = (props) => {
     const { preview } = props;
     const [show, setShow] = useState(false);
     const [file, setFile] = useState("");
-    const [fileDesc, setFileDesc] = useState("");
-    const [fileTitle, setFileTitle] = useState("");
+    const [fileDesc, setFileDesc] = useState(preview.description);
+    const [fileTitle, setFileTitle] = useState(preview.title);
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
 
@@ -19,31 +19,34 @@ const Preview = (props) => {
         if (preview !== null && preview !== undefined && preview.file_path !== undefined) {
             showPreview();
         }
-    }, []);
+    }, [preview]);
 
     const showPreview = () => {
+        console.log("about to render preview modal: ");
         setFileDesc(preview.description);
         setFileTitle(preview.title);
-        const path = preview.file_path.slice(5);
-        setFile(API_URL + "/" + path);
-
+        //const path = ;
+        setFile(API_URL + "/" + preview.file_path.slice(5));
+        console.log(file +'\n'+fileDesc+'\n'+fileTitle);
     }
 
     return (
         <React.Fragment>
-            {preview !== null && preview !== undefined
+            {console.log(preview)}
+            {preview !== null && preview !== undefined && Object.keys(preview).length > 0
                 ?
                 <>
-                    <h5>File: {fileTitle}</h5>
-                    <p>Description: {fileDesc}</p>
-                    <Button variant="primary" onClick={handleShow}>
+                    <h5>{preview.title}</h5>
+                    <p>{preview.description}</p>
+                    <Button variant="link" onClick={handleShow}>
                         View file
                     </Button>
+
                     <Modal show={show} onHide={handleClose} dialogClassName="modal-dialog">
                         <Modal.Header closeButton>
-                            <Modal.Title>{fileTitle}</Modal.Title>
+                            <Modal.Title>{preview.title}</Modal.Title>
                         </Modal.Header>
-                        <Modal.Body>{fileDesc}</Modal.Body>
+                        <Modal.Body>{preview.description}</Modal.Body>
                         <div className="center-video">
                             <div className="App">
                                 <Worker workerUrl="https://unpkg.com/pdfjs-dist@2.6.347/build/pdf.worker.min.js">
@@ -58,7 +61,7 @@ const Preview = (props) => {
                     </Modal>
                 </>
                 :
-                <p>No preview selected</p>
+                <p className="italicize text-center">No preview selected</p>
             }
         </React.Fragment>
     )

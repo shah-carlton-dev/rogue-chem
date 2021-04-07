@@ -19,12 +19,18 @@ const Header = () => {
 	}
 
 	return (
-		
+
 		<Navbar sticky="top" className="navbar gradient">
 			<Navbar.Brand className="mr-auto px-2 logo-nav"><img src={logo}></img></Navbar.Brand>
 			<Nav className="ml-auto nav-text">
-				{userData && userData.user && Object.keys(userData.user).length > 0
-					? (<Nav.Link onClick={() => logout()} to="/login"> Logout </Nav.Link>)
+				{userData.token !== 0 && userData.token !== 1
+					? (<>
+						{userData.user !== undefined ?
+							<Navbar.Text className="pr-3">Welcome, {userData.user.fname} </Navbar.Text> :
+							<></>
+						}
+						<Nav.Link onClick={() => logout()} to="/login"> Logout </Nav.Link>
+					</>)
 					: (<Nav.Link as={Link} to="/login">Login</Nav.Link>)
 				}
 			</Nav>

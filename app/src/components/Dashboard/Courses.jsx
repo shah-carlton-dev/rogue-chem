@@ -9,9 +9,6 @@ const Courses = (props) => {
 
     return (<>
         <Row className="top-nav">
-            <Col xs={3} className="p-0">
-                <p>Welcome, {userData.user.fname}</p>
-            </Col>
             <Col className="p-0 text-center">
                 <p>dashboard nav links, search, etc will be here</p>
             </Col>

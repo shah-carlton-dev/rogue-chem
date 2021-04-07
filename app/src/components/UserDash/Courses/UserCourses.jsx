@@ -5,13 +5,17 @@ import ResizePanel from "react-resize-panel";
 import '../../../styles/UserCourses.css';
 import CoursesDash from './CoursesDash.jsx';
 import FoldersList from './FoldersList.jsx';
-import FilePreview from './FilePreview.jsx';
+import FilesList from './FilesList.jsx';
 import Preview from './Preview.jsx';
 import { API_URL } from '../../../utils/constants.js';
 import Axios from "axios";
 import { Col } from "react-bootstrap";
 
 const UserCourses = (props) => {
+    // const history = useHistory();
+    // sessionStorage.clear();
+    // sessionStorage.setItem("last-route", history.location.pathname); doesn't work, forces all reloads to end up here
+
     const { userData, setUserData } = useContext(UserContext);
     const [courseData, setCourseData] = useState([]);
     const [retrieving, setRetrieving] = useState(true);
@@ -41,27 +45,28 @@ const UserCourses = (props) => {
 
     const getPreview = async (id) => {
         const url = API_URL + '/getFile/' + id;
-        await Axios.get(url).then((res) => {
-            console.log('preview data');
-            console.log(res.data);
-            setPreview(res.data);
-        })
+        try {
+            await Axios.get(url).then((res) => {
+                setPreview(res.data);
+            })
+        } catch {}
+        
     }
 
     const getFileData = async (id) => {
         const url = API_URL + '/courses/files/' + id;
-        await Axios.get(url).then((res) => {
-            console.log('file data');
-            console.log(res.data);
-            setFiles(res.data);
-        })
+        try {
+            await Axios.get(url).then((res) => {
+                setFiles(res.data);
+                setPreviewChange(res.data[0]._id);
+            })
+        } catch {}
+        
     }
 
     const getSectionData = async (id) => {
         const url = API_URL + '/courses/sections/' + id;
         await Axios.get(url).then((res) => {
-            console.log('section data');
-            console.log(res.data);
             setSections(res.data);
             setSectionChange(res.data[0]._id);
         })
@@ -69,22 +74,28 @@ const UserCourses = (props) => {
 
     const getCourseData = async () => {
         const url = API_URL + '/courses/allData';
-        await Axios.post(url, { ids: userData.user.courses }).then((res) => {
-            console.log('course data');
+        try {
+            await Axios.post(url, { ids: userData.user.courses }).then((res) => {
+                console.log('course data');
+                setRetrieving(false);
+                if (res === 1) {
+                    console.log("Error: " + res.data);
+                    setIsError(2);
+                }
+                else if (res === 0) {
+                    console.log("Error: user has no courses");
+                    setIsError(1);
+                } else {
+                    console.log(res.data);
+                    setCourseData(res.data);
+                    setCourseChange(res.data[0]._id);
+                }
+            });
+        } catch {
             setRetrieving(false);
-            if (res === 1) {
-                console.log("Error: " + res.data);
-                setIsError(2);
-            }
-            else if (res === 0) {
-                console.log("Error: user has no courses");
-                setIsError(1);
-            } else {
-                console.log(res.data);
-                setCourseData(res.data);
-                setCourseChange(res.data[0]._id);
-            }
-        });
+            setIsError(2);
+        }
+        
     }
     // TODO: Handle no courses available!
 
@@ -100,18 +111,18 @@ const UserCourses = (props) => {
             <div className='body fill-bottom'>
                 <Col xs={4}>
                     <div className='content panel right-border'>
-                        <FoldersList data={sections} setSectionChange={setSectionChange}/>
+                        <FoldersList data={sections} setSectionChange={setSectionChange} />
                     </div>
                 </Col>
                 <Col>
                     <div className='content panel right-border'>
-                        <FilePreview files={files} setPreviewChange={setPreviewChange}/>
+                        <FilesList files={files} setPreviewChange={setPreviewChange} />
                     </div>
                 </Col>
                 <Col>
                     <div className='content panel'>
-                        <Preview preview={preview}/>
-                </div>
+                        <Preview preview={preview} />
+                    </div>
                 </Col>
             </div>
         </div>
