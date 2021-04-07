@@ -6,6 +6,7 @@ import '../../../styles/UserCourses.css';
 import CoursesDash from './CoursesDash.jsx';
 import FoldersList from './FoldersList.jsx';
 import FilePreview from './FilePreview.jsx';
+import Preview from './Preview.jsx';
 import { API_URL } from '../../../utils/constants.js';
 import Axios from "axios";
 import { Col } from "react-bootstrap";
@@ -19,6 +20,8 @@ const UserCourses = (props) => {
     const [sections, setSections] = useState([]);
     const [sectionChange, setSectionChange] = useState(0);
     const [files, setFiles] = useState([]);
+    const [previewChange, setPreviewChange] = useState(0);
+    const [preview, setPreview] = useState({});
 
     useEffect(() => {
         getCourseData();
@@ -31,6 +34,19 @@ const UserCourses = (props) => {
     useEffect(() => {
         getFileData(sectionChange);
     }, [sectionChange]);
+
+    useEffect(() => {
+        getPreview(previewChange);
+    }, [previewChange])
+
+    const getPreview = async (id) => {
+        const url = API_URL + '/getFile/' + id;
+        await Axios.get(url).then((res) => {
+            console.log('preview data');
+            console.log(res.data);
+            setPreview(res.data);
+        })
+    }
 
     const getFileData = async (id) => {
         const url = API_URL + '/courses/files/' + id;
@@ -70,10 +86,11 @@ const UserCourses = (props) => {
             }
         });
     }
+    // TODO: Handle no courses available!
 
     return (<>
         <div className='container'>
-            <ResizePanel direction="s" handleClass="customHandle" borderClass="customResizeBorder" >
+            <ResizePanel direction="s" handleClass="customHandle" borderClass="customResizeBorder">
                 <div className='body'>
                     <div className='header panel'>
                         <CoursesDash things={{ retrieving, isError, courseData, setCourseChange }} />
@@ -88,12 +105,12 @@ const UserCourses = (props) => {
                 </Col>
                 <Col>
                     <div className='content panel right-border'>
-                        <FilePreview files={files}/>
+                        <FilePreview files={files} setPreviewChange={setPreviewChange}/>
                     </div>
                 </Col>
                 <Col>
                     <div className='content panel'>
-                        content  3
+                        <Preview preview={preview}/>
                 </div>
                 </Col>
             </div>

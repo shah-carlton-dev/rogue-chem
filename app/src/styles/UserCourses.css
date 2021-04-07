@@ -11,9 +11,9 @@ body {
 }
 
 .panel {    
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    /* display: flex; */ 
+    justify-content: left;
+    align-items: top;
     margin: 0px;
 }
 
