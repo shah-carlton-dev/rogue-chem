@@ -26,6 +26,8 @@ const UserCourses = (props) => {
     const [files, setFiles] = useState([]);
     const [previewChange, setPreviewChange] = useState(0);
     const [preview, setPreview] = useState({});
+    const [courseName, setCourseName] = useState("");
+    const [sectionName, setSectionName] = useState("");
 
     useEffect(() => {
         getCourseData();
@@ -49,27 +51,35 @@ const UserCourses = (props) => {
             await Axios.get(url).then((res) => {
                 setPreview(res.data);
             })
-        } catch {}
-        
+        } catch { }
+
     }
 
     const getFileData = async (id) => {
         const url = API_URL + '/courses/files/' + id;
         try {
+            if (sections !== undefined) setSectionName(sections.filter(s => s._id === id)[0].name);
+        } catch { }
+        try {
             await Axios.get(url).then((res) => {
                 setFiles(res.data);
                 setPreviewChange(res.data[0]._id);
             })
-        } catch {}
-        
+        } catch { }
+
     }
 
     const getSectionData = async (id) => {
         const url = API_URL + '/courses/sections/' + id;
-        await Axios.get(url).then((res) => {
-            setSections(res.data);
-            setSectionChange(res.data[0]._id);
-        })
+        try {
+            if (courseData !== undefined) setCourseName(courseData.filter(c => c._id === id)[0].name);
+        } catch { }
+        try {
+            await Axios.get(url).then((res) => {
+                setSections(res.data);
+                setSectionChange(res.data[0]._id);
+            })
+        } catch { }
     }
 
     const getCourseData = async () => {
@@ -95,9 +105,8 @@ const UserCourses = (props) => {
             setRetrieving(false);
             setIsError(2);
         }
-        
+
     }
-    // TODO: Handle no courses available!
 
     return (<>
         <div className='container'>
@@ -111,12 +120,12 @@ const UserCourses = (props) => {
             <div className='body fill-bottom'>
                 <Col xs={4}>
                     <div className='content panel right-border'>
-                        <FoldersList data={sections} setSectionChange={setSectionChange} />
+                        <FoldersList data={sections} setSectionChange={setSectionChange} courseName={courseName} />
                     </div>
                 </Col>
                 <Col>
                     <div className='content panel right-border'>
-                        <FilesList files={files} setPreviewChange={setPreviewChange} />
+                        <FilesList files={files} setPreviewChange={setPreviewChange} sectionName={sectionName} />
                     </div>
                 </Col>
                 <Col>

@@ -2,8 +2,8 @@ import React from "react";
 import { Button } from "react-bootstrap";
 
 const FoldersList = (props) => {
-    const { data, setSectionChange } = props;
-    
+    const { data, setSectionChange, courseName } = props;
+
     if (data.length === 0) {
         return (
             <p className="italicize">No folders in this course</p>
@@ -12,12 +12,13 @@ const FoldersList = (props) => {
 
     return (<div>
         {data !== null && data !== undefined
-            ? <dl> {data.map(section =>
-                <>
-                    <dt> <Button variant="link" onClick={() => setSectionChange(section._id)}>{section.name}</Button> </dt>
-                    <dd> {section.description} </dd>
-                </>
-            )}</dl> : <p>loading...</p>
+            ? <dl> <h5>{courseName}</h5>
+                {data.map(section =>
+                    <>
+                        <dt> <Button variant="link" onClick={() => setSectionChange(section._id)}>{section.name}</Button> </dt>
+                        <dd> {section.description} </dd>
+                    </>
+                )}</dl> : <p>loading...</p>
         }
     </div>)
 }
