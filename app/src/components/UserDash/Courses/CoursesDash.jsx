@@ -1,6 +1,6 @@
 import React from "react";
 import CourseCard from "./CourseCard.jsx";
-import {Row, Col} from "react-bootstrap";
+import {Row, Col, CardDeck} from "react-bootstrap";
 
 const CoursesDash = (props) => {
     const {retrieving, isError, courseData, setCourseChange} = props.things;
@@ -12,9 +12,9 @@ const CoursesDash = (props) => {
                 ? (isError===1 
                         ? (<div className="coursedata-error italicize text-center pt-3">Error retrieving courses. Try again later.</div>)
                         : (<div className="coursedata-message italicize text-center pt-3">You don't have any courses. Start by purchasing one!</div>))
-                : (<Row className="pt-3">{courseData.map(course => 
+                : (<Row className="pt-3"><CardDeck>{courseData.map(course => 
                     <Col><CourseCard course={course} setCourseChange={setCourseChange}/></Col>
-                )}</Row>)
+                )}</CardDeck></Row>)
         }
     </>)
 }

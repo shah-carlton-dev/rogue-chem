@@ -1,10 +1,10 @@
 import React from "react";
 import { Card } from "react-bootstrap";
-
+import '../../../styles/CourseCard.css';
 const CourseCard = (props) => {
   const { course, setCourseChange } = props;
   return (
-    <Card style={{ width: '18rem' }}>
+    <Card className="h-100" style={{ width: '18rem' }}>
       <Card.Body>
         <Card.Title>{course.name}</Card.Title>
         <Card.Text>

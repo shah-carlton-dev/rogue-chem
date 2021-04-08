@@ -62,4 +62,5 @@ body {
 
 .right-border {
     border-right: 2px solid rgb(227,227,227);
+    height: 100%;
 }
