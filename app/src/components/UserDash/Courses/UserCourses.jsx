@@ -11,31 +11,25 @@ import { API_URL } from '../../../utils/constants.js';
 import Axios from "axios";
 import { Col } from "react-bootstrap";
 
-const UserCourses = (props) => {
+const UserCourses = ({ course }) => {
     // const history = useHistory();
     // sessionStorage.clear();
     // sessionStorage.setItem("last-route", history.location.pathname); doesn't work, forces all reloads to end up here
 
     const { userData, setUserData } = useContext(UserContext);
-    const [courseData, setCourseData] = useState([]);
     const [retrieving, setRetrieving] = useState(true);
-    const [isError, setIsError] = useState(0);
-    const [courseChange, setCourseChange] = useState(0);
     const [sections, setSections] = useState([]);
     const [sectionChange, setSectionChange] = useState(0);
     const [files, setFiles] = useState([]);
     const [previewChange, setPreviewChange] = useState(0);
     const [preview, setPreview] = useState({});
-    const [courseName, setCourseName] = useState("");
+    const courseName = course.name;
+    const courseId = course._id;
     const [sectionName, setSectionName] = useState("");
 
     useEffect(() => {
-        getCourseData();
-    }, []);
-
-    useEffect(() => {
-        getSectionData(courseChange);
-    }, [courseChange]);
+        getSectionData(courseId);
+    }, [course]);
 
     useEffect(() => {
         getFileData(sectionChange);
@@ -52,7 +46,6 @@ const UserCourses = (props) => {
                 setPreview(res.data);
             })
         } catch { }
-
     }
 
     const getFileData = async (id) => {
@@ -66,46 +59,18 @@ const UserCourses = (props) => {
                 setPreviewChange(res.data[0]._id);
             })
         } catch { }
-
     }
 
     const getSectionData = async (id) => {
+        console.log(id);
         const url = API_URL + '/courses/sections/' + id;
         try {
-            if (courseData !== undefined) setCourseName(courseData.filter(c => c._id === id)[0].name);
-        } catch { }
-        try {
             await Axios.get(url).then((res) => {
+                // console.log(res); res is good, need to show folders and update file list acccordingly a
                 setSections(res.data);
                 setSectionChange(res.data[0]._id);
             })
         } catch { }
-    }
-
-    const getCourseData = async () => {
-        const url = API_URL + '/courses/allData';
-        try {
-            await Axios.post(url, { ids: userData.user.courses }).then((res) => {
-                console.log('course data');
-                setRetrieving(false);
-                if (res === 1) {
-                    console.log("Error: " + res.data);
-                    setIsError(2);
-                }
-                else if (res === 0) {
-                    console.log("Error: user has no courses");
-                    setIsError(1);
-                } else {
-                    console.log(res.data);
-                    setCourseData(res.data);
-                    setCourseChange(res.data[0]._id);
-                }
-            });
-        } catch {
-            setRetrieving(false);
-            setIsError(2);
-        }
-
     }
 
     return (<>
@@ -113,24 +78,25 @@ const UserCourses = (props) => {
             <ResizePanel direction="s" handleClass="customHandle" borderClass="customResizeBorder">
                 <div className='body'>
                     <div className='header panel'>
-                        <CoursesDash things={{ retrieving, isError, courseData, setCourseChange }} />
+                        <CoursesDash things={{ courseName, sections, setSectionChange }} />
                     </div>
                 </div>
             </ResizePanel>
             <div className='body fill-bottom'>
                 <Col xs={4}>
                     <div className='content panel right-border'>
-                        <FoldersList data={sections} setSectionChange={setSectionChange} courseName={courseName} />
-                    </div>
-                </Col>
-                <Col>
-                    <div className='content panel right-border'>
+                        {console.log(sections)}
                         <FilesList files={files} setPreviewChange={setPreviewChange} sectionName={sectionName} />
                     </div>
                 </Col>
                 <Col>
-                    <div className='content panel'>
+                    <div className='content panel right-border'>
                         <Preview preview={preview} />
+                    </div>
+                </Col>
+                <Col>
+                    <div className='content panel'>
+                        description whatnot
                     </div>
                 </Col>
             </div>

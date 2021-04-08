@@ -1,22 +1,21 @@
 import React from "react";
-import CourseCard from "./CourseCard.jsx";
-import {Row, Col, CardDeck} from "react-bootstrap";
+import SectionCard from "./SectionCard.jsx";
+import { Row, Col, CardDeck } from "react-bootstrap";
+import '../../../styles/CoursesDash.css';
 
 const CoursesDash = (props) => {
-    const {retrieving, isError, courseData, setCourseChange} = props.things;
-    
-    return (<>
-        {retrieving
-            ? (<div className="dash-loader"></div>)
-            : isError > 0 
-                ? (isError===1 
-                        ? (<div className="coursedata-error italicize text-center pt-3">Error retrieving courses. Try again later.</div>)
-                        : (<div className="coursedata-message italicize text-center pt-3">You don't have any courses. Start by purchasing one!</div>))
-                : (<Row className="pt-3"><CardDeck>{courseData.map(course => 
-                    <Col><CourseCard course={course} setCourseChange={setCourseChange}/></Col>
-                )}</CardDeck></Row>)
-        }
-    </>)
+    const { courseName, sections, setSectionChange } = props.things;
+    console.log(sections);
+    return (
+        <div className="topdash-wrapper">
+            <h5 className="ml-3 pt-3">{courseName}</h5>
+            <Row className="pt-3">
+                <CardDeck className="center-contents">{sections.map(section =>
+                    <Col><SectionCard section={section} setSectionChange={setSectionChange} /></Col>
+                )}</CardDeck>
+            </Row>
+        </div>
+        )
 }
 
-export default CoursesDash
+export default CoursesDash;

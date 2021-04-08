@@ -15,24 +15,24 @@ const Preview = (props) => {
     const handleShow = () => setShow(true);
 
     useEffect(() => {
-        console.log('attempting preview render');
+        //console.log('attempting preview render');
         if (preview !== null && preview !== undefined && preview.file_path !== undefined) {
             showPreview();
         }
     }, [preview]);
 
     const showPreview = () => {
-        console.log("about to render preview modal: ");
+        //console.log("about to render preview modal: ");
         setFileDesc(preview.description);
         setFileTitle(preview.title);
         //const path = ;
         setFile(API_URL + "/" + preview.file_path.slice(5));
-        console.log(file +'\n'+fileDesc+'\n'+fileTitle);
+        //console.log(file +'\n'+fileDesc+'\n'+fileTitle);
     }
 
     return (
         <React.Fragment>
-            {console.log(preview)}
+            {/* {console.log(preview)} */}
             {preview !== null && preview !== undefined && Object.keys(preview).length > 0
                 ?
                 <>

@@ -1,0 +1,7 @@
+.center-contents {
+    display: flex;
+}
+
+.topdash-wrapper {
+    overflow: auto;
+}
