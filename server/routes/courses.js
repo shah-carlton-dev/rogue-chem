@@ -4,6 +4,8 @@ const Router = express.Router();
 const Course = require('../model/course.js');
 const Section = require('../model/section.js');
 const File = require('../model/file.js');
+const Admin = require('../model/admin');
+const Student = require('../model/student');
 const mongoose = require('mongoose');
 
 Router.post('/create', async (req, res) => {
@@ -24,12 +26,18 @@ Router.post('/create', async (req, res) => {
     }
 });
 
-Router.delete('/delete/:id', async (req, res) => {
+Router.delete('/delete/:id', async (req, res) => { // deletes a course
     try {
         const course_id = req.params.id;
         let courses;
+        // remove course from db
         await Course.findByIdAndDelete(mongoose.Types.ObjectId(course_id)).then(async (r) => {
             await Course.find().then(r2 => courses = r2);
+        });
+        await Student.find({ courses: mongoose.Types.ObjectId(course_id) }).then(list => {
+            list.forEach(async s => {
+                await Student.findByIdAndUpdate(s._id, { "$pull": { "courses": mongoose.Types.ObjectId(course_id) } }, { useFindAndModify: false });
+            })
         });
         return res.send(courses);
     } catch (error) {
@@ -251,7 +259,7 @@ Router.post('/allData', async (req, res) => {
                 await Course.findById(mongoose.Types.ObjectId(i)).then((course) => {
                     courses.push(course);
                 }).then(async () => {
-                    if(courses.length === ids.length) {
+                    if (courses.length === ids.length) {
                         return res.send(courses).status(200);
                     }
                     // courses.forEach( course => {
