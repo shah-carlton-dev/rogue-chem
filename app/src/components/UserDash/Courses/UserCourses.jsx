@@ -42,25 +42,27 @@ const UserCourses = ({ course }) => {
 
     const getPreview = async (id) => {
         const url = API_URL + '/getFile/' + id;
-        console.log("preview change");
+        console.log("getting file for preview");
         try {
             await Axios.get(url).then((res) => {
-                setPreview(res.data);
                 console.log(res.data);
+                setPreview(res.data);
             })
         } catch { }
     }
 
     const getFileData = async (id) => {
         const url = API_URL + '/courses/files/' + id;
+        console.log("getting file list");
         try {
             if (sections !== undefined) {
                 setSectionName(sections.filter(s => s._id === id)[0].name);
-            } 
+            }
         } catch { }
         try {
             await Axios.get(url).then((res) => {
                 setFiles(res.data);
+                if (res.data[0])
                 setPreviewChange(res.data[0]._id);
             })
         } catch { }
@@ -98,7 +100,7 @@ const UserCourses = ({ course }) => {
                 </Col>
                 <Col className="preview-render">
                     <div className='content panel preview-render'>
-                        <PreviewRender preview={preview}/>
+                        <PreviewRender preview={preview} />
                     </div>
                 </Col>
             </div>

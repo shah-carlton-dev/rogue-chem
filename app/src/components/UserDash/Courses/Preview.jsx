@@ -9,9 +9,6 @@ const Preview = (props) => {
     const { preview } = props;
     const [show, setShow] = useState(false);
     const [file, setFile] = useState("");
-    const [fileDesc, setFileDesc] = useState(preview.description);
-    const [fileTitle, setFileTitle] = useState(preview.title);
-    const [keywrd, setKeywrd] = useState([]);
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
 
@@ -24,10 +21,6 @@ const Preview = (props) => {
 
     const showPreview = () => {
         //console.log("about to render preview modal: ");
-        setFileDesc(preview.description);
-        setFileTitle(preview.title);
-        setKeywrd(preview.keywords);
-        //const path = ;
         setFile(API_URL + "/" + preview.file_path.slice(5));
         //console.log(file +'\n'+fileDesc+'\n'+fileTitle);
     }
@@ -56,11 +49,11 @@ const Preview = (props) => {
                         <Modal.Body>{preview.description}</Modal.Body>
                         <div className="center-video">
                             <div className="App">
-                                <Worker workerUrl="https://unpkg.com/pdfjs-dist@2.6.347/build/pdf.worker.min.js">
+                                {/* <Worker workerUrl="https://unpkg.com/pdfjs-dist@2.6.347/build/pdf.worker.min.js">
                                     <div id="pdfviewer">
-                                        <Viewer fileUrl={file} toolbar="0" />
+                                        <Viewer fileUrl={API_URL + "/" + preview.file_path.slice(5)} toolbar="0" />
                                     </div>
-                                </Worker>
+                                </Worker> */}
                             </div>
                         </div>
                         <Modal.Footer>
