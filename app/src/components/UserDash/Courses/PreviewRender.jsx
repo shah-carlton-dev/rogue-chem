@@ -6,8 +6,7 @@ import '../../../styles/PreviewRender.css';
 import { API_URL } from '../../../utils/constants';
 
 
-const PreviewRender = (props) => {
-    const { preview } = props;
+const PreviewRender = ({ preview }) => {
 
     return (
         <React.Fragment>
@@ -18,14 +17,14 @@ const PreviewRender = (props) => {
                         <div className="App">
                             <Worker workerUrl="https://unpkg.com/pdfjs-dist@2.6.347/build/pdf.worker.min.js">
                                 <div id="pdfviewer">
-                                    <Viewer fileUrl={API_URL + "/" + preview.file_path.slice(5)} toolbar="0" />
+                                    <Viewer fileUrl={API_URL + "" + preview.file_path.slice(5)} toolbar="0" />
                                 </div>
                             </Worker>
                         </div>
                     </div>
                 </>
                 :
-                <p className="italicize text-center">No preview selected</p>
+                <p className="italicize text-center">No preview selected or invalid file object</p>
             }
         </React.Fragment>
     )

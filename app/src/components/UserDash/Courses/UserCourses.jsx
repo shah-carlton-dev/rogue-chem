@@ -44,10 +44,12 @@ const UserCourses = ({ course }) => {
         const url = API_URL + '/getFile/' + id;
         console.log("getting file for preview");
         try {
-            await Axios.get(url).then((res) => {
-                console.log(res.data);
-                setPreview(res.data);
-            })
+            if (id !== 0) {
+                await Axios.get(url).then((res) => {
+                    console.log(res.data);
+                    setPreview(res.data);
+                })
+            }
         } catch { }
     }
 
@@ -60,21 +62,25 @@ const UserCourses = ({ course }) => {
             }
         } catch { }
         try {
-            await Axios.get(url).then((res) => {
-                setFiles(res.data);
-                if (res.data[0])
-                setPreviewChange(res.data[0]._id);
-            })
+            if (id !== 0) {
+                await Axios.get(url).then((res) => {
+                    setFiles(res.data);
+                    if (res.data[0])
+                        setPreviewChange(res.data[0]._id);
+                })
+            }
         } catch { }
     }
 
     const getSectionData = async (id) => {
         const url = API_URL + '/courses/sections/' + id;
         try {
-            await Axios.get(url).then((res) => {
-                setSections(res.data);
-                setSectionChange(res.data[0]._id);
-            })
+            if (id !== undefined) {
+                await Axios.get(url).then((res) => {
+                    setSections(res.data);
+                    setSectionChange(res.data[0]._id);
+                })
+            }
         } catch { }
     }
 
