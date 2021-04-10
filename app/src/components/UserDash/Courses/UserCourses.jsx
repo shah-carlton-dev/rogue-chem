@@ -41,9 +41,11 @@ const UserCourses = ({ course }) => {
 
     const getPreview = async (id) => {
         const url = API_URL + '/getFile/' + id;
+        console.log("preview change");
         try {
             await Axios.get(url).then((res) => {
                 setPreview(res.data);
+                console.log(res.data);
             })
         } catch { }
     }
@@ -62,11 +64,9 @@ const UserCourses = ({ course }) => {
     }
 
     const getSectionData = async (id) => {
-        console.log(id);
         const url = API_URL + '/courses/sections/' + id;
         try {
             await Axios.get(url).then((res) => {
-                // console.log(res); res is good, need to show folders and update file list acccordingly a
                 setSections(res.data);
                 setSectionChange(res.data[0]._id);
             })
@@ -85,7 +85,6 @@ const UserCourses = ({ course }) => {
             <div className='body fill-bottom'>
                 <Col xs={4}>
                     <div className='content panel right-border'>
-                        {console.log(sections)}
                         <FilesList files={files} setPreviewChange={setPreviewChange} sectionName={sectionName} />
                     </div>
                 </Col>
@@ -96,7 +95,7 @@ const UserCourses = ({ course }) => {
                 </Col>
                 <Col>
                     <div className='content panel'>
-                        description whatnot
+                        description and whatnot
                     </div>
                 </Col>
             </div>

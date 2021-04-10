@@ -230,7 +230,6 @@ Router.put('/addSection', async (req, res) => {
                     if (sections.length === sectionList.length) {
                         return res.send(sectionList).status(304);
                     }
-                    console.log(sectionList)
                 })
             });
         } catch (err) {
@@ -253,7 +252,6 @@ Router.post('/allData', async (req, res) => {
                     courses.push(course);
                 }).then(async () => {
                     if(courses.length === ids.length) {
-                        console.log(courses);
                         return res.send(courses).status(200);
                     }
                     // courses.forEach( course => {

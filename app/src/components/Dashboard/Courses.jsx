@@ -27,6 +27,7 @@ const Courses = (props) => {
                 else if (res === 0)
                     console.log("Error: user has no courses");
                 else {
+                    console.log(res.data);
                     setCourseData(res.data);
                     setSelected(res.data[0]);
                 }
