@@ -11,6 +11,7 @@ const Preview = (props) => {
     const [file, setFile] = useState("");
     const [fileDesc, setFileDesc] = useState(preview.description);
     const [fileTitle, setFileTitle] = useState(preview.title);
+    const [keywrd, setKeywrd] = useState([]);
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
 
@@ -25,6 +26,7 @@ const Preview = (props) => {
         //console.log("about to render preview modal: ");
         setFileDesc(preview.description);
         setFileTitle(preview.title);
+        setKeywrd(preview.keywords);
         //const path = ;
         setFile(API_URL + "/" + preview.file_path.slice(5));
         //console.log(file +'\n'+fileDesc+'\n'+fileTitle);
@@ -38,6 +40,11 @@ const Preview = (props) => {
                 <>
                     <h5>{preview.title}</h5>
                     <p>{preview.description}</p>
+                    <ul className="keyword-list">
+                        {preview.keywords.map((word, index) => (
+                            <li key={index}>{word}</li>
+                        ))}
+                    </ul>
                     <Button variant="link" onClick={handleShow}>
                         View file
                     </Button>

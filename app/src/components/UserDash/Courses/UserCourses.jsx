@@ -7,6 +7,7 @@ import CoursesDash from './CoursesDash.jsx';
 import FoldersList from './FoldersList.jsx';
 import FilesList from './FilesList.jsx';
 import Preview from './Preview.jsx';
+import PreviewRender from './PreviewRender.jsx';
 import { API_URL } from '../../../utils/constants.js';
 import Axios from "axios";
 import { Col } from "react-bootstrap";
@@ -53,7 +54,9 @@ const UserCourses = ({ course }) => {
     const getFileData = async (id) => {
         const url = API_URL + '/courses/files/' + id;
         try {
-            if (sections !== undefined) setSectionName(sections.filter(s => s._id === id)[0].name);
+            if (sections !== undefined) {
+                setSectionName(sections.filter(s => s._id === id)[0].name);
+            } 
         } catch { }
         try {
             await Axios.get(url).then((res) => {
@@ -93,9 +96,9 @@ const UserCourses = ({ course }) => {
                         <Preview preview={preview} />
                     </div>
                 </Col>
-                <Col>
-                    <div className='content panel'>
-                        description and whatnot
+                <Col className="preview-render">
+                    <div className='content panel preview-render'>
+                        <PreviewRender preview={preview}/>
                     </div>
                 </Col>
             </div>
