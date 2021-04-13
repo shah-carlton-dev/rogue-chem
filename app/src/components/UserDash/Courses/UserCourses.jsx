@@ -84,6 +84,7 @@ const UserCourses = ({ course }) => {
         } catch { }
     }
 
+
     return (<>
         <div className='container'>
             <ResizePanel direction="s" handleClass="customHandle" borderClass="customResizeBorder">

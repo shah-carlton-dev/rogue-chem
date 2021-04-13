@@ -30,9 +30,11 @@ const Preview = (props) => {
             {/* {console.log(preview)} */}
             {preview !== null && preview !== undefined && Object.keys(preview).length > 0
                 ?
-                <>
+                <> 
                     <h5>{preview.title}</h5>
+                    <h6>Description:</h6>
                     <p>{preview.description}</p>
+                    <h6>Keywords:</h6>
                     <ul className="keyword-list">
                         {preview.keywords.map((word, index) => (
                             <li key={index}>{word}</li>
@@ -49,11 +51,11 @@ const Preview = (props) => {
                         <Modal.Body>{preview.description}</Modal.Body>
                         <div className="center-video">
                             <div className="App">
-                                {/* <Worker workerUrl="https://unpkg.com/pdfjs-dist@2.6.347/build/pdf.worker.min.js">
+                                <Worker workerUrl="https://unpkg.com/pdfjs-dist@2.6.347/build/pdf.worker.min.js">
                                     <div id="pdfviewer">
                                         <Viewer fileUrl={API_URL + "/" + preview.file_path.slice(5)} toolbar="0" />
                                     </div>
-                                </Worker> */}
+                                </Worker>
                             </div>
                         </div>
                         <Modal.Footer>
