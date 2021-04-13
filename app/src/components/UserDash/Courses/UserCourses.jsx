@@ -86,10 +86,10 @@ const UserCourses = ({ course }) => {
 
 
     return (<>
-        <div className='container'>
+        <div className='usercourses-container'>
             <ResizePanel direction="s" handleClass="customHandle" borderClass="customResizeBorder">
                 <div className='body'>
-                    <div className='header panel'>
+                    <div className='header panel' style={{height: '33vh'}}>
                         <CoursesDash things={{ courseName, sections, setSectionChange }} />
                     </div>
                 </div>
