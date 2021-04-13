@@ -63,6 +63,15 @@ Router.get('/allSections', async (req, res) => {
     }
 });
 
+Router.get('/section/:id', async (req, res) => {
+    try {
+        const section = await Section.findById(req.params.id);
+        return res.send(section);
+    } catch (errror) {
+        return res.status(400).send('Error while getting section. Try again later');
+    }
+})
+
 Router.post('/createSection', async (req, res) => {
     try {
         let { course_id, name, description } = req.body;
