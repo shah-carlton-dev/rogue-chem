@@ -173,17 +173,6 @@ Router.post('/addToQueue', async (req, res) => {
                 }
             })
         }
-
-
-
-
-
-        // findOneAndUpdate(filter,
-        //     { "$push": { "starredFiles": Mongoose.Types.ObjectId(fileId) } },
-        //     { useFindAndModify: false, new: true }
-        // ).then(res => {
-        //     console.log(res);
-        // })
     } catch (e) {
         console.log(e);
     }

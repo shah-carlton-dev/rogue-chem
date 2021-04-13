@@ -52,9 +52,11 @@ const Preview = (props) => {
             {/* {console.log(preview)} */}
             {preview !== null && preview !== undefined && Object.keys(preview).length > 0
                 ?
-                <>
+                <> 
                     <h5>{preview.title}</h5>
+                    <h6>Description:</h6>
                     <p>{preview.description}</p>
+                    <h6>Keywords:</h6>
                     <ul className="keyword-list">
                         {preview.keywords.map((word, index) => (
                             <li key={index}>{word}</li>
