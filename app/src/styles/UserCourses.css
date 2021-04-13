@@ -2,7 +2,7 @@ body {
     margin: 0px;
 }
 
-.container {
+.usercourses-container {
     height: calc(100vh - 96px);
     -webkit-box-flex: 3;
     flex-grow: 3;
