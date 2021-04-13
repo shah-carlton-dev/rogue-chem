@@ -1,10 +1,8 @@
 import React, { useEffect, useContext, useState } from "react";
 import UserContext from "../../../context/UserContext.js";
-import { useHistory } from "react-router-dom";
 import ResizePanel from "react-resize-panel";
 import '../../../styles/UserCourses.css';
 import CoursesDash from './CoursesDash.jsx';
-import FoldersList from './FoldersList.jsx';
 import FilesList from './FilesList.jsx';
 import Preview from './Preview.jsx';
 import PreviewRender from './PreviewRender.jsx';
@@ -12,7 +10,7 @@ import { API_URL } from '../../../utils/constants.js';
 import Axios from "axios";
 import { Col } from "react-bootstrap";
 
-const UserCourses = ({ course }) => {
+const UserCourses = ({ course}) => {
     // const history = useHistory();
     // sessionStorage.clear();
     // sessionStorage.setItem("last-route", history.location.pathname); doesn't work, forces all reloads to end up here
@@ -88,7 +86,7 @@ const UserCourses = ({ course }) => {
         <div className='usercourses-container'>
             <ResizePanel direction="s" handleClass="customHandle" borderClass="customResizeBorder">
                 <div className='body'>
-                    <div className='header panel' style={{height: '33vh'}}>
+                    <div className='header panel container' style={{height: '33vh'}}>
                         <CoursesDash things={{ courseName, sections, setSectionChange }} />
                     </div>
                 </div>

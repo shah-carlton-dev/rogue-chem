@@ -30,6 +30,7 @@ const studentSchema = mongoose.Schema(
         bookmarkedFiles: Array,
         completedSections: Array,
         completedFiles: Array,
+        recentFiles: Array,
         admin: {
             type: Boolean,
             required: true

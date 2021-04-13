@@ -146,4 +146,47 @@ Router.post('/login', async (req, res) => {
     }
 });
 
+Router.post('/addToQueue', async (req, res) => {
+    try {
+        if (req.body.fileId) {
+            const { fileId, userId } = req.body;
+            await Student.findById(userId).then(async s => {
+                console.log(s);
+                if (!s.starredFiles.includes(fileId)) {
+                    s.starredFiles = [...s.starredFiles, Mongoose.Types.ObjectId(fileId)];
+                    s.save();
+                    return res.status(200).send("File added to queue successfully!");
+                } else {
+                    return res.status(208).send("File is already in the queue!");
+                }
+            })
+        } else {
+            const { folderId, userId } = req.body;
+            await Student.findById(userId).then(async s => {
+                console.log(s);
+                if (!s.starredSections.includes(folderId)) {
+                    s.starredSections = [...s.starredSections, Mongoose.Types.ObjectId(folderId)];
+                    s.save();
+                    return res.status(200).send("Folder added to queue successfully!");
+                } else {
+                    return res.status(208).send("Folder is already in the queue!");
+                }
+            })
+        }
+
+
+
+
+
+        // findOneAndUpdate(filter,
+        //     { "$push": { "starredFiles": Mongoose.Types.ObjectId(fileId) } },
+        //     { useFindAndModify: false, new: true }
+        // ).then(res => {
+        //     console.log(res);
+        // })
+    } catch (e) {
+        console.log(e);
+    }
+})
+
 module.exports = Router;

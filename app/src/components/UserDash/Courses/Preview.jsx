@@ -1,11 +1,16 @@
-import React, { useState, useeffect, useEffect } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import Viewer, { Worker } from '@phuocng/react-pdf-viewer';
 import { Modal, Button, Row, Container } from 'react-bootstrap';
 import '@phuocng/react-pdf-viewer/cjs/react-pdf-viewer.css';
 import '../../../styles/PDFView.css';
+import Axios from "axios";
 import { API_URL } from '../../../utils/constants';
+import UserContext from "../../../context/UserContext.js";
+import ListsContext from "../../../context/ListsContext.js";
 
 const Preview = (props) => {
+    const { userData, setUserData } = useContext(UserContext);
+    const { queue, setQueue, recents, setRecents } = useContext(ListsContext);
     const { preview } = props;
     const [show, setShow] = useState(false);
     const [file, setFile] = useState("");
@@ -25,9 +30,18 @@ const Preview = (props) => {
     }
     const handleAddToQueue = (fileId) => {
         console.log("add to queue: " + fileId);
+        try {
+            Axios.post(
+                API_URL + "/users/addToQueue",
+                { fileId, userId: userData.user._id }
+            ).then(res => {
+                setQueue({ ...queue, files: [...queue.files, fileId] })
+            });
+        } catch (e) { }
+
     }
 
-    const handleShow = (fileId) => {
+    const handleShow = async (fileId) => {
         setShow(true);
         console.log("add to recents: " + fileId);
     }
