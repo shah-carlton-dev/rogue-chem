@@ -4,7 +4,7 @@ import '../../styles/Sidebar.css';
 import { useHistory } from "react-router-dom";
 import UserContext from "../../context/UserContext.js";
 import ListsContext from "../../context/ListsContext.js";
-import { Button } from 'react-bootstrap';
+import { Button, Row, Col, Container } from 'react-bootstrap';
 import { API_URL } from '../../utils/constants.js';
 import Axios from 'axios';
 import { getFilenameFromUrl } from "pdfjs-dist";
@@ -17,28 +17,29 @@ const Sidebar = (props) => {
     const [queueFileIds, setQueueFileIds] = useState([]);
     const [queueSections, setQueueSections] = useState([]);
     const [queueSectionIds, setQueueSectionIds] = useState([]);
+    const [showList, setShowList] = useState("qfiles");
 
     useEffect(() => {
-        if(queue !== undefined && queue.files !== null && queue.files !== undefined) 
+        if (queue !== undefined && queue.files !== null && queue.files !== undefined)
             setQueueFileIds(queue.files);
-        if(queue !== undefined && queue.sections !== null && queue.sections !== undefined) 
+        if (queue !== undefined && queue.sections !== null && queue.sections !== undefined)
             setQueueSectionIds(queue.sections);
     }, [...Object.values(queue)]);
 
     useEffect(() => {
         const qFiles = [];
-        for(const id in queueFileIds) {
+        for (const id in queueFileIds) {
             const file = getFile(queueFileIds[id]);
             qFiles.unshift(file);
         }
         setQueueFiles(qFiles);
-        console.log("file sections: "); 
+        console.log("file sections: ");
         console.log(queueFiles);
     }, [queueFileIds]);
 
     useEffect(() => {
         const qSections = [];
-        for(const id in queueSectionIds) {
+        for (const id in queueSectionIds) {
             const section = getSection(queueSectionIds[id]);
             qSections.unshift(section);
         }
@@ -49,18 +50,18 @@ const Sidebar = (props) => {
 
     const getFile = async (id) => {
         try {
-            const {data} = await Axios.get(API_URL + "/getFile/" + id);
+            const { data } = await Axios.get(API_URL + "/getFile/" + id);
             return data;
         } catch (error) {
-            return { error: "unable to load file"};
+            return { error: "unable to load file" };
         }
     }
     const getSection = async (id) => {
         try {
-            const {data} = await Axios.get(API_URL + "/courses/section/" + id);
+            const { data } = await Axios.get(API_URL + "/courses/section/" + id);
             return data;
         } catch (error) {
-            return { error: "unable to load section"};
+            return { error: "unable to load section" };
         }
     }
     const items = userData.user.admin ? (
@@ -136,30 +137,54 @@ const Sidebar = (props) => {
         />
         <hr />
         <div>
-            <Button className="btn btn-primary mb-2">Queue</Button>
-            <Button className="btn btn-primary mb-2">History</Button>
-            <div className="queue-view">
-                {
-                    queue.files.map(q => (<div className="queue-item">
-                        <h6 style={{ color: '#374151' }}>{q}</h6>
-                    </div>))
-                }
-                <div className="queue-item">
-                    </div>
-                <div className="queue-item">
-                    </div>
-                <div className="queue-item">
-                    </div>
-                <div className="queue-item">
-                    </div>
-            </div>
-            <div className="history-view">
-                {
-                    queue.sections.map(q => (<div className="history-item">
-                        <h6 style={{ color: '#374151' }}>{q}</h6>
-                    </div>))
-                }
-            </div>
+            <Container>
+                <Row>
+                    <Col xs={3} className="p-0">
+                        <Button variant="link" className="mb-2" onClick={() => setShowList("qfiles")}>Q:Files</Button>
+                    </Col>
+                    <Col xs={5} className="pl-2">
+                        <Button variant="link" className="mb-2" onClick={() => setShowList("qfolders")}>Q:Folders</Button>
+                    </Col>
+                    <Col xs={4} className="pl-1">
+                        <Button variant="link" className="mb-2" onClick={() => setShowList("recents")}>History</Button>
+                    </Col>
+                </Row>
+            </Container>
+            {
+                showList === "qfiles" ?
+                    <div className="queue-view">
+                        {
+                            queue.files.map(q => (<div className="queue-item">
+                                <h6 style={{ color: '#374151' }}>{q}</h6>
+                            </div>))
+                        }
+                        <div className="queue-item">
+                        </div>
+                        <div className="queue-item">
+                        </div>
+                        <div className="queue-item">
+                        </div>
+                        <div className="queue-item">
+                        </div>
+                    </div> : <></>
+            }
+
+            {
+                showList === "qfolders" ? <div className="qfolders-view">
+                    {
+                        queue.sections.map(q => (<div className="qfolder-item">
+                            <h6 style={{ color: '#374151' }}>{q}</h6>
+                        </div>))
+                    }
+                </div> : <></>
+            }
+
+            {
+                showList === "recents" ? <> show recents</> : <></>
+                    
+            }
+
+
         </div>
         <hr />
 

@@ -175,7 +175,7 @@
     margin-left: 5%;
     margin-right: 5%;
     height: 80px;
-    background-color: lightblue; 
+    background-color: lightblue;
     border: 1px grey solid;
     border-radius: 7px;
     margin-top: 10px;
@@ -186,7 +186,7 @@
     cursor: pointer;
 }
 
-.history-view {
+.qfolders-view {
     border-radius: 7px;
     background-color: white !important;
     border: 2px grey solid;
@@ -195,18 +195,18 @@
     overflow: scroll;
 }
 
-.history-item {
+.qfolder-item {
     width: 90%;
     margin-left: 5%;
     margin-right: 5%;
     height: 80px;
-    background-color: lightblue; 
+    background-color: lightblue;
     border: 1px grey solid;
     border-radius: 7px;
     margin-top: 10px;
 }
 
-.history-item:hover {
+.qfolder-item:hover {
     background-color: blue;
     cursor: pointer;
 }
