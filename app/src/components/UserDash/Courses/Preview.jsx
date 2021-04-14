@@ -28,22 +28,39 @@ const Preview = (props) => {
         setFile(API_URL + "/" + preview.file_path.slice(5));
         //console.log(file +'\n'+fileDesc+'\n'+fileTitle);
     }
-    const handleAddToQueue = (fileId) => {
-        console.log("add to queue: " + fileId);
-        try {
-            Axios.post(
-                API_URL + "/users/addToQueue",
-                { fileId, userId: userData.user._id }
-            ).then(res => {
-                setQueue({ ...queue, files: [...queue.files, fileId] })
-            });
-        } catch (e) { }
-
+    const handleAddToQueue = async (fileId) => {
+        if (queue.files.includes(fileId)) {
+            console.log("File already in queue: " + fileId);
+        } else {
+            try {
+                await Axios.post(
+                    API_URL + "/users/addToQueue",
+                    { fileId, userId: userData.user._id }
+                ).then(res => {
+                    setQueue({ ...queue, files: [...queue.files, fileId] })
+                });
+            } catch (e) { }
+        }
     }
 
     const handleShow = async (fileId) => {
         setShow(true);
-        console.log("add to recents: " + fileId);
+        console.log("Add to recents: " + fileId);
+        try {
+            await Axios.post(
+                API_URL + "/users/updateRecents",
+                { fileId, userId: userData.user._id }
+            ).then(res => {
+                let find = (e) => e === fileId;
+                if (recents.findIndex(find) === -1) {
+                    setRecents([fileId, ...recents])
+                } else {
+                    const rec = recents.splice(find, 1);
+                    console.log(rec);
+                    setRecents([fileId, ...rec]);
+                }
+            });
+        } catch (e) { }
     }
 
 
@@ -52,7 +69,7 @@ const Preview = (props) => {
             {/* {console.log(preview)} */}
             {preview !== null && preview !== undefined && Object.keys(preview).length > 0
                 ?
-                <> 
+                <>
                     <h5>{preview.title}</h5>
                     <h6>Description:</h6>
                     <p>{preview.description}</p>

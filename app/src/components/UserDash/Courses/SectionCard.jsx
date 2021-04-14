@@ -12,12 +12,16 @@ const SectionCard = (props) => {
     const { queue, setQueue, recents, setRecents } = useContext(ListsContext);
 
     const handleAddToQueue = async (folderId) => {
-        Axios.post(
-            API_URL + "/users/addToQueue",
-            { folderId, userId: userData.user._id }
-        ).then(
-            setQueue({ ...queue, sections: [...queue.sections, folderId] })
-        );
+        if (queue.sections.includes(folderId)) {
+            console.log("Folder already in queue: " + folderId);
+        } else {
+            await Axios.post(
+                API_URL + "/users/addToQueue",
+                { folderId, userId: userData.user._id }
+            ).then(
+                setQueue({ ...queue, sections: [...queue.sections, folderId] })
+            );
+        }
     }
 
     return (

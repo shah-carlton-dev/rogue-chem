@@ -151,7 +151,6 @@ Router.post('/addToQueue', async (req, res) => {
         if (req.body.fileId) {
             const { fileId, userId } = req.body;
             await Student.findById(userId).then(async s => {
-                console.log(s);
                 if (!s.starredFiles.includes(fileId)) {
                     s.starredFiles = [...s.starredFiles, Mongoose.Types.ObjectId(fileId)];
                     s.save();
@@ -163,7 +162,6 @@ Router.post('/addToQueue', async (req, res) => {
         } else {
             const { folderId, userId } = req.body;
             await Student.findById(userId).then(async s => {
-                console.log(s);
                 if (!s.starredSections.includes(folderId)) {
                     s.starredSections = [...s.starredSections, Mongoose.Types.ObjectId(folderId)];
                     s.save();
@@ -173,6 +171,25 @@ Router.post('/addToQueue', async (req, res) => {
                 }
             })
         }
+    } catch (e) {
+        console.log(e);
+    }
+})
+
+Router.post('/updateRecents', async (req, res) => {
+    try {
+        const { fileId, userId } = req.body;
+        await Student.findById(userId).then(async s => {
+            console.log(s);
+            if (!s.recentFiles.includes(fileId)) {
+                s.recentFiles = [Mongoose.Types.ObjectId(fileId), ...s.recentFiles];
+            } else if (s.recentFiles.length !== 1) {
+                s.recentFiles.splice(s.recentFiles.findIndex(e => e == fileId), 1);
+                s.recentFiles = [Mongoose.Types.ObjectId(fileId), ...s.recentFiles];
+            }
+            s.save();
+            return res.status(200).send("Recents list updated successfully!");
+        })
     } catch (e) {
         console.log(e);
     }

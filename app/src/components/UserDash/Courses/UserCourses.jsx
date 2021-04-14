@@ -1,5 +1,4 @@
 import React, { useEffect, useContext, useState } from "react";
-import UserContext from "../../../context/UserContext.js";
 import ResizePanel from "react-resize-panel";
 import '../../../styles/UserCourses.css';
 import CoursesDash from './CoursesDash.jsx';
@@ -15,7 +14,6 @@ const UserCourses = ({ course}) => {
     // sessionStorage.clear();
     // sessionStorage.setItem("last-route", history.location.pathname); doesn't work, forces all reloads to end up here
 
-    const { userData, setUserData } = useContext(UserContext);
     const [retrieving, setRetrieving] = useState(true);
     const [sections, setSections] = useState([]);
     const [sectionChange, setSectionChange] = useState(0);
@@ -81,7 +79,6 @@ const UserCourses = ({ course}) => {
             }
         } catch { }
     }
-
 
     return (<>
         <div className='usercourses-container'>
