@@ -23,18 +23,7 @@
     stroke: #000;
   }
   
-  /* Targets openFileButton */
- .viewer-toolbar-right .viewer-toolbar-item:nth-child(2) {
-    display: none !important;
-  }
-
-  /* Targets downloadButton */
-  .viewer-toolbar-right .viewer-toolbar-item:nth-child(3) {
-    display: none !important;
-  }
-
-  /* Targets printButton */
-  .viewer-toolbar-right .viewer-toolbar-item:nth-child(4) {
+  .viewer-open-file {
     display: none !important;
   }
   
