@@ -1,3 +1,4 @@
+
 import React, { useContext, useEffect, useState } from "react";
 import { Navigation } from 'react-minimal-side-navigation';
 import '../../styles/Sidebar.css';
@@ -9,7 +10,7 @@ import { API_URL } from '../../utils/constants.js';
 import Axios from 'axios';
 import { getFilenameFromUrl } from "pdfjs-dist";
 
-const Sidebar = (props) => {
+const AdminSidebar = (props) => {
     const history = useHistory();
     const { userData, setUserData } = useContext(UserContext);
     const { queue, setQueue, recents, setRecents } = useContext(ListsContext);
@@ -64,7 +65,7 @@ const Sidebar = (props) => {
             return { error: "unable to load section" };
         }
     }
-    const items = userData.user.admin ? (
+    const items =
         [ //admin items
             {
                 title: 'Home',
@@ -109,23 +110,7 @@ const Sidebar = (props) => {
                 title: 'Sample Render',
                 itemId: '/home/sample'
             },
-        ]
-    ) : (
-        [// user items
-            {
-                title: 'Home',
-                itemId: '/home',
-            }, {
-                title: 'Messages',
-                itemId: '/home/messages',
-            }, {
-                title: 'Progress',
-                itemId: '/home/progress',
-            }, {
-                title: 'Profile',
-                itemId: '/home/profile'
-            }]
-    );
+        ];
 
     return (<>
         <Navigation
@@ -136,59 +121,8 @@ const Sidebar = (props) => {
             items={items}
         />
         <hr />
-        <div>
-            <Container>
-                <Row>
-                    <Col xs={3} className="p-0">
-                        <Button variant="link" className="mb-2" onClick={() => setShowList("qfiles")}>Q:Files</Button>
-                    </Col>
-                    <Col xs={5} className="pl-2">
-                        <Button variant="link" className="mb-2" onClick={() => setShowList("qfolders")}>Q:Folders</Button>
-                    </Col>
-                    <Col xs={4} className="pl-1">
-                        <Button variant="link" className="mb-2" onClick={() => setShowList("recents")}>History</Button>
-                    </Col>
-                </Row>
-            </Container>
-            {
-                showList === "qfiles" ?
-                    <div className="queue-view">
-                        {
-                            queue.files.map(q => (<div className="queue-item">
-                                <h6 style={{ color: '#374151' }}>{q}</h6>
-                            </div>))
-                        }
-                        <div className="queue-item">
-                        </div>
-                        <div className="queue-item">
-                        </div>
-                        <div className="queue-item">
-                        </div>
-                        <div className="queue-item">
-                        </div>
-                    </div> : <></>
-            }
-
-            {
-                showList === "qfolders" ? <div className="qfolders-view">
-                    {
-                        queue.sections.map(q => (<div className="qfolder-item">
-                            <h6 style={{ color: '#374151' }}>{q}</h6>
-                        </div>))
-                    }
-                </div> : <></>
-            }
-
-            {
-                showList === "recents" ? <> show recents</> : <></>
-                    
-            }
-
-
-        </div>
-        <hr />
 
     </>)
 }
 
-export default Sidebar;
+export default AdminSidebar;
