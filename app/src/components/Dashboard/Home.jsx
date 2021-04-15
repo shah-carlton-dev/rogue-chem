@@ -2,8 +2,7 @@ import React, { useContext, useState } from 'react';
 import UserContext from "../../context/UserContext.js";
 import { Row, Col } from "react-bootstrap";
 import { Switch, Route } from 'react-router-dom';
-import UserSidebar from "../UserDash/UserSidebar.jsx";
-import AdminSidebar from "../AdminDash/AdminSidebar.jsx";
+import Sidebar from "./Sidebar.jsx"
 import "../../styles/Home.css";
 import CourseManagement from '../../components/CourseManagement/CourseManagement';
 import SampleRender from '../../components/VideoRender/SampleRender';
@@ -31,9 +30,9 @@ const Home = (props) => {
                     <Col xs={2} className="ml-2 sidebar">
                         {
                             userData.user.admin ? (
-                                <AdminSidebar />
+                                <Sidebar />
                             ) : (
-                                <UserSidebar />
+                                <Sidebar />
                             )
                         }
                     </Col>
