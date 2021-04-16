@@ -101,7 +101,7 @@ const Preview = (props) => {
                         </Modal.Body>
                         <div className="center-video">
                             <div className="App">
-                                <Worker workerUrl="https://unpkg.com/pdfjs-dist@2.6.347/build/pdf.worker.min.js">
+                                <Worker workerUrl="https://unpkg.com/pdfjs-dist@2.7.570/build/pdf.worker.min.js">
                                     <div id="pdfviewer">
                                         <Viewer fileUrl={API_URL + preview.file_path.slice(5)} toolbar="0" />
                                     </div>
