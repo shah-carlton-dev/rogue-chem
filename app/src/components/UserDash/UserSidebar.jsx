@@ -64,21 +64,21 @@ const Sidebar = (props) => {
             return { error: "unable to load section" };
         }
     }
-    const items = 
-        [// user items
-            {
-                title: 'Home',
-                itemId: '/home',
-            }, {
-                title: 'Messages',
-                itemId: '/home/messages',
-            }, {
-                title: 'Progress',
-                itemId: '/home/progress',
-            }, {
-                title: 'Profile',
-                itemId: '/home/profile'
-            }];
+    const items = [// user items
+        {
+            title: 'Home',
+            itemId: '/home',
+        }, {
+            title: 'Messages',
+            itemId: '/home/messages',
+        }, {
+            title: 'Progress',
+            itemId: '/home/progress',
+        }, {
+            title: 'Profile',
+            itemId: '/home/profile'
+        }
+    ];
 
     return (<>
         <Navigation
@@ -134,7 +134,7 @@ const Sidebar = (props) => {
 
             {
                 showList === "recents" ? <> show recents</> : <></>
-                    
+
             }
 
 
