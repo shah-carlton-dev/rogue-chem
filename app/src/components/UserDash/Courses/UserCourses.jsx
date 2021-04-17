@@ -18,6 +18,7 @@ const UserCourses = ({ course}) => {
     const [sections, setSections] = useState([]);
     const [sectionChange, setSectionChange] = useState(0);
     const [files, setFiles] = useState([]);
+    const [videos, setVideos] = useState([]);
     const [previewChange, setPreviewChange] = useState(0);
     const [preview, setPreview] = useState({});
     const courseName = course.name;
@@ -51,6 +52,7 @@ const UserCourses = ({ course}) => {
 
     const getFileData = async (id) => {
         const url = API_URL + '/courses/files/' + id;
+        const vURL = API_URL + '/courses/videos/' + id;
         console.log("getting file list");
         try {
             if (sections !== undefined) {
@@ -66,6 +68,16 @@ const UserCourses = ({ course}) => {
                 })
             }
         } catch { }
+        // now, we yoink the video data
+        try {
+            if (id !== 0) {
+                await Axios.get(vURL).then((res) => {
+                    setVideos(res.data);
+                    if (res.data[0] && previewChange !== 0) // if there is a video, and preview isn't a PDF set video as preview
+                        setPreviewChange(res.data[0].id); 
+                })
+            }
+        }  catch {}
     }
 
     const getSectionData = async (id) => {
@@ -75,7 +87,7 @@ const UserCourses = ({ course}) => {
                 await Axios.get(url).then((res) => {
                     setSections(res.data);
                     setSectionChange(res.data[0]._id);
-                })
+                }) 
             }
         } catch { }
     }

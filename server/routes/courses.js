@@ -4,6 +4,7 @@ const Router = express.Router();
 const Course = require('../model/course.js');
 const Section = require('../model/section.js');
 const File = require('../model/file.js');
+const Video = require('../model/video.js');
 const Admin = require('../model/admin');
 const Student = require('../model/student');
 const mongoose = require('mongoose');
@@ -159,6 +160,30 @@ Router.get('/files/:id', async (req, res) => {
     }
 });
 
+Router.get('/videos/:id', async (req, res) => {
+    try {
+        const section_id = req.params.id;
+        let section;
+        await Section.findById(mongoose.Types.ObjectId(section_id)).then(s => section = s);
+        let videoList = [];
+        try {
+            if (section.videos.length === 0) res.send(videoList).status(304);
+            await section.videos.forEach(async (video) => {
+                await Video.findById(mongoose.Types.ObjectId(video._id)).then((v) => {
+                    videoList.push(v);
+                    if (section.videos.length === videoList.length) { 
+                        res.send(videoList);
+                    }
+                })
+            })
+        } catch (err) { 
+            res.status(400).send("Error collecting videos for folder.");
+        }
+    } catch (err) {
+        res.status(400).send("Error finding folder's videos. Try again later")
+    }
+})
+
 Router.put('/addFile', async (req, res) => {
     try {
         const { file_id, section_id } = req.body;
@@ -173,6 +198,19 @@ Router.put('/addFile', async (req, res) => {
     }
 });
 
+Router.put('/addVideo', async (req, res) => {
+    try {
+        const { video_id, section_id } = req.body;
+        await Section.findByIdAndUpdate(mongoose.Types.ObjectId(section_id), { "$push": {"videos": mongoose.Types.ObjectId(video_id) } }).then(async () => 
+            await Section.findById(mongoose.Types.ObjectId(section_id)).then(v => {
+                res.send(v.videos).status(304);
+            })
+        )
+    } catch (err) {
+        res.status(400).send("Error adding video to folder. Try again later");
+    }
+})
+
 Router.put('/removeFile', async (req, res) => {
     try {
         const { file_id, section_id } = req.body;
@@ -185,6 +223,19 @@ Router.put('/removeFile', async (req, res) => {
         res.status(400).send("Error removing file from folder. Try again later");
     }
 });
+
+Router.put('/removeVideo', async (req, res) => {
+    try {
+        const { video_id, section_id } = req.body;
+        await Section.findByIdAndUpdate(mongoose.Types.ObjectId(section_id), { "$pull": { "videos": mongoose.Types.ObjectId(video_id) } }).then(async () =>
+            await Section.findById(mongoose.Types.ObjectId(section_id)).then(v => {
+                res.send(v.videos).status(304);
+            })
+        );
+    } catch (err) {
+        res.status(400).send("Error removing video from folder. Try again later")
+    }
+})
 
 Router.put('/removeSection', async (req, res) => {
     try {
