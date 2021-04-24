@@ -6,7 +6,8 @@ const sectionSchema = mongoose.Schema(
         course_id: mongoose.ObjectId,
         name: String,
         description: String,
-        files: Array
+        files: Array,
+        videos: Array
     },
     { timestamps: true }
 );

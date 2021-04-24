@@ -46,6 +46,7 @@ const CourseManagement = (props) => {
             await Axios.get(API_URL + "/courses/sections/" + activeCourse._id).then(res => {
                 setSections(res.data);
             });
+            console.log("get sections")
         } catch (err) { }
     }
 

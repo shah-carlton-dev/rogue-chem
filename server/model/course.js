@@ -7,7 +7,8 @@ const courseSchema = mongoose.Schema(
         name: String,
         description: String,
         sections: Array,
-        files: Array
+        files: Array,
+        videos: Array
     },
     { timestamps: true }
 );
