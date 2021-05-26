@@ -140,10 +140,10 @@ const Sidebar = (props) => {
             <Container>
                 <Row>
                     <Col xs={3} className="p-0">
-                        <Button variant="link" className="mb-2" onClick={() => setShowList("qfiles")}>Q:Files</Button>
+                        <Button variant="link" className="mb-2" onClick={() => setShowList("qfiles")}>Files</Button>
                     </Col>
                     <Col xs={5} className="pl-2">
-                        <Button variant="link" className="mb-2" onClick={() => setShowList("qfolders")}>Q:Folders</Button>
+                        <Button variant="link" className="mb-2" onClick={() => setShowList("qfolders")}>Folders</Button>
                     </Col>
                     <Col xs={4} className="pl-1">
                         <Button variant="link" className="mb-2" onClick={() => setShowList("recents")}>History</Button>

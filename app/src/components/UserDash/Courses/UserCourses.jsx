@@ -9,7 +9,7 @@ import { API_URL } from '../../../utils/constants.js';
 import Axios from "axios";
 import { Col } from "react-bootstrap";
 
-const UserCourses = ({ course}) => {
+const UserCourses = ({ course }) => {
     // const history = useHistory();
     // sessionStorage.clear();
     // sessionStorage.setItem("last-route", history.location.pathname); doesn't work, forces all reloads to end up here
@@ -41,7 +41,7 @@ const UserCourses = ({ course}) => {
         const url = API_URL + '/getFile/' + id;
         console.log("getting file for preview");
         try {
-            if (id !== 0) {
+            if (id !== 0 && id !== undefined) {
                 await Axios.get(url).then((res) => {
                     console.log(res.data);
                     setPreview(res.data);
@@ -74,10 +74,10 @@ const UserCourses = ({ course}) => {
                 await Axios.get(vURL).then((res) => {
                     setVideos(res.data);
                     if (res.data[0] && previewChange !== 0) // if there is a video, and preview isn't a PDF set video as preview
-                        setPreviewChange(res.data[0].id); 
+                        setPreviewChange(res.data[0].id);
                 })
             }
-        }  catch {}
+        } catch { }
     }
 
     const getSectionData = async (id) => {
@@ -87,32 +87,32 @@ const UserCourses = ({ course}) => {
                 await Axios.get(url).then((res) => {
                     setSections(res.data);
                     setSectionChange(res.data[0]._id);
-                }) 
+                })
             }
         } catch { }
     }
 
     return (<>
         <div className='usercourses-container'>
-            <ResizePanel direction="s" handleClass="customHandle" borderClass="customResizeBorder">
-                <div className='body'>
-                    <div className='header panel container' style={{height: '33vh'}}>
+            <ResizePanel direction="s" handleClass="customHandle" borderClass="customResizeBorder" style={{height: '20vh'}}>
+                <div className='content-area'>
+                    <div className='header panel container'>
                         <CoursesDash things={{ courseName, sections, setSectionChange }} />
                     </div>
                 </div>
             </ResizePanel>
-            <div className='body fill-bottom'>
+            <div className='content-area'>
                 <Col xs={4}>
                     <div className='content panel right-border'>
                         <FilesList files={files} setPreviewChange={setPreviewChange} sectionName={sectionName} />
                     </div>
                 </Col>
-                <Col>
+                <Col xs={4}>
                     <div className='content panel right-border'>
                         <Preview preview={preview} />
                     </div>
                 </Col>
-                <Col className="preview-render">
+                <Col xs={4} className="preview-render">
                     <div className='content panel preview-render'>
                         <PreviewRender preview={preview} />
                     </div>

@@ -10,7 +10,6 @@ import Axios from "axios";
 const Courses = (props) => {
     const { userData, setUserData } = useContext(UserContext);
     const [courseData, setCourseData] = useState([]);
-    const [disableSelect, setDisableSelect] = useState(false);
     const [selected, setSelected] = useState({});
 
     useEffect(() => {
@@ -39,20 +38,22 @@ const Courses = (props) => {
 
     return (<>
         <Row className="top-nav py-1">
-            <Col lg={3} className="">
+            <Col lg={3}>
                 <Select
                     options={courseData}
                     valueField="_id"
-                    disabled={disableSelect}
+                    disabled={false}
                     onChange={(val) => { setSelected(val[0]) }}
                     labelField="name"
-                    placeholder="Select course"
+                    placeholder={selected.name}
                     separator={true}
                     dropdownHandleRenderer={({ state }) => (
                         <span className="pl-1">{state.dropdown ? " –" : " +"}</span>
                     )}
                     closeOnSelect={true}
+                    backspaceDelete={false}
                 />
+                {console.log(selected)}
             </Col>
             <Col lg={8} className="">
                 <p className="text-center">dashboard nav links, search, etc will be here</p>
