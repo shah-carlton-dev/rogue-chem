@@ -9,7 +9,7 @@ import { API_URL } from '../../../utils/constants.js';
 import Axios from "axios";
 import { Col } from "react-bootstrap";
 
-// component containing entire use dashboard (minus dashboard nav)
+// component containing entire user dashboard (minus dashboard nav)
 
 const UserCourses = ({ course }) => {
     // const history = useHistory();
