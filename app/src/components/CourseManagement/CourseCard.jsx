@@ -1,9 +1,7 @@
 import React from 'react';
 import { Card, Button } from "react-bootstrap";
 
-const CourseBlock = (props) => {
-
-
+const CourseCard = (props) => {
     return (
         <Card style={{ width: '18rem' }} key={props.course._id}>
             <Card.Body>
@@ -20,4 +18,4 @@ const CourseBlock = (props) => {
     );
 };
 
-export default CourseBlock;
+export default CourseCard;

@@ -8,7 +8,7 @@ import { API_URL } from '../../../utils/constants';
 import UserContext from "../../../context/UserContext.js";
 import ListsContext from "../../../context/ListsContext.js";
 
-const Preview = (props) => {
+const FileInfo = (props) => {
     const { userData, setUserData } = useContext(UserContext);
     const { queue, setQueue, recents, setRecents } = useContext(ListsContext);
     const { preview } = props;
@@ -65,7 +65,7 @@ const Preview = (props) => {
 
 
     return (
-        <React.Fragment>
+        <div className="filelist-root">
             {/* {console.log(preview)} */}
             {preview !== null && preview !== undefined && Object.keys(preview).length > 0
                 ?
@@ -115,8 +115,8 @@ const Preview = (props) => {
                 :
                 <p className="italicize text-center">No preview selected</p>
             }
-        </React.Fragment>
+        </div>
     )
 }
 
-export default Preview;
+export default FileInfo;

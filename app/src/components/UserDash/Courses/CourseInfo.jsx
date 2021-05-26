@@ -3,7 +3,7 @@ import SectionCard from "./SectionCard.jsx";
 import { Row, Col, CardDeck } from "react-bootstrap";
 import '../../../styles/CoursesDash.css';
 
-const CoursesDash = (props) => {
+const CourseInfo = (props) => {
     const { courseName, sections, setSectionChange } = props.things;
     return (
         <div className="topdash-wrapper" >
@@ -17,4 +17,4 @@ const CoursesDash = (props) => {
         )
 }
 
-export default CoursesDash;
+export default CourseInfo;

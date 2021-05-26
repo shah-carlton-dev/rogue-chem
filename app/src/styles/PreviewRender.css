@@ -1,7 +1,18 @@
 #pdfviewer {
-    width: 100% !important;
+    width: 95% !important;
+    padding-top: 1vh;
+    text-align: center;
 }
 .preview-render {
     padding: 0px !important;
     margin: 0px !important;
+}
+
+.viewer-layout-toolbar {
+    display: none;
+}
+
+.viewer-layout-container {
+    /* border: none; */
+    grid-template-rows: 0;
 }

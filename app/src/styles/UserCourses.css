@@ -67,3 +67,7 @@ body {
     border-right: 2px solid rgb(227, 227, 227);
     height: 100%;
 }
+
+.col-4 {
+    padding: 0px !important;
+}

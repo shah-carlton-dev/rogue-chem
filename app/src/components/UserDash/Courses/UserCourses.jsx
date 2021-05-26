@@ -1,13 +1,15 @@
 import React, { useEffect, useContext, useState } from "react";
 import ResizePanel from "react-resize-panel";
 import '../../../styles/UserCourses.css';
-import CoursesDash from './CoursesDash.jsx';
-import FilesList from './FilesList.jsx';
-import Preview from './Preview.jsx';
+import CourseInfo from './CourseInfo.jsx';
+import FolderInfo from './FolderInfo.jsx';
+import FileInfo from './FileInfo.jsx';
 import PreviewRender from './PreviewRender.jsx';
 import { API_URL } from '../../../utils/constants.js';
 import Axios from "axios";
 import { Col } from "react-bootstrap";
+
+// component containing entire use dashboard (minus dashboard nav)
 
 const UserCourses = ({ course }) => {
     // const history = useHistory();
@@ -35,7 +37,20 @@ const UserCourses = ({ course }) => {
 
     useEffect(() => {
         getPreview(previewChange);
-    }, [previewChange])
+    }, [previewChange]);
+
+    useEffect(() => {
+        console.log("mounted")
+        console.log(courseName);
+        return function cleanup() {
+            console.log("unmounted");
+            console.log(courseName)
+            console.log("section:");
+            console.log(sectionChange);
+            console.log("file:");
+            console.log(previewChange);
+        }
+    }, []);
 
     const getPreview = async (id) => {
         const url = API_URL + '/getFile/' + id;
@@ -94,22 +109,22 @@ const UserCourses = ({ course }) => {
 
     return (<>
         <div className='usercourses-container'>
-            <ResizePanel direction="s" handleClass="customHandle" borderClass="customResizeBorder" style={{height: '20vh'}}>
+            <ResizePanel direction="s" handleClass="customHandle" borderClass="customResizeBorder" style={{ height: '20vh' }}>
                 <div className='content-area'>
                     <div className='header panel container'>
-                        <CoursesDash things={{ courseName, sections, setSectionChange }} />
+                        <CourseInfo things={{ courseName, sections, setSectionChange }} />
                     </div>
                 </div>
             </ResizePanel>
             <div className='content-area'>
                 <Col xs={4}>
                     <div className='content panel right-border'>
-                        <FilesList files={files} setPreviewChange={setPreviewChange} sectionName={sectionName} />
+                        <FolderInfo files={files} setPreviewChange={setPreviewChange} sectionName={sectionName} />
                     </div>
                 </Col>
                 <Col xs={4}>
                     <div className='content panel right-border'>
-                        <Preview preview={preview} />
+                        <FileInfo preview={preview} />
                     </div>
                 </Col>
                 <Col xs={4} className="preview-render">

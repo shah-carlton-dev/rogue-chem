@@ -1,63 +1,69 @@
-import React, { useContext, useState } from 'react';
-import UserContext from "../../context/UserContext.js";
+import React, { useContext, useState, useEffect } from "react";
 import { Row, Col } from "react-bootstrap";
-import { Switch, Route } from 'react-router-dom';
-import Sidebar from "./Sidebar.jsx"
-import "../../styles/Home.css";
-import CourseManagement from '../../components/CourseManagement/CourseManagement';
-import SampleRender from '../../components/VideoRender/SampleRender';
-import FileUpload from '../../components/FileManagement/FileUpload';
-import VideoUpload from '../../components/FileManagement/VideoUpload';
-import Courses from '../Dashboard/Courses.jsx';
-import ProfileManagement from '../UserDash/ProfileManagement.jsx';
-import UserProgress from '../UserDash/UserProgress.jsx';
-import AdminProgress from '../AdminDash/AdminProgress.jsx';
-import AdminStats from '../AdminDash/AdminStats.jsx';
-import Messages from './Messages.jsx';
-import ListsContext from "../../context/ListsContext.js";
-
+import UserContext from "../../context/UserContext.js";
+import AdminCourses from "../AdminDash/AdminCourses.jsx";
+import UserCourses from "../UserDash/Courses/UserCourses.jsx";
+import Select from 'react-dropdown-select';
+import { API_URL } from '../../utils/constants.js';
+import Axios from "axios";
 
 const Home = (props) => {
     const { userData, setUserData } = useContext(UserContext);
+    const [courseData, setCourseData] = useState([]);
+    const [selected, setSelected] = useState({});
 
-    const [queue, setQueue] = useState({files: userData.user.starredFiles, sections: userData.user.starredSections});
-    const [recents, setRecents] = useState(userData.user.recentFiles);
+    useEffect(() => {
+        getCourseData();
+    }, []);
 
-    return (
-        <ListsContext.Provider value={{ queue, setQueue, recents, setRecents }}>
-            <div className="home-wrapper">
-                <Row className="fill-homepage">
-                    <Col xs={2} className="ml-2 sidebar">
-                        {
-                            userData.user.admin ? (
-                                <Sidebar />
-                            ) : (
-                                <Sidebar />
-                            )
-                        }
-                    </Col>
-                    <Col className="fill-width">
-                        <Switch>
-                            <Route component={Courses} exact path="/home" />
-                            <Route component={Messages} path="/home/messages" />
-                            {userData.user.admin ?
-                                <> {/* admin routes */}
-                                    <Route component={CourseManagement} path="/home/management/courses" />
-                                    <Route component={FileUpload} path="/home/management/files" />
-                                    <Route component={VideoUpload} path="/home/management/videos" />
-                                    <Route component={SampleRender} path="/home/sample" />
-                                    <Route component={AdminProgress} path="/home/usage/progress" />
-                                    <Route component={AdminStats} path="/home/usage/stats" />
-                                </> :
-                                <> {/* user routes */}
-                                    <Route component={ProfileManagement} path="/home/profile" />
-                                    <Route component={UserProgress} path="/home/progress" />
-                                </>
-                            }
-                        </Switch>
-                    </Col>
-                </Row>
-            </div>
-        </ListsContext.Provider>);
-};
+    const getCourseData = async () => {
+        const url = API_URL + '/courses/allData';
+        try {
+            await Axios.post(url, { ids: userData.user.courses }).then((res) => {
+                console.log('course data');
+                if (res === 1)
+                    console.log("Error: " + res.data);
+                else if (res === 0)
+                    console.log("Error: user has no courses");
+                else {
+                    console.log(res.data);
+                    setCourseData(res.data);
+                    setSelected(res.data[0]);
+                }
+            });
+        } catch {
+            console.log("error in \'courses.jsx\' getCourseData fn")
+        }
+    }
+
+    return (<>
+        <Row className="top-nav py-1">
+            <Col lg={3}>
+                <Select
+                    options={courseData}
+                    valueField="_id"
+                    disabled={false}
+                    onChange={(val) => { setSelected(val[0]) }}
+                    labelField="name"
+                    placeholder={selected.name}
+                    separator={true}
+                    dropdownHandleRenderer={({ state }) => (
+                        <span className="pl-1">{state.dropdown ? " –" : " +"}</span>
+                    )}
+                    closeOnSelect={true}
+                    backspaceDelete={false}
+                />
+            </Col>
+            <Col lg={8} className="">
+                <p className="text-center">dashboard nav links, search, etc will be here</p>
+            </Col>
+        </Row>
+        {userData.user.admin ? (
+            <AdminCourses course={selected} />
+        ) : (
+            <UserCourses course={selected} />
+        )}
+    </>)
+}
+
 export default Home;

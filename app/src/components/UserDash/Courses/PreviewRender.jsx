@@ -17,7 +17,7 @@ const PreviewRender = ({ preview }) => {
                         <div className="App">
                             <Worker workerUrl="https://unpkg.com/pdfjs-dist@2.7.570/build/pdf.worker.min.js">
                                 <div id="pdfviewer">
-                                    <Viewer fileUrl={API_URL + "" + preview.file_path.slice(5)} toolbar="0" />
+                                    <Viewer fileUrl={API_URL + "" + preview.file_path.slice(5)} toolbar="0" defaultScale={.6}/>
                                 </div>
                             </Worker>
                         </div>

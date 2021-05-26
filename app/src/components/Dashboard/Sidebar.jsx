@@ -136,58 +136,60 @@ const Sidebar = (props) => {
             items={items}
         />
         <hr />
-        <div>
-            <Container>
-                <Row>
-                    <Col xs={3} className="p-0">
-                        <Button variant="link" className="mb-2" onClick={() => setShowList("qfiles")}>Files</Button>
-                    </Col>
-                    <Col xs={5} className="pl-2">
-                        <Button variant="link" className="mb-2" onClick={() => setShowList("qfolders")}>Folders</Button>
-                    </Col>
-                    <Col xs={4} className="pl-1">
-                        <Button variant="link" className="mb-2" onClick={() => setShowList("recents")}>History</Button>
-                    </Col>
-                </Row>
-            </Container>
-            {
-                showList === "qfiles" ?
-                    <div className="queue-view">
-                        {
-                            queue.files.map(q => (<div className="queue-item">
-                                <h6 style={{ color: '#374151' }}>{q}</h6>
-                            </div>))
-                        }
-                        <div className="queue-item">
-                        </div>
-                        <div className="queue-item">
-                        </div>
-                        <div className="queue-item">
-                        </div>
-                        <div className="queue-item">
-                        </div>
-                    </div> : <></>
-            }
-
-            {
-                showList === "qfolders" ? <div className="qfolders-view">
+        {
+            userData.user.admin ? (<></>) :
+                (<><div>
+                    <Container>
+                        <Row>
+                            <Col xs={3} className="p-0">
+                                <Button variant="link" className="mb-2" onClick={() => setShowList("qfiles")}>Files</Button>
+                            </Col>
+                            <Col xs={5} className="pl-2">
+                                <Button variant="link" className="mb-2" onClick={() => setShowList("qfolders")}>Folders</Button>
+                            </Col>
+                            <Col xs={4} className="pl-1">
+                                <Button variant="link" className="mb-2" onClick={() => setShowList("recents")}>History</Button>
+                            </Col>
+                        </Row>
+                    </Container>
                     {
-                        queue.sections.map(q => (<div className="qfolder-item">
-                            <h6 style={{ color: '#374151' }}>{q}</h6>
-                        </div>))
+                        showList === "qfiles" ?
+                            <div className="queue-view">
+                                {
+                                    queue.files.map(q => (<div className="queue-item">
+                                        <h6 style={{ color: '#374151' }}>{q}</h6>
+                                    </div>))
+                                }
+                                <div className="queue-item">
+                                </div>
+                                <div className="queue-item">
+                                </div>
+                                <div className="queue-item">
+                                </div>
+                                <div className="queue-item">
+                                </div>
+                            </div> : <></>
                     }
-                </div> : <></>
-            }
 
-            {
-                showList === "recents" ? <> show recents</> : <></>
-                    
-            }
+                    {
+                        showList === "qfolders" ? <div className="qfolders-view">
+                            {
+                                queue.sections.map(q => (<div className="qfolder-item">
+                                    <h6 style={{ color: '#374151' }}>{q}</h6>
+                                </div>))
+                            }
+                        </div> : <></>
+                    }
+
+                    {
+                        showList === "recents" ? <> show recents</> : <></>
+
+                    }
 
 
-        </div>
-        <hr />
-
+                </div>
+                    <hr /></>)
+        }
     </>)
 }
 

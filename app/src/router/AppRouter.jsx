@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Switch, Route } from 'react-router-dom';
-import Home from '../components/Dashboard/Home';
+import HomeRouter from '../components/Dashboard/HomeRouter';
 import LoginSignup from '../components/Login/LoginSignup';
 import Signup from '../components/Login/LoginSignup';
 import Header from '../components/Header';
@@ -9,6 +9,10 @@ import Axios from "axios";
 import { useHistory } from "react-router-dom";
 import { API_URL } from '../utils/constants';
 import "../styles/AppRouter.css";
+
+// login info:
+// admin = rfarrell / RogueChem1
+// user = rshah / thisIsPassword!
 
 const AppRouter = () => {
     const [userData, setUserData] = useState({});
@@ -59,7 +63,7 @@ const AppRouter = () => {
                     {userData.user && Object.keys(userData.user).length > 0 ?
                         <>
                             <Route component={LoginSignup} path="/login" />
-                            <Route component={Home} path="/home" />
+                            <Route component={HomeRouter} path="/home" />
                         </> :
                         <>
                             <Route component={Signup} path="/signup" />

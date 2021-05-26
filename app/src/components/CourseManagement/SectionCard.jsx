@@ -1,7 +1,7 @@
 import React from "react";
 import { Card, Button } from "react-bootstrap";
 
-const SectionBlock = (props) => {
+const SectionCard = (props) => {
     return (
         <Card style={{ width: '20rem' }} key={props.section._id}>
             <Card.Body>
@@ -19,4 +19,4 @@ const SectionBlock = (props) => {
     )
 }
 
-export default SectionBlock;
+export default SectionCard;

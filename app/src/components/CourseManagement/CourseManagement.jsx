@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Axios from "axios";
-import CourseBlock from "./CourseBlock.jsx";
-import SectionBlock from "./SectionBlock.jsx";
+import CourseCard from "./CourseCard.jsx";
+import SectionCard from "./SectionCard.jsx";
 import FileDisplay from "./FileDisplay.jsx"
 import CourseCreateModal from "./CourseCreateModal";
 import SectionCreateModal from "./SectionCreateModal";
@@ -160,7 +160,7 @@ const CourseManagement = (props) => {
                                     <p className="italicize">No courses here. Start by creating one!</p>
                                 </Col>
                             </>) : (<>
-                                {courses.map(c => <Col className="py-2" key={c._id}><CourseBlock course={c} clickHandler={showSections} deleteHandler={deleteCourse} /></Col>)}
+                                {courses.map(c => <Col className="py-2" key={c._id}><CourseCard course={c} clickHandler={showSections} deleteHandler={deleteCourse} /></Col>)}
                             </>)
                         }
                     </Row>
@@ -174,7 +174,7 @@ const CourseManagement = (props) => {
                     <hr/>
                     <p>Be careful deleting folders - it will be permanently deleted across all courses. Use the remove button to unassociate it from the current course.</p>
                     <Row>
-                        {sections.length === 0 ? <Col className="text-center mt-5"><p className="italicize">No existing core folders. Go ahead and create one!</p> </Col> : sections.map(s => <Col className="py-2" key={s._id} xs={4}><SectionBlock section={s} clickHandler={showFiles} deleteHandler={deleteSection} removeHandler={removeSection} /></Col>)}
+                        {sections.length === 0 ? <Col className="text-center mt-5"><p className="italicize">No existing core folders. Go ahead and create one!</p> </Col> : sections.map(s => <Col className="py-2" key={s._id} xs={4}><SectionCard section={s} clickHandler={showFiles} deleteHandler={deleteSection} removeHandler={removeSection} /></Col>)}
                     </Row> </> :
                     <></>
             }
