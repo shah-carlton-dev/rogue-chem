@@ -5,6 +5,7 @@ import '../../../styles/CoursesDash.css';
 
 const CourseInfo = (props) => {
     const { courseName, sections, setSectionChange } = props.things;
+    props.setRecent(courseName);
     return (
         <div className="topdash-wrapper" >
             {/* <h5 className="ml-3 pt-3">{courseName}</h5> */}
@@ -14,7 +15,7 @@ const CourseInfo = (props) => {
                 )}</CardDeck>
             </Row>
         </div>
-        )
+    )
 }
 
 export default CourseInfo;

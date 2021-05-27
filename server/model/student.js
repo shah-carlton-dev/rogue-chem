@@ -31,6 +31,17 @@ const studentSchema = mongoose.Schema(
         completedSections: Array,
         completedFiles: Array,
         recentFiles: Array,
+        lastState: {
+            course: {
+                name: String,
+                _id: mongoose.ObjectId
+            },
+            folder: String,
+            file: {
+                name: String,
+                _id: mongoose.ObjectId
+            }
+        },
         admin: {
             type: Boolean,
             required: true

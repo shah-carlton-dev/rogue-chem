@@ -1,3 +1,5 @@
 .filelist-root {
     padding: 0 2vw;
+    height: inherit;
+    overflow: auto;
 }

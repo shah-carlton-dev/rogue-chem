@@ -127,7 +127,7 @@ const Sidebar = (props) => {
             }]
     );
 
-    return (<>
+    return (<div className="sidebar-height100">
         <Navigation
             activeItemId="/home"
             onSelect={({ itemId }) => {
@@ -190,7 +190,7 @@ const Sidebar = (props) => {
                 </div>
                     <hr /></>)
         }
-    </>)
+    </div>)
 }
 
 export default Sidebar;

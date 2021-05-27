@@ -95,6 +95,7 @@ Router.post('/validateToken', async (req, res) => {
                 })
             }
         });
+        return;
     } catch (err) {
         return res.send("Could not validate token").status(304);
     }
@@ -180,7 +181,6 @@ Router.post('/updateRecents', async (req, res) => {
     try {
         const { fileId, userId } = req.body;
         await Student.findById(userId).then(async s => {
-            console.log(s);
             if (!s.recentFiles.includes(fileId)) {
                 s.recentFiles = [Mongoose.Types.ObjectId(fileId), ...s.recentFiles];
             } else if (s.recentFiles.length !== 1) {
@@ -192,6 +192,37 @@ Router.post('/updateRecents', async (req, res) => {
         })
     } catch (e) {
         console.log(e);
+    }
+})
+
+Router.post('/lastState', async (req, res) => {
+    try {
+        const { userId, recent } = req.body;
+        await Student.findById(userId).then(async s => {
+            s.lastState = recent;
+            s.save();
+            return res.status(200).send(true);
+        })
+    } catch (e) {
+        console.log(e);
+        return res.status(400).send(false);
+    }
+})
+
+Router.get('/lastState/:id', async (req, res) => {
+    try {
+        const userId = req.params.id;
+        await Student.findById(userId).then(async s => {
+            if (s.lastState !== undefined) {
+                return res.status(200).send(s.lastState);
+            }
+            else {
+                return res.status(204).send(false);
+            }
+        })
+    } catch (e) {
+        console.log(e);
+        return res.status(400).send(false);
     }
 })
 

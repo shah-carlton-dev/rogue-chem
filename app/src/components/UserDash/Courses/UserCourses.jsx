@@ -8,14 +8,15 @@ import PreviewRender from './PreviewRender.jsx';
 import { API_URL } from '../../../utils/constants.js';
 import Axios from "axios";
 import { Col } from "react-bootstrap";
+import UserContext from "../../../context/UserContext.js";
+import { createPromiseCapability } from "pdfjs-dist";
 
 // component containing entire user dashboard (minus dashboard nav)
 
-const UserCourses = ({ course }) => {
-    // const history = useHistory();
-    // sessionStorage.clear();
-    // sessionStorage.setItem("last-route", history.location.pathname); doesn't work, forces all reloads to end up here
+let recent = { course: null, folder: null, file: null };
 
+const UserCourses = ({ course }) => {
+    const { userData, setUserData } = useContext(UserContext);
     const [retrieving, setRetrieving] = useState(true);
     const [sections, setSections] = useState([]);
     const [sectionChange, setSectionChange] = useState(0);
@@ -26,6 +27,31 @@ const UserCourses = ({ course }) => {
     const courseName = course.name;
     const courseId = course._id;
     const [sectionName, setSectionName] = useState("");
+
+    const setRecentCourse = (c) => {
+        recent.course = {name: course.name, _id: course._id};
+    }
+    const setRecentFolder = (f) => {
+        recent.folder = f;
+    }
+    const setRecentFile = (f) => {
+        recent.file = f;
+    }
+    useEffect(() => {
+        return async function cleanup() {
+            console.log(userData)
+            await Axios.post(
+                API_URL + "/users/lastState",
+                { userId: userData.user._id, recent }
+            ).then(res => {
+                if (res.data) {
+                    // successful update
+                } else {
+                    // update failed
+                }
+            });
+        }
+    }, []);
 
     useEffect(() => {
         getSectionData(courseId);
@@ -38,19 +64,6 @@ const UserCourses = ({ course }) => {
     useEffect(() => {
         getPreview(previewChange);
     }, [previewChange]);
-
-    useEffect(() => {
-        console.log("mounted")
-        console.log(courseName);
-        return function cleanup() {
-            console.log("unmounted");
-            console.log(courseName)
-            console.log("section:");
-            console.log(sectionChange);
-            console.log("file:");
-            console.log(previewChange);
-        }
-    }, []);
 
     const getPreview = async (id) => {
         const url = API_URL + '/getFile/' + id;
@@ -112,19 +125,19 @@ const UserCourses = ({ course }) => {
             <ResizePanel direction="s" handleClass="customHandle" borderClass="customResizeBorder" style={{ height: '20vh' }}>
                 <div className='content-area'>
                     <div className='header panel container'>
-                        <CourseInfo things={{ courseName, sections, setSectionChange }} />
+                        <CourseInfo things={{ courseName, sections, setSectionChange }} setRecent={setRecentCourse} />
                     </div>
                 </div>
             </ResizePanel>
             <div className='content-area'>
                 <Col xs={4}>
                     <div className='content panel right-border'>
-                        <FolderInfo files={files} setPreviewChange={setPreviewChange} sectionName={sectionName} />
+                        <FolderInfo files={files} setPreviewChange={setPreviewChange} sectionName={sectionName} courseName={courseName} setRecent={setRecentFolder} />
                     </div>
                 </Col>
                 <Col xs={4}>
                     <div className='content panel right-border'>
-                        <FileInfo preview={preview} />
+                        <FileInfo preview={preview} setRecent={setRecentFile} />
                     </div>
                 </Col>
                 <Col xs={4} className="preview-render">

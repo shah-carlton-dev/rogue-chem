@@ -16,6 +16,8 @@ const FileInfo = (props) => {
     const [file, setFile] = useState("");
     const handleClose = () => setShow(false);
 
+    props.setRecent({ name: preview.title, _id: preview._id });
+
     useEffect(() => {
         //console.log('attempting preview render');
         if (preview !== null && preview !== undefined && preview.file_path !== undefined) {
@@ -71,6 +73,7 @@ const FileInfo = (props) => {
                 ?
                 <>
                     <h5>{preview.title}</h5>
+                    <hr />
                     <h6>Description:</h6>
                     <p>{preview.description}</p>
                     <h6>Keywords:</h6>

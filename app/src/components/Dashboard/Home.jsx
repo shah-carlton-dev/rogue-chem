@@ -6,14 +6,22 @@ import UserCourses from "../UserDash/Courses/UserCourses.jsx";
 import Select from 'react-dropdown-select';
 import { API_URL } from '../../utils/constants.js';
 import Axios from "axios";
+import { useHistory } from "react-router-dom";
 
 const Home = (props) => {
     const { userData, setUserData } = useContext(UserContext);
     const [courseData, setCourseData] = useState([]);
     const [selected, setSelected] = useState({});
+    let course, folder, file = "";
+    const [done, setDone] = useState(false);
+
+    const history = useHistory();
+    sessionStorage.clear();
+    sessionStorage.setItem("last-route", history.location.pathname);
 
     useEffect(() => {
         getCourseData();
+        // getMostRecent();
     }, []);
 
     const getCourseData = async () => {
@@ -26,17 +34,31 @@ const Home = (props) => {
                 else if (res === 0)
                     console.log("Error: user has no courses");
                 else {
-                    console.log(res.data);
                     setCourseData(res.data);
                     setSelected(res.data[0]);
                 }
             });
         } catch {
-            console.log("error in \'courses.jsx\' getCourseData fn")
+            console.log("error in courses.jsx getCourseData fn")
         }
     }
 
+    const getMostRecent = async () => {
+        try {
+            await Axios.get(API_URL + '/users/lastState/' + userData.user._id).then(res => {
+                course = (res.data.course);
+                folder = (res.data.folder);
+                file = (res.data.file.title);
+                setSelected((courseData.filter(c => c.name === course))[0]);
+                setDone(true);
+            })
+        } catch (e) {
+            console.log(e)
+        }
+    }
+    console.log(selected);
     return (<>
+
         <Row className="top-nav py-1">
             <Col lg={3}>
                 <Select
