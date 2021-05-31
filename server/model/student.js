@@ -36,7 +36,10 @@ const studentSchema = mongoose.Schema(
                 name: String,
                 _id: mongoose.ObjectId
             },
-            folder: String,
+            folder: {
+                name: String,
+                _id: mongoose.ObjectId
+            },
             file: {
                 name: String,
                 _id: mongoose.ObjectId

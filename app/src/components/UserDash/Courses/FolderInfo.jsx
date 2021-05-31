@@ -5,7 +5,7 @@ import '../../../styles/PDFView.css';
 
 const FolderInfo = (props) => {
     const { files, setPreviewChange, sectionName, courseName, setRecent } = props;
-    console.log(props)
+    // console.log(props)
     setRecent(sectionName);
     return (
         <div className="filelist-root">

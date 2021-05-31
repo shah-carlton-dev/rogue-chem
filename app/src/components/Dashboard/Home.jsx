@@ -12,8 +12,8 @@ const Home = (props) => {
     const { userData, setUserData } = useContext(UserContext);
     const [courseData, setCourseData] = useState([]);
     const [selected, setSelected] = useState({});
+    const [lastState, setLastState] = useState({});
     let course, folder, file = "";
-    const [done, setDone] = useState(false);
 
     const history = useHistory();
     sessionStorage.clear();
@@ -21,8 +21,11 @@ const Home = (props) => {
 
     useEffect(() => {
         getCourseData();
-        // getMostRecent();
     }, []);
+
+    useEffect(() => {
+        getMostRecent();
+    }, [courseData]);
 
     const getCourseData = async () => {
         const url = API_URL + '/courses/allData';
@@ -39,21 +42,20 @@ const Home = (props) => {
                 }
             });
         } catch {
-            console.log("error in courses.jsx getCourseData fn")
+            console.log("courses.jsx -> getCourseData")
         }
     }
 
     const getMostRecent = async () => {
-        try {
-            await Axios.get(API_URL + '/users/lastState/' + userData.user._id).then(res => {
-                course = (res.data.course);
-                folder = (res.data.folder);
-                file = (res.data.file.title);
-                setSelected((courseData.filter(c => c.name === course))[0]);
-                setDone(true);
-            })
-        } catch (e) {
-            console.log(e)
+        if (courseData !== {}) {
+            try {
+                await Axios.get(API_URL + '/users/lastState/' + userData.user._id).then(res => {
+                    setLastState(res.data);
+                    setSelected((courseData.filter(c => c.name === res.data.course.name))[0]);
+                })
+            } catch (e) {
+                console.log(e)
+            }
         }
     }
     console.log(selected);
@@ -67,7 +69,7 @@ const Home = (props) => {
                     disabled={false}
                     onChange={(val) => { setSelected(val[0]) }}
                     labelField="name"
-                    placeholder={selected.name}
+                    placeholder={selected ? selected.name : courseData[0].name}
                     separator={true}
                     dropdownHandleRenderer={({ state }) => (
                         <span className="pl-1">{state.dropdown ? " –" : " +"}</span>
@@ -81,9 +83,9 @@ const Home = (props) => {
             </Col>
         </Row>
         {userData.user.admin ? (
-            <AdminCourses course={selected} />
+            <AdminCourses course={selected ? selected : courseData[0]} prev={lastState} />
         ) : (
-            <UserCourses course={selected} />
+            <UserCourses course={selected ? selected : courseData[0]} prev={lastState}/>
         )}
     </>)
 }

@@ -1,24 +1,24 @@
 .fill-homepage {
-    height: 100vh;
+    /* height: 100vh; */
     /* takes the remaining height after navbar */
     max-width: 100vw !important;
     margin: 0px !important;
     /* max-height: calc(96vh - 66px); */
-    overflow: hidden;
+    overflow: scroll;
 }
 
 .fill-width {
     width: 100vw;
     max-width: 100vw !important;
-    overflow: hidden;
+    overflow: scroll;
     margin: 0px;
     padding: 0px;
-    max-height: 90vh !important;
+    height: 90vh !important;
 }
 
 .home-wrapper {
     max-height: calc(100vh - 66px) !important;
-    overflow: hidden;
+    overflow: scroll;
 }
 
 ::placeholder {

@@ -15,7 +15,7 @@ import { createPromiseCapability } from "pdfjs-dist";
 
 let recent = { course: null, folder: null, file: null };
 
-const UserCourses = ({ course }) => {
+const UserCourses = ({ course, prev }) => {
     const { userData, setUserData } = useContext(UserContext);
     const [retrieving, setRetrieving] = useState(true);
     const [sections, setSections] = useState([]);
@@ -26,13 +26,16 @@ const UserCourses = ({ course }) => {
     const [preview, setPreview] = useState({});
     const courseName = course.name;
     const courseId = course._id;
+    const prevFolder = prev.folder;
+    const prevFile = prev.file;
+    console.log(prev);
     const [sectionName, setSectionName] = useState("");
 
     const setRecentCourse = (c) => {
-        recent.course = {name: course.name, _id: course._id};
+        recent.course = { name: course.name, _id: course._id };
     }
     const setRecentFolder = (f) => {
-        recent.folder = f;
+        recent.folder = { 'name': f, '_id': sectionChange };
     }
     const setRecentFile = (f) => {
         recent.file = f;
@@ -96,8 +99,7 @@ const UserCourses = ({ course }) => {
                 })
             }
         } catch { }
-        // now, we yoink the video data
-        try {
+        try { // now, we yoink the video data
             if (id !== 0) {
                 await Axios.get(vURL).then((res) => {
                     setVideos(res.data);
@@ -122,7 +124,7 @@ const UserCourses = ({ course }) => {
 
     return (<>
         <div className='usercourses-container'>
-            <ResizePanel direction="s" handleClass="customHandle" borderClass="customResizeBorder" style={{ height: '20vh' }}>
+            <ResizePanel direction="s" handleClass="customHandle" borderClass="customResizeBorder" style={{ height: '40vh' }}>
                 <div className='content-area'>
                     <div className='header panel container'>
                         <CourseInfo things={{ courseName, sections, setSectionChange }} setRecent={setRecentCourse} />
