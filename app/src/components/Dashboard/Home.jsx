@@ -58,7 +58,7 @@ const Home = (props) => {
             }
         }
     }
-    console.log(selected);
+
     return (<>
 
         <Row className="top-nav py-1">
