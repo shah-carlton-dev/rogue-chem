@@ -171,12 +171,12 @@ Router.get('/videos/:id', async (req, res) => {
             await section.videos.forEach(async (video) => {
                 await Video.findById(mongoose.Types.ObjectId(video._id)).then((v) => {
                     videoList.push(v);
-                    if (section.videos.length === videoList.length) { 
+                    if (section.videos.length === videoList.length) {
                         res.send(videoList);
                     }
                 })
             })
-        } catch (err) { 
+        } catch (err) {
             res.status(400).send("Error collecting videos for folder.");
         }
     } catch (err) {
@@ -201,7 +201,7 @@ Router.put('/addFile', async (req, res) => {
 Router.put('/addVideo', async (req, res) => {
     try {
         const { video_id, section_id } = req.body;
-        await Section.findByIdAndUpdate(mongoose.Types.ObjectId(section_id), { "$push": {"videos": mongoose.Types.ObjectId(video_id) } }).then(async () => 
+        await Section.findByIdAndUpdate(mongoose.Types.ObjectId(section_id), { "$push": { "videos": mongoose.Types.ObjectId(video_id) } }).then(async () =>
             await Section.findById(mongoose.Types.ObjectId(section_id)).then(v => {
                 res.send(v.videos).status(304);
             })
@@ -309,7 +309,7 @@ Router.put('/addSection', async (req, res) => {
 });
 
 Router.post('/allData', async (req, res) => {
-    try { // want to return a fat object with all courses, sections, and file info - files can be fetched in a separate call from the frontend
+    try { // returns an object with the courses that a user is in and the section ids
         let { ids } = req.body;
         if (ids.length === 0) return res.status(304).send(0);
         let courses = [];
@@ -317,24 +317,12 @@ Router.post('/allData', async (req, res) => {
         try {
             ids.forEach(async (i) => {
                 await Course.findById(mongoose.Types.ObjectId(i)).then((course) => {
+                    //  need to check published eventually: if (course.published) courses.push(course);
                     courses.push(course);
                 }).then(async () => {
                     if (courses.length === ids.length) {
                         return res.send(courses).status(200);
                     }
-                    // courses.forEach( course => {
-                    //     let list = []; // this will have a list of the sections
-                    //     course.sections.forEach(async section => {
-                    //         await Section.findById(mongoose.Types.ObjectId(section)).then((sec => {
-                    //             list.push(sec); // find each section and push to list
-                    //             if (course.sections.length === list.length) {
-                    //                 sections[course.name] = list;
-                    //                 courses[0].sections = sections[course.name];
-                    //                 return res.status(200).send(courses);
-                    //             }
-                    //         }))
-                    //     })
-                    // })
                 })
             })
         } catch (err) {

@@ -31,7 +31,8 @@ const Home = (props) => {
         const url = API_URL + '/courses/allData';
         try {
             await Axios.post(url, { ids: userData.user.courses }).then((res) => {
-                console.log('course data');
+                console.log('course data: ');
+                console.log(res)
                 if (res === 1)
                     console.log("Error: " + res.data);
                 else if (res === 0)
@@ -85,7 +86,7 @@ const Home = (props) => {
         {userData.user.admin ? (
             <AdminCourses course={selected ? selected : courseData[0]} prev={lastState} />
         ) : (
-            <UserCourses course={selected ? selected : courseData[0]} prev={lastState}/>
+            <UserCourses course={selected ? selected : courseData[0]} prev={lastState} />
         )}
     </>)
 }

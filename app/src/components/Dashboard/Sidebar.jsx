@@ -156,7 +156,7 @@ const Sidebar = (props) => {
                         showList === "qfiles" ?
                             <div className="queue-view">
                                 {
-                                    queue.files.map(q => (<div className="queue-item">
+                                    queue.files.map(q => (<div className="queue-item" key={q}>
                                         <h6 style={{ color: '#374151' }}>{q}</h6>
                                     </div>))
                                 }
@@ -174,7 +174,7 @@ const Sidebar = (props) => {
                     {
                         showList === "qfolders" ? <div className="qfolders-view">
                             {
-                                queue.sections.map(q => (<div className="qfolder-item">
+                                queue.sections.map(q => (<div className="qfolder-item" key={q}>
                                     <h6 style={{ color: '#374151' }}>{q}</h6>
                                 </div>))
                             }
