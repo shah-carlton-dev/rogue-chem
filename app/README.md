@@ -1,6 +1,21 @@
+# Rogue Chem's E-Learning Website
+
+This website aims to take advantage of the MERN stack to deliver learning materials from Rogue Chem, LLC to paying subscribers.
+
+## Initial setup
+Use npm to install dependencies (make sure you do so in the `app` and `server` directories). 
+```bash
+npm install
+```
+In the off chance that does not work, you may also try...
+```bash
+npm update
+```
+
 ## Components
 The program has been broken down into components. Their organization is outlined below.
-#### Components Logic
+
+#### Components Logic (WIP)
 ```
 ├── Header
 ├── Footer
@@ -30,7 +45,7 @@ The program has been broken down into components. Their organization is outlined
         ├── ProfileManagement
         └── UserProgress
 ```
-#### Components File Structure
+#### File Structure (WIP)
 ```
 ├── AdminDash
 │   ├── AdminCourses.jsx
@@ -78,3 +93,19 @@ The program has been broken down into components. Their organization is outlined
 ├── Footer.jsx
 └── Header.jsx
 ```
+
+## Development Mode
+To run the app make sure you're in the `app` directory then enter the following command in the terminal. This will run the app on `localhost:3000`.
+```bash
+npm start
+```
+
+To run the backend, move to the `server` directory in a separate terminal, and enter the following command. The server will run on `localhost: 3030`.
+```bash
+npm start
+```
+
+## Contributors
+- Rushil Shah
+- Mac Carlton
+
