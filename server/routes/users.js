@@ -2,6 +2,7 @@ const path = require('path');
 const express = require('express');
 const Admin = require('../model/admin');
 const Student = require('../model/student');
+const Course = require('../model/course.js');
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const Mongoose = require('mongoose');
@@ -219,6 +220,30 @@ Router.get('/lastState/:id', async (req, res) => {
             else {
                 return res.status(204).send(false);
             }
+        })
+    } catch (e) {
+        console.log(e);
+        return res.status(400).send(false);
+    }
+})
+
+Router.get('/courseInfo/:id', async (req, res) => {
+    try {
+        const userId = req.params.id;
+        let courseList = [];
+        await Student.findById(userId).then(async s => {
+            s.courses.forEach(async c => {
+                await Course.findById(c).then(c1 => {
+                    courseList.push({ 'id': c, 'name': c1.name })
+                }).then(a => {
+                    if (courseList.length === s.courses.length) {
+                        if (courseList.length === 0)
+                            return res.status(204).send(true);
+                        else
+                            return res.status(200).send(courseList);
+                    }
+                })
+            })
         })
     } catch (e) {
         console.log(e);

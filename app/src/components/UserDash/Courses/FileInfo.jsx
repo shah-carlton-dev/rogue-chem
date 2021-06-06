@@ -11,12 +11,12 @@ import ListsContext from "../../../context/ListsContext.js";
 const FileInfo = (props) => {
     const { userData, setUserData } = useContext(UserContext);
     const { queue, setQueue, recents, setRecents } = useContext(ListsContext);
-    const { preview } = props;
+    const { preview, setRecent } = props;
     const [show, setShow] = useState(false);
     const [file, setFile] = useState("");
     const handleClose = () => setShow(false);
 
-    props.setRecent({ name: preview.title, _id: preview._id });
+    setRecent(preview._id, preview.title);
 
     useEffect(() => {
         //console.log('attempting preview render');
@@ -58,7 +58,6 @@ const FileInfo = (props) => {
                     setRecents([fileId, ...recents])
                 } else {
                     const rec = recents.splice(find, 1);
-                    console.log(rec);
                     setRecents([fileId, ...rec]);
                 }
             });

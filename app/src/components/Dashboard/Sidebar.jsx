@@ -33,8 +33,8 @@ const Sidebar = (props) => {
             qFiles.unshift(file);
         }
         setQueueFiles(qFiles);
-        console.log("file sections: ");
-        console.log(queueFiles);
+        // console.log("file sections: ");
+        // console.log(queueFiles);
     }, [queueFileIds]);
 
     useEffect(() => {
@@ -44,8 +44,8 @@ const Sidebar = (props) => {
             qSections.unshift(section);
         }
         setQueueSections(qSections);
-        console.log("queue sections: ");
-        console.log(queueSections);
+        // console.log("queue sections: ");
+        // console.log(queueSections);
     }, [queueSectionIds]);
 
     const getFile = async (id) => {
