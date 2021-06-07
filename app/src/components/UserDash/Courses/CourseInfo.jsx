@@ -9,7 +9,7 @@ const CourseInfo = (props) => {
     return (
         <div className="topdash-wrapper" >
             <h5 className="ml-3 pt-3">{currState.currCourse.name}</h5>
-            <Row className="pt-3">
+            <Row className="pt-3 courses-row">
                 <CardDeck className="center-contents">{folders.map(folder =>
                     <Col key={folder._id}><FolderCard folder={folder} setCurrFolder={setCurrFolder} /></Col>
                 )}</CardDeck>

@@ -31,7 +31,7 @@ const FolderCard = (props) => {
                 <Card.Text>
                     {folder.description}
                 </Card.Text>
-
+                {console.log(folder)}
                 <Button variant="link" onClick={() => setCurrFolder(folder._id, folder.name)}>View Files</Button>
         &nbsp;&nbsp;
         <Button variant="link" onClick={() => handleAddToQueue(folder._id)}>Add to Queue</Button>
