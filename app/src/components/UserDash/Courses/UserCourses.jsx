@@ -113,7 +113,7 @@ const UserCourses = (props) => {
                 </div>
             </ResizePanel>
             <div className='content-area'>
-                <Col xs={4}>
+                <Col xs={5}>
                     <div className='content panel right-border'>
                         {
                             currState?.currCourse?.name !== undefined && currState?.currFolder?.name !== undefined ?
@@ -122,18 +122,19 @@ const UserCourses = (props) => {
                         }
                     </div>
                 </Col>
-                <Col xs={4}>
-                    <div className='content panel right-border'>
-                        <FileInfo preview={preview} setRecent={setCurrFile} />
-                        {/* <FileInfo /> */}
-                    </div>
-                </Col>
-                <Col xs={4} className="preview-render">
+                <Col xs={3} className="preview-render">
                     <div className='content panel preview-render'>
                         <PreviewRender preview={preview} />
                         {/* <PreviewRender /> */}
                     </div>
                 </Col>
+                <Col xs={4}>
+                    <div className='content panel'>
+                        <FileInfo preview={preview} setRecent={setCurrFile} />
+                        {/* <FileInfo /> */}
+                    </div>
+                </Col>
+                
             </div>
         </div>
     </>)
