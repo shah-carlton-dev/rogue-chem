@@ -12,14 +12,13 @@ import { useHistory } from "react-router-dom";
 let currCourse = { id: null, name: "" };
 let currFolder = { id: null, name: "" };
 let currFile = { id: null, name: "" };
-let currState = { currCourse, currFolder, currFile };
+// let currState = { currCourse, currFolder, currFile };
 
 const Home = (props) => {
     const { userData, setUserData } = useContext(UserContext);
     const [courseData, setCourseData] = useState([]); // info on the courses that the user is enrolled in
     const [lastState, setLastState] = useState({}); // prev state from last session, updated on session end
-    // const [currState, setCurrState] = useState({ currCourse, currFolder, currFile })
-    // const currState = { currCourse, currFolder, currFile };
+    const [currState, setCurrState] = useState({ currCourse, currFolder, currFile })
 
     // const history = useHistory();
     // sessionStorage.clear();
@@ -30,7 +29,7 @@ const Home = (props) => {
         getCourseData(); // get up to date course data when component mounts
         getLastState(); // get info on initial state on first mount
         // return async function cleanup() {
-        // updateLastState(); // update last state when component unmounts -- need to handle tab closure/refresh
+            // updateLastState(); // update last state when component unmounts -- need to handle tab closure/refresh
         // }
     }, [])
 
@@ -58,10 +57,7 @@ const Home = (props) => {
                 await Axios.get(API_URL + '/users/lastState/' + userData.user._id).then(res => {
                     setLastState(res.data);
                     console.log(res.data)
-                    // setCurrState({ currCourse: res.data.course, currFolder: res.data.folder, currFile: res.data.file });
-                    setCurrCourse(res.data.course.id, res.data.course.name);
-                    setCurrFolder(res.data.folder.id, res.data.folder.name);
-                    setCurrFile(res.data.file.id, res.data.file.name);
+                    setCurrState({ currCourse: res.data.course, currFolder: res.data.folder, currFile: res.data.file });
                 })
             } catch (e) {
                 console.log(e)
@@ -84,26 +80,10 @@ const Home = (props) => {
 
     const setCurrCourse = (id, name) => {
         currCourse = { id, name };
-        currState.currCourse = currCourse;
-        // setCurrState({ currCourse, currFolder, currFile });
-        console.log("currCourse updated: ");
-        console.log(currCourse);
-        console.log(currState)
+        setCurrState({currCourse, currFolder, currFile})
     }
-    const setCurrFolder = (id, name) => {
-        currFolder = { id, name };
-        currState.currFolder = currFolder;
-        // setCurrState({currCourse, currFolder, currFile});
-        console.log("currFolder updated: ");
-        console.log(currState);
-    }
-    const setCurrFile = (id, name) => {
-        currFile = { id, name };
-        currState.currFile = currFile;
-        // setCurrState({currCourse, currFolder, currFile});
-        console.log("currFile updated: ");
-        console.log(currState);
-    }
+    const setCurrFolder = (id, name) => currFolder = { id, name };
+    const setCurrFile = (id, name) => currFile = { id, name };
     // const setCurrState = (currCourse, currFolder, currFile) => currState = { currCourse, currFolder, currFile };
 
     return (<>
@@ -114,7 +94,7 @@ const Home = (props) => {
                     options={courseData}
                     valueField="id"
                     disabled={false}
-                    onChange={(val) => setCurrCourse(val[0].id, val[0].name)}
+                    onChange={(val) => { setCurrCourse(val[0].id, val[0].name); console.log(currState) }}
                     labelField="name"
                     separator={true}
                     dropdownHandleRenderer={({ state }) => (

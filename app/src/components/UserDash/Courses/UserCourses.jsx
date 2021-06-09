@@ -26,26 +26,19 @@ const UserCourses = (props) => {
 
     const { currState, setCurrCourse, setCurrFolder, setCurrFile, lastState } = props;
 
-    const [course, setCourse] = useState(currState.currCourse.id);
-    const [folder, setFolder] = useState(currState.currFolder.id);
-    const [file, setFile] = useState(currState.currFile.id);
-
     console.log(props)
 
     useEffect(() => {
-        console.log("currCourse useEffect")
         if (currState?.currCourse?.id !== undefined) getSectionData(currState.currCourse.id);
-    }, [course]);
+    }, [currState?.currCourse?.id]);
 
     useEffect(() => {
-        console.log("currFolder useEffect")
         if (currState?.currFolder?.id !== undefined) getFileData(currState.currFolder.id);
-    }, [folder]);
+    }, [currState?.currFolder?.id]);
 
     useEffect(() => {
-        console.log("currFile useEffect")
         if (currState?.currFile?.id !== undefined) getPreview(currState.currFile.id);
-    }, [file]);
+    }, [currState?.currFile?.id]);
 
     const getPreview = async (id) => {
         const url = API_URL + '/getFile/' + id;
@@ -117,7 +110,7 @@ const UserCourses = (props) => {
                     <div className='content panel right-border'>
                         {
                             currState?.currCourse?.name !== undefined && currState?.currFolder?.name !== undefined ?
-                                <FolderInfo files={files} currState={currState} setCurrFile={setCurrFile} />
+                                <FolderInfo files={files} setPreviewChange={setPreviewChange} sectionName={currState.currFolder.name} courseName={currState.currCourse.name} setRecent={setCurrFolder} />
                                 : <p>loading</p>
                         }
                     </div>
