@@ -308,12 +308,11 @@ Router.put('/addSection', async (req, res) => {
     }
 });
 
-Router.post('/allData', async (req, res) => {
+Router.post('/courseInfo', async (req, res) => {
     try { // returns an object with the courses that a user is in and the section ids
         let { ids } = req.body;
         if (ids.length === 0) return res.status(304).send(0);
         let courses = [];
-        let sections = {};
         try {
             ids.forEach(async (i) => {
                 await Course.findById(mongoose.Types.ObjectId(i)).then((course) => {

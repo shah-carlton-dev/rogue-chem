@@ -6,53 +6,62 @@ import UserCourses from "../UserDash/Courses/UserCourses.jsx";
 import Select from 'react-dropdown-select';
 import { API_URL } from '../../utils/constants.js';
 import Axios from "axios";
+import DisplayContext from "../../context/DisplayContext.js";
 import { useHistory } from "react-router-dom";
+
+let currCourse = { id: null, name: "" };
+let currFolder = { id: null, name: "" };
+let currFile = { id: null, name: "" };
+let currState = { currCourse, currFolder, currFile };
 
 const Home = (props) => {
     const { userData, setUserData } = useContext(UserContext);
-    const [courseData, setCourseData] = useState([]);
-    const [selected, setSelected] = useState({});
-    const [lastState, setLastState] = useState({});
-    let course, folder, file = "";
+    const [courseData, setCourseData] = useState([]); // info on the courses that the user is enrolled in
+    const [lastState, setLastState] = useState({}); // prev state from last session, updated on session end
+    // const [currState, setCurrState] = useState({ currCourse, currFolder, currFile })
+    // const currState = { currCourse, currFolder, currFile };
 
-    const history = useHistory();
-    sessionStorage.clear();
-    sessionStorage.setItem("last-route", history.location.pathname);
-
-    useEffect(() => {
-        getCourseData();
-    }, []);
+    // const history = useHistory();
+    // sessionStorage.clear();
+    // sessionStorage.setItem("last-route", history.location.pathname);
 
     useEffect(() => {
-        getMostRecent();
-    }, [courseData]);
+        console.log("use effect")
+        getCourseData(); // get up to date course data when component mounts
+        getLastState(); // get info on initial state on first mount
+        // return async function cleanup() {
+        // updateLastState(); // update last state when component unmounts -- need to handle tab closure/refresh
+        // }
+    }, [])
 
     const getCourseData = async () => {
-        const url = API_URL + '/courses/allData';
         try {
-            await Axios.post(url, { ids: userData.user.courses }).then((res) => {
-                console.log('course data: ');
-                console.log(res)
-                if (res === 1)
-                    console.log("Error: " + res.data);
-                else if (res === 0)
-                    console.log("Error: user has no courses");
+            await Axios.get(API_URL + '/users/courseInfo/' + userData.user._id).then(res => {
+                if (res.status === 204)
+                    console.log("User does not have any courses");
+                else if (res.status !== 200)
+                    console.log("Error retrieving user's courses");
                 else {
                     setCourseData(res.data);
-                    setSelected(res.data[0]);
+                    console.log(res)
+                    setCurrCourse(res.data[0].id, res.data[0].name);
                 }
             });
         } catch {
-            console.log("courses.jsx -> getCourseData")
+            console.log("Error: courses.jsx -> getCourseData")
         }
     }
 
-    const getMostRecent = async () => {
+    const getLastState = async () => {
         if (courseData !== {}) {
             try {
                 await Axios.get(API_URL + '/users/lastState/' + userData.user._id).then(res => {
                     setLastState(res.data);
-                    setSelected((courseData.filter(c => c.name === res.data.course.name))[0]);
+                    console.log(res.data)
+                    // setCurrState({ currCourse: res.data.course, currFolder: res.data.folder, currFile: res.data.file });
+                    setCurrCourse(res.data.course.id, res.data.course.name);
+                    setCurrFolder(res.data.folder.id, res.data.folder.name);
+                    setCurrFile(res.data.file.id, res.data.file.name);
                 })
             } catch (e) {
                 console.log(e)
@@ -60,22 +69,59 @@ const Home = (props) => {
         }
     }
 
-    return (<>
+    const updateLastState = async () => {
+        await Axios.post(
+            API_URL + "/users/lastState",
+            { userId: userData.user._id, recent: currState }
+        ).then(res => {
+            if (res.data) {
+                // successful update
+            } else {
+                // update failed
+            }
+        });
+    }
 
+    const setCurrCourse = (id, name) => {
+        currCourse = { id, name };
+        currState.currCourse = currCourse;
+        // setCurrState({ currCourse, currFolder, currFile });
+        console.log("currCourse updated: ");
+        console.log(currCourse);
+        console.log(currState)
+    }
+    const setCurrFolder = (id, name) => {
+        currFolder = { id, name };
+        currState.currFolder = currFolder;
+        // setCurrState({currCourse, currFolder, currFile});
+        console.log("currFolder updated: ");
+        console.log(currState);
+    }
+    const setCurrFile = (id, name) => {
+        currFile = { id, name };
+        currState.currFile = currFile;
+        // setCurrState({currCourse, currFolder, currFile});
+        console.log("currFile updated: ");
+        console.log(currState);
+    }
+    // const setCurrState = (currCourse, currFolder, currFile) => currState = { currCourse, currFolder, currFile };
+
+    return (<>
         <Row className="top-nav py-1">
             <Col lg={3}>
+                {console.log(courseData)}
                 <Select
                     options={courseData}
-                    valueField="_id"
+                    valueField="id"
                     disabled={false}
-                    onChange={(val) => { setSelected(val[0]) }}
+                    onChange={(val) => setCurrCourse(val[0].id, val[0].name)}
                     labelField="name"
-                    placeholder={selected ? selected.name : courseData[0].name}
                     separator={true}
                     dropdownHandleRenderer={({ state }) => (
                         <span className="pl-1">{state.dropdown ? " –" : " +"}</span>
                     )}
                     closeOnSelect={true}
+                    placeholder={"Switch course"}
                     backspaceDelete={false}
                 />
             </Col>
@@ -84,9 +130,10 @@ const Home = (props) => {
             </Col>
         </Row>
         {userData.user.admin ? (
-            <AdminCourses course={selected ? selected : courseData[0]} prev={lastState} />
-        ) : (
-            <UserCourses course={selected ? selected : courseData[0]} prev={lastState} />
+            <AdminCourses props={lastState} />
+        ) : (<>
+            <UserCourses currState={currState} setCurrCourse={setCurrCourse} setCurrFolder={setCurrFolder} setCurrFile={setCurrFile} lastState={lastState} />
+        </>
         )}
     </>)
 }

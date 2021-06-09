@@ -34,15 +34,15 @@ const studentSchema = mongoose.Schema(
         lastState: {
             course: {
                 name: String,
-                _id: mongoose.ObjectId
+                id: mongoose.ObjectId
             },
             folder: {
                 name: String,
-                _id: mongoose.ObjectId
+                id: mongoose.ObjectId
             },
             file: {
                 name: String,
-                _id: mongoose.ObjectId
+                id: mongoose.ObjectId
             }
         },
         admin: {

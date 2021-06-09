@@ -21,10 +21,10 @@
     overflow: scroll;
 }
 
-::placeholder {
+/* ::placeholder {
     font-size: medium;
     color: black;
-}
+} */
 
 .top-nav {
     background-color: rgb(226, 225, 225);

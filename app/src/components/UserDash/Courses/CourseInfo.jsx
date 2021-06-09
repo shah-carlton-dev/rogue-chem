@@ -1,17 +1,17 @@
 import React from "react";
-import SectionCard from "./SectionCard.jsx";
+import FolderCard from "./FolderCard.jsx";
 import { Row, Col, CardDeck } from "react-bootstrap";
 import '../../../styles/CoursesDash.css';
 
 const CourseInfo = (props) => {
-    const { courseName, sections, setSectionChange } = props.things;
-    props.setRecent(courseName);
+    const {folders, currState, setCurrFolder} = props;
+
     return (
         <div className="topdash-wrapper" >
-            {/* <h5 className="ml-3 pt-3">{courseName}</h5> */}
-            <Row className="pt-3">
-                <CardDeck className="center-contents">{sections.map(section =>
-                    <Col key={section._id}><SectionCard section={section} setSectionChange={setSectionChange} /></Col>
+            <h5 className="ml-3 pt-3">{currState.currCourse.name}</h5>
+            <Row className="pt-3 courses-row">
+                <CardDeck className="center-contents">{folders.map(folder =>
+                    <Col key={folder._id}><FolderCard folder={folder} setCurrFolder={setCurrFolder} /></Col>
                 )}</CardDeck>
             </Row>
         </div>

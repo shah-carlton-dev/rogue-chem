@@ -15,67 +15,45 @@ import { createPromiseCapability } from "pdfjs-dist";
 
 let recent = { course: null, folder: null, file: null };
 
-const UserCourses = ({ course, prev }) => {
-    const { userData, setUserData } = useContext(UserContext);
-    const [retrieving, setRetrieving] = useState(true);
-    const [sections, setSections] = useState([]);
-    const [sectionChange, setSectionChange] = useState(0);
+const UserCourses = (props) => {
+    const [folders, setFolders] = useState([]);
+    const [folderChange, setFolderChange] = useState(0);
     const [files, setFiles] = useState([]);
     const [videos, setVideos] = useState([]);
     const [previewChange, setPreviewChange] = useState(0);
     const [preview, setPreview] = useState({});
-    const courseName = course.name;
-    const courseId = course._id;
-    const prevFolder = prev.folder;
-    const prevFile = prev.file;
-    console.log(prev);
-    const [sectionName, setSectionName] = useState("");
+    const [folderName, setFolderName] = useState("");
 
-    const setRecentCourse = (c) => {
-        recent.course = { name: course.name, _id: course._id };
-    }
-    const setRecentFolder = (f) => {
-        recent.folder = { 'name': f, '_id': sectionChange };
-    }
-    const setRecentFile = (f) => {
-        recent.file = f;
-    }
-    useEffect(() => {
-        return async function cleanup() {
-            console.log(userData)
-            await Axios.post(
-                API_URL + "/users/lastState",
-                { userId: userData.user._id, recent }
-            ).then(res => {
-                if (res.data) {
-                    // successful update
-                } else {
-                    // update failed
-                }
-            });
-        }
-    }, []);
+    const { currState, setCurrCourse, setCurrFolder, setCurrFile, lastState } = props;
+
+    const [course, setCourse] = useState(currState.currCourse.id);
+    const [folder, setFolder] = useState(currState.currFolder.id);
+    const [file, setFile] = useState(currState.currFile.id);
+
+    console.log(props)
 
     useEffect(() => {
-        getSectionData(courseId);
+        console.log("currCourse useEffect")
+        if (currState?.currCourse?.id !== undefined) getSectionData(currState.currCourse.id);
     }, [course]);
 
     useEffect(() => {
-        getFileData(sectionChange);
-    }, [sectionChange]);
+        console.log("currFolder useEffect")
+        if (currState?.currFolder?.id !== undefined) getFileData(currState.currFolder.id);
+    }, [folder]);
 
     useEffect(() => {
-        getPreview(previewChange);
-    }, [previewChange]);
+        console.log("currFile useEffect")
+        if (currState?.currFile?.id !== undefined) getPreview(currState.currFile.id);
+    }, [file]);
 
     const getPreview = async (id) => {
         const url = API_URL + '/getFile/' + id;
-        console.log("getting file for preview");
         try {
             if (id !== 0 && id !== undefined) {
                 await Axios.get(url).then((res) => {
-                    console.log(res.data);
                     setPreview(res.data);
+                    setCurrFile(res.data._id, res.data.title)
                 })
             }
         } catch { }
@@ -84,10 +62,9 @@ const UserCourses = ({ course, prev }) => {
     const getFileData = async (id) => {
         const url = API_URL + '/courses/files/' + id;
         const vURL = API_URL + '/courses/videos/' + id;
-        console.log("getting file list");
         try {
-            if (sections !== undefined) {
-                setSectionName(sections.filter(s => s._id === id)[0].name);
+            if (folders !== undefined) {
+                setFolderName(folders.filter(s => s._id === id)[0].name);
             }
         } catch { }
         try {
@@ -95,7 +72,7 @@ const UserCourses = ({ course, prev }) => {
                 await Axios.get(url).then((res) => {
                     setFiles(res.data);
                     if (res.data[0])
-                        setPreviewChange(res.data[0]._id);
+                        setCurrFolder(res.data[0]._id, res.data[0].title);
                 })
             }
         } catch { }
@@ -104,7 +81,7 @@ const UserCourses = ({ course, prev }) => {
                 await Axios.get(vURL).then((res) => {
                     setVideos(res.data);
                     if (res.data[0] && previewChange !== 0) // if there is a video, and preview isn't a PDF set video as preview
-                        setPreviewChange(res.data[0].id);
+                        setCurrFolder(res.data[0]._id, res.data[0].title);
                 })
             }
         } catch { }
@@ -115,8 +92,8 @@ const UserCourses = ({ course, prev }) => {
         try {
             if (id !== undefined) {
                 await Axios.get(url).then((res) => {
-                    setSections(res.data);
-                    setSectionChange(res.data[0]._id);
+                    setFolders(res.data);
+                    setCurrFolder(res.data[0]._id, res.data[0].name);
                 })
             }
         } catch { }
@@ -127,26 +104,37 @@ const UserCourses = ({ course, prev }) => {
             <ResizePanel direction="s" handleClass="customHandle" borderClass="customResizeBorder" style={{ height: '40vh' }}>
                 <div className='content-area'>
                     <div className='header panel container'>
-                        <CourseInfo things={{ courseName, sections, setSectionChange }} setRecent={setRecentCourse} />
+                        {
+                            currState?.currCourse?.name !== undefined ?
+                                <CourseInfo folders={folders} currState={currState} setCurrFolder={setCurrFolder} />
+                                : <p>loading...</p>
+                        }
                     </div>
                 </div>
             </ResizePanel>
             <div className='content-area'>
-                <Col xs={4}>
+                <Col xs={5}>
                     <div className='content panel right-border'>
-                        <FolderInfo files={files} setPreviewChange={setPreviewChange} sectionName={sectionName} courseName={courseName} setRecent={setRecentFolder} />
+                        {
+                            currState?.currCourse?.name !== undefined && currState?.currFolder?.name !== undefined ?
+                                <FolderInfo files={files} currState={currState} setCurrFile={setCurrFile} />
+                                : <p>loading</p>
+                        }
                     </div>
                 </Col>
-                <Col xs={4}>
-                    <div className='content panel right-border'>
-                        <FileInfo preview={preview} setRecent={setRecentFile} />
-                    </div>
-                </Col>
-                <Col xs={4} className="preview-render">
+                <Col xs={3} className="preview-render">
                     <div className='content panel preview-render'>
                         <PreviewRender preview={preview} />
+                        {/* <PreviewRender /> */}
                     </div>
                 </Col>
+                <Col xs={4}>
+                    <div className='content panel'>
+                        <FileInfo preview={preview} setRecent={setCurrFile} />
+                        {/* <FileInfo /> */}
+                    </div>
+                </Col>
+                
             </div>
         </div>
     </>)
