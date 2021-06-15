@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react';
-import Viewer, { Worker } from '@phuocng/react-pdf-viewer';
+// import Viewer, { Worker } from '@phuocng/react-pdf-viewer';
 import { Modal, Button, Row, Container } from 'react-bootstrap';
 import '@phuocng/react-pdf-viewer/cjs/react-pdf-viewer.css';
 import '../../../styles/PDFView.css';
@@ -101,7 +101,7 @@ const FileInfo = (props) => {
                                 </Row>
                             </Container>
                         </Modal.Body>
-                        <div className="center-video">
+                        {/* <div className="center-video">
                             <div className="App">
                                 <Worker workerUrl="https://unpkg.com/pdfjs-dist@2.7.570/build/pdf.worker.min.js">
                                     <div id="pdfviewer">
@@ -109,7 +109,7 @@ const FileInfo = (props) => {
                                     </div>
                                 </Worker>
                             </div>
-                        </div>
+                        </div> */}
                         <Modal.Footer>
                         </Modal.Footer>
                     </Modal>
