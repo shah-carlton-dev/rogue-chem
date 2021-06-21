@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react';
-// import Viewer, { Worker } from '@phuocng/react-pdf-viewer';
+import Viewer, { Worker } from '@phuocng/react-pdf-viewer';
 import { Modal, Button, Row, Container } from 'react-bootstrap';
 import '@phuocng/react-pdf-viewer/cjs/react-pdf-viewer.css';
 import '../../../styles/PDFView.css';
@@ -11,12 +11,10 @@ import ListsContext from "../../../context/ListsContext.js";
 const FileInfo = (props) => {
     const { userData, setUserData } = useContext(UserContext);
     const { queue, setQueue, recents, setRecents } = useContext(ListsContext);
-    const { preview, setRecent } = props;
+    const { preview } = props;
     const [show, setShow] = useState(false);
     const [file, setFile] = useState("");
     const handleClose = () => setShow(false);
-
-    setRecent(preview._id, preview.title);
 
     useEffect(() => {
         //console.log('attempting preview render');
@@ -58,6 +56,7 @@ const FileInfo = (props) => {
                     setRecents([fileId, ...recents])
                 } else {
                     const rec = recents.splice(find, 1);
+                    console.log(rec);
                     setRecents([fileId, ...rec]);
                 }
             });
@@ -66,13 +65,13 @@ const FileInfo = (props) => {
 
 
     return (
-        <div className="filelist-root">
+        <div className="fileinfo-root">
             {/* {console.log(preview)} */}
             {preview !== null && preview !== undefined && Object.keys(preview).length > 0
                 ?
                 <>
                     <h5>{preview.title}</h5>
-                    <hr />
+                    <hr/>
                     <h6>Description:</h6>
                     <p>{preview.description}</p>
                     <h6>Keywords:</h6>
@@ -101,7 +100,7 @@ const FileInfo = (props) => {
                                 </Row>
                             </Container>
                         </Modal.Body>
-                        {/* <div className="center-video">
+                        <div className="center-video">
                             <div className="App">
                                 <Worker workerUrl="https://unpkg.com/pdfjs-dist@2.7.570/build/pdf.worker.min.js">
                                     <div id="pdfviewer">
@@ -109,7 +108,7 @@ const FileInfo = (props) => {
                                     </div>
                                 </Worker>
                             </div>
-                        </div> */}
+                        </div>
                         <Modal.Footer>
                         </Modal.Footer>
                     </Modal>
