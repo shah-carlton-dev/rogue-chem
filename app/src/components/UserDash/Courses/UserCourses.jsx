@@ -122,16 +122,17 @@ const UserCourses = ({ course }) => {
                         <FolderInfo files={files} setPreviewChange={setPreviewChange} sectionName={sectionName} />
                     </div>
                 </Col>
-                <Col xs={4}>
-                    <div className='content panel right-border'>
-                        <FileInfo preview={preview} />
-                    </div>
-                </Col>
-                <Col xs={4} className="preview-render">
+                <Col xs={5} className="preview-render right-border">
                     <div className='content panel preview-render'>
                         <PreviewRender preview={preview} />
                     </div>
                 </Col>
+                <Col xs={3}>
+                    <div className='content panel '>
+                        <FileInfo preview={preview} />
+                    </div>
+                </Col>
+                
             </div>
         </div>
     </>)

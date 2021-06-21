@@ -65,12 +65,13 @@ const FileInfo = (props) => {
 
 
     return (
-        <div className="filelist-root">
+        <div className="fileinfo-root">
             {/* {console.log(preview)} */}
             {preview !== null && preview !== undefined && Object.keys(preview).length > 0
                 ?
                 <>
                     <h5>{preview.title}</h5>
+                    <hr/>
                     <h6>Description:</h6>
                     <p>{preview.description}</p>
                     <h6>Keywords:</h6>

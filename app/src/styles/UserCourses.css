@@ -38,7 +38,7 @@ body {
 .content {
     /* overflow: hidden; */
     flex-grow: 2;
-    padding: 1vw;
+    padding: 1vw 0.3vw;
 }
 
 .customHandle {

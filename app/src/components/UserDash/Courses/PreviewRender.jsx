@@ -4,6 +4,9 @@ import '@phuocng/react-pdf-viewer/cjs/react-pdf-viewer.css';
 import '../../../styles/PDFView.css';
 import '../../../styles/PreviewRender.css';
 import { API_URL } from '../../../utils/constants';
+// import { Document, Page } from 'react-pdf'; this might be the answer to our problems
+import { Document, Page } from 'react-pdf/dist/esm/entry.webpack';
+
 
 
 const PreviewRender = ({ preview }) => {
@@ -16,10 +19,11 @@ const PreviewRender = ({ preview }) => {
                     <div className="center-video">
                         <div className="App">
                             <Worker workerUrl="https://unpkg.com/pdfjs-dist@2.7.570/build/pdf.worker.min.js">
-                                <div id="pdfviewer">
+                                {/* <div id="pdfviewer">
                                     <Viewer fileUrl={API_URL + "" + preview.file_path.slice(5)} toolbar="0" defaultScale={.6}/>
-                                </div>
+                                </div> */}
                             </Worker>
+                            <p>pdf view will eventually be here</p>
                         </div>
                     </div>
                 </>
