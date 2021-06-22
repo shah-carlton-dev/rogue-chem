@@ -1,9 +1,9 @@
 import React from 'react';
 import Viewer, { Worker } from '@phuocng/react-pdf-viewer';
 import '@phuocng/react-pdf-viewer/cjs/react-pdf-viewer.css';
-import '../../../styles/PDFView.css';
-import '../../../styles/PreviewRender.css';
-import { API_URL } from '../../../utils/constants';
+import '../../../../styles/PDFView.css';
+import '../../../../styles/PreviewRender.css';
+import { API_URL } from '../../../../utils/constants';
 // import { Document, Page } from 'react-pdf'; this might be the answer to our problems
 import { Document, Page } from 'react-pdf/dist/esm/entry.webpack';
 

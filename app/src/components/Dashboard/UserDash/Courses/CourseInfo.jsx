@@ -1,7 +1,7 @@
 import React from "react";
 import SectionCard from "./SectionCard.jsx";
 import { Row, Col, CardDeck } from "react-bootstrap";
-import '../../../styles/CoursesDash.css';
+import '../../../../styles/CoursesDash.css';
 
 const CourseInfo = (props) => {
     const { courseName, sections, setSectionChange } = props.things;

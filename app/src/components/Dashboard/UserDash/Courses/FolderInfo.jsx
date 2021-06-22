@@ -1,7 +1,7 @@
 import React from "react";
-import '../../../styles/FileList.css';
+import '../../../../styles/FileList.css';
 import '@phuocng/react-pdf-viewer/cjs/react-pdf-viewer.css';
-import '../../../styles/PDFView.css';
+import '../../../../styles/PDFView.css';
 
 const FolderInfo = (props) => {
     const { files, setPreviewChange, sectionName } = props;

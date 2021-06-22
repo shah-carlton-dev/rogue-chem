@@ -1,8 +1,8 @@
 import React, { useContext, useState, useEffect } from "react";
 import { Row, Col } from "react-bootstrap";
 import UserContext from "../../context/UserContext.js";
-import AdminCourses from "../AdminDash/AdminCourses.jsx";
-import UserCourses from "../UserDash/Courses/UserCourses.jsx";
+import AdminCourses from "./AdminDash/AdminCourses.jsx";
+import UserCourses from "./UserDash/Courses/UserCourses.jsx";
 import Select from 'react-dropdown-select';
 import { API_URL } from '../../utils/constants.js';
 import Axios from "axios";

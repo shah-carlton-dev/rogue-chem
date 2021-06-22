@@ -1,10 +1,10 @@
 import React, { useContext } from "react";
 import { Card, Button } from "react-bootstrap";
-import '../../../styles/SectionCard.css';
+import '../../../../styles/SectionCard.css';
 import Axios from "axios";
-import ListsContext from '../../../context/ListsContext.js';
-import UserContext from '../../../context/UserContext.js';
-import { API_URL } from '../../../utils/constants';
+import ListsContext from '../../../../context/ListsContext.js';
+import UserContext from '../../../../context/UserContext.js';
+import { API_URL } from '../../../../utils/constants';
 
 const SectionCard = (props) => {
     const { section, setSectionChange } = props;

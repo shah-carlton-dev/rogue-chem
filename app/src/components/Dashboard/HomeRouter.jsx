@@ -9,10 +9,10 @@ import SampleRender from '../VideoRender/SampleRender';
 import FileUpload from '../FileManagement/FileUpload';
 import VideoUpload from '../FileManagement/VideoUpload';
 import Home from './Home.jsx';
-import ProfileManagement from '../UserDash/ProfileManagement.jsx';
-import UserProgress from '../UserDash/UserProgress.jsx';
-import AdminProgress from '../AdminDash/AdminProgress.jsx';
-import AdminStats from '../AdminDash/AdminStats.jsx';
+import ProfileManagement from './UserDash/ProfileManagement.jsx';
+import UserProgress from './UserDash/UserProgress.jsx';
+import AdminProgress from './AdminDash/AdminProgress.jsx';
+import AdminStats from './AdminDash/AdminStats.jsx';
 import Messages from './Messages.jsx';
 import ListsContext from "../../context/ListsContext.js";
 

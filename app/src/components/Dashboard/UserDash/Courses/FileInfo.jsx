@@ -2,11 +2,11 @@ import React, { useState, useContext, useEffect } from 'react';
 import Viewer, { Worker } from '@phuocng/react-pdf-viewer';
 import { Modal, Button, Row, Container } from 'react-bootstrap';
 import '@phuocng/react-pdf-viewer/cjs/react-pdf-viewer.css';
-import '../../../styles/PDFView.css';
+import '../../../../styles/PDFView.css';
 import Axios from "axios";
-import { API_URL } from '../../../utils/constants';
-import UserContext from "../../../context/UserContext.js";
-import ListsContext from "../../../context/ListsContext.js";
+import { API_URL } from '../../../../utils/constants';
+import UserContext from "../../../../context/UserContext.js";
+import ListsContext from "../../../../context/ListsContext.js";
 
 const FileInfo = (props) => {
     const { userData, setUserData } = useContext(UserContext);

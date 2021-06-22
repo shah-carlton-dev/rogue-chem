@@ -1,11 +1,11 @@
 import React, { useEffect, useContext, useState } from "react";
 import ResizePanel from "react-resize-panel";
-import '../../../styles/UserCourses.css';
+import '../../../../styles/UserCourses.css';
 import CourseInfo from './CourseInfo.jsx';
 import FolderInfo from './FolderInfo.jsx';
 import FileInfo from './FileInfo.jsx';
 import PreviewRender from './PreviewRender.jsx';
-import { API_URL } from '../../../utils/constants.js';
+import { API_URL } from '../../../../utils/constants.js';
 import Axios from "axios";
 import { Col } from "react-bootstrap";
 
