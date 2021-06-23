@@ -26,14 +26,16 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'files')));
 
 // router setup 
-const fileRouter = require('./routes/file');
-const videoRouter = require('./routes/video');
+const fileRouter = require('./routes/files');
+const videoRouter = require('./routes/videos');
 const usersRouter = require('./routes/users');
 const coursesRouter = require('./routes/courses.js');
+const messagesRouter = require('./routes/messages.js');
 app.use(fileRouter);
 app.use(videoRouter);
 app.use('/users', usersRouter);
 app.use('/courses', coursesRouter);
+app.use('/msg', messagesRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
