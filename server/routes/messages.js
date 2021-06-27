@@ -12,7 +12,8 @@ const constants = require('../utils/constants.js');
 Router.post('/newAnnouncement',
     async (req, res) => {
         try {
-            let { to, from, title, body, broadcast } = req.body;
+            const { to, from, title, body, broadcast } = req.body;
+            // check that the 'to' is a course id
             const msg = new Message({
                 to, from, title, body, broadcast
             });
@@ -29,7 +30,8 @@ Router.post('/newAnnouncement',
 Router.post('/newMessage',
     async (req, res) => {
         try {
-            let { to, from, title, body, broadcast } = req.body;
+            const { to, from, title, body, broadcast } = req.body;
+            // check that the 'to' is a student id
             const msg = new Message({
                 to, from, title, body, broadcast
             });
@@ -40,5 +42,20 @@ Router.post('/newMessage',
         }
     }
 );
+
+// get all messages/announcements for a specific user (by id)
+Router.get('allMessages/:id',
+    async (req, res) => {
+        try {
+            const userId = req.params;
+            Message.findById(userId, (err1, user => {
+                if (err) return res.send("User not found").status(400);
+                console.log(user);
+            }))
+        } catch (err) {
+            return res.send('Error while getting messages for user').status(400);
+        }
+    }
+)
 
 module.exports = Router;
