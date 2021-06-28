@@ -8,7 +8,12 @@ const courseSchema = mongoose.Schema(
         description: String,
         sections: Array,
         files: Array,
-        videos: Array
+        videos: Array,
+        meta: Boolean,
+        courses: {
+            type: Array,
+            required: false
+        }
     },
     { timestamps: true }
 );

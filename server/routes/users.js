@@ -2,6 +2,7 @@ const path = require('path');
 const express = require('express');
 const Admin = require('../model/admin');
 const Student = require('../model/student');
+const Course = require('../model/course');
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const Mongoose = require('mongoose');
@@ -192,6 +193,31 @@ Router.post('/updateRecents', async (req, res) => {
         })
     } catch (e) {
         console.log(e);
+    }
+})
+
+Router.post('/addCourse/:courseId/:userId', async (req, res) => {
+    try {
+        // add user to list of users on course
+        await Course.findOne({ meta: true }).then(
+            metaDoc => {
+                return metaDoc.courses.findIndex(e => e.id.equals(req.params.courseId));
+            }
+        ).then(
+            async ix => {
+                await Course.findOneAndUpdate(
+                    { meta: true }, 
+                    { $push: { ['courses.' + ix + '.users']: Mongoose.Types.ObjectId(req.params.userId) } })
+            }
+        )
+
+        // add course to list of user's courses
+        await Student.findByIdAndUpdate(req.params.userId, {$push: {courses: Mongoose.Types.ObjectId(req.params.courseId)}});
+
+        return res.send("Successfully added user to course").status(200);
+    } catch (err) {
+        console.log(err);
+        return res.send("Error adding course to user account. Try again later.").status(400);
     }
 })
 

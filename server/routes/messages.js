@@ -3,20 +3,40 @@ const express = require('express');
 const Admin = require('../model/admin');
 const Student = require('../model/student');
 const Message = require('../model/message');
+const Course = require('../model/course.js');
 const Mongoose = require('mongoose');
 const Router = express.Router();
 const constants = require('../utils/constants.js');
 
+// keep broadcast bc it will help when getting messages/announcements
+
 // create a new announcement
-// curl -X POST -H "Content-Type: application/json" -d '{"to":"rfarrell", "from":"RogueChem1", "title":"example announcement", "body":"announcement body", "broadcast":true}' http://localhost:3030/msg/newAnnouncement
+// curl -X POST -H "Content-Type: application/json" -d '{"to": "60aea37e17fb8527810c93ed", "from": "rfarrell", "title":"example announcement", "body":"announcement body"}' http://localhost:3030/msg/newAnnouncement
 Router.post('/newAnnouncement',
     async (req, res) => {
         try {
-            const { to, from, title, body, broadcast } = req.body;
-            // check that the 'to' is a course id
+            const { to, from, title, body } = req.body;
+            let to_course;
+            let from_admin;
+
+            // check that the to is a course id
+            try {
+                await Course.findById(to).then(course => to_course = course);
+            } catch (err) {
+                return res.send("Must have a course id as the \'to\' field for announcements");
+            }
+
+            // check that the from is admin
+            try {
+                await Admin.findOne({username: from}).then(admin => from_admin = admin);
+            } catch (err) {
+                return res.send("Must have an admin username as the \'from\' field for announcements");
+            }
+
             const msg = new Message({
-                to, from, title, body, broadcast
+                to, from, title, body, broadcast: true
             });
+
             await msg.save();
             return res.send(msg).status(200);
         } catch (err) {
@@ -26,15 +46,30 @@ Router.post('/newAnnouncement',
 );
 
 // create a new message
-// curl -X POST -H "Content-Type: application/json" -d '{"to":"rfarrell", "from":"RogueChem1", "title":"example message", "body":"message body", "broadcast":false}' http://localhost:3030/msg/newMessage
+// curl -X POST -H "Content-Type: application/json" -d '{"to": "rshah", "from": "rfarrell", "title":"example message", "body":"message body"}' http://localhost:3030/msg/newMessage
 Router.post('/newMessage',
     async (req, res) => {
         try {
-            const { to, from, title, body, broadcast } = req.body;
-            // check that the 'to' is a student id
+            const { to, from, title, body } = req.body;
+
+            // TODO: if from is admin, to should be student
+            try {
+                await Course.findById(to).then(course => to_course = course);
+            } catch (err) {
+                return res.send("Must have a course id as the \'to\' field for announcements");
+            }
+
+            // TODO: if from is student, to should be admin
+            try {
+                await Admin.findOne({username: from}).then(admin => from_admin = admin);
+            } catch (err) {
+                return res.send("Must have an admin username as the \'from\' field for announcements");
+            }
+            
             const msg = new Message({
-                to, from, title, body, broadcast
+                to, from, title, body, broadcast: false
             });
+            
             await msg.save();
             return res.send(msg).status(200);
         } catch (err) {

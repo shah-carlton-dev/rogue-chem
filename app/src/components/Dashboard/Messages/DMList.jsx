@@ -4,7 +4,7 @@ const DMList = (props) => {
     return (
         <div>
             DMs will go here
-            <hr>fgd</hr>
+            <hr />
         </div>
     )
 }

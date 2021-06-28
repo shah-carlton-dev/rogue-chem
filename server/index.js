@@ -28,7 +28,7 @@ app.use(express.static(path.join(__dirname, 'files')));
 // router setup 
 const fileRouter = require('./routes/files');
 const videoRouter = require('./routes/videos');
-const usersRouter = require('./routes/users');
+const usersRouter = require('./routes/users.js');
 const coursesRouter = require('./routes/courses.js');
 const messagesRouter = require('./routes/messages.js');
 app.use(fileRouter);

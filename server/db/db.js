@@ -4,7 +4,8 @@ const constants = require('../utils/constants.js');
 const users_db = Mongoose.createConnection(constants.mongo_users_uri, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
-  useCreateIndex: true
+  useCreateIndex: true,
+  useFindAndModify: false
 }, (err) => {
   console.log('Connection in progress...');
   if (err) throw err;

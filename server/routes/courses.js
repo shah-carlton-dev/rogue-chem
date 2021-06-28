@@ -7,6 +7,7 @@ const File = require('../model/file.js');
 const Video = require('../model/video.js');
 const Admin = require('../model/admin');
 const Student = require('../model/student');
+const Message = require('../model/message.js');
 const mongoose = require('mongoose');
 
 Router.post('/create', async (req, res) => {
@@ -17,12 +18,28 @@ Router.post('/create', async (req, res) => {
             description,
             sections: [],
             files: [],
-            published: false
+            published: false,
+            meta: false
         });
         await course.save();
+        await Course.findOne({ name: name })
+            .then(async course => {
+                await Course.findOne({ meta: true }).then(async metaDoc => {
+                    metaDoc.courses.push(
+                        {
+                            name: course.name,
+                            id: mongoose.Types.ObjectId(course._id),
+                            users: []
+                        }
+                    );
+                    await metaDoc.save();
+                })
+            })
+
         await Course.find().then(r => res.send(r));
         //res.send('Course created successfully.');
     } catch (error) {
+        console.log(error);
         res.status(400).send('Error while creating course. Try again later.');
     }
 });
@@ -31,15 +48,22 @@ Router.delete('/delete/:id', async (req, res) => { // deletes a course
     try {
         const course_id = req.params.id;
         let courses;
+
         // remove course from db
-        await Course.findByIdAndDelete(mongoose.Types.ObjectId(course_id)).then(async (r) => {
+        await Course.findByIdAndDelete(mongoose.Types.ObjectId(course_id)).then(async r => {
             await Course.find().then(r2 => courses = r2);
         });
+
+        // remove course from any student enrolled
         await Student.find({ courses: mongoose.Types.ObjectId(course_id) }).then(list => {
             list.forEach(async s => {
                 await Student.findByIdAndUpdate(s._id, { "$pull": { "courses": mongoose.Types.ObjectId(course_id) } }, { useFindAndModify: false });
             })
         });
+
+        // remove course from metaDoc
+        await Course.findOneAndUpdate({ meta: true }, { $pull: { 'courses': { id: mongoose.Types.ObjectId(course_id) } } });
+
         return res.send(courses);
     } catch (error) {
         res.status(400).send('Error while creating course. Try again later.');
@@ -48,8 +72,7 @@ Router.delete('/delete/:id', async (req, res) => { // deletes a course
 
 Router.get('/', async (req, res) => {
     try {
-        const courses = await Course.find();
-        return res.send(courses);
+        await Course.find({ meta: false }).then(courses => { return res.send(courses) });
     } catch (error) {
         return res.status(400).send('Error while getting list of courses. Try again later.');
     }
@@ -171,12 +194,12 @@ Router.get('/videos/:id', async (req, res) => {
             await section.videos.forEach(async (video) => {
                 await Video.findById(mongoose.Types.ObjectId(video._id)).then((v) => {
                     videoList.push(v);
-                    if (section.videos.length === videoList.length) { 
+                    if (section.videos.length === videoList.length) {
                         res.send(videoList);
                     }
                 })
             })
-        } catch (err) { 
+        } catch (err) {
             res.status(400).send("Error collecting videos for folder.");
         }
     } catch (err) {
@@ -201,7 +224,7 @@ Router.put('/addFile', async (req, res) => {
 Router.put('/addVideo', async (req, res) => {
     try {
         const { video_id, section_id } = req.body;
-        await Section.findByIdAndUpdate(mongoose.Types.ObjectId(section_id), { "$push": {"videos": mongoose.Types.ObjectId(video_id) } }).then(async () => 
+        await Section.findByIdAndUpdate(mongoose.Types.ObjectId(section_id), { "$push": { "videos": mongoose.Types.ObjectId(video_id) } }).then(async () =>
             await Section.findById(mongoose.Types.ObjectId(section_id)).then(v => {
                 res.send(v.videos).status(304);
             })
