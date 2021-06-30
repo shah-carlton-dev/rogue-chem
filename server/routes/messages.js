@@ -28,7 +28,7 @@ Router.post('/newAnnouncement',
 
             // check that the from is admin
             try {
-                await Admin.findOne({username: from}).then(admin => from_admin = admin);
+                await Admin.findOne({ username: from }).then(admin => from_admin = admin);
             } catch (err) {
                 return res.send("Must have an admin username as the \'from\' field for announcements");
             }
@@ -61,15 +61,15 @@ Router.post('/newMessage',
 
             // TODO: if from is student, to should be admin
             try {
-                await Admin.findOne({username: from}).then(admin => from_admin = admin);
+                await Admin.findOne({ username: from }).then(admin => from_admin = admin);
             } catch (err) {
                 return res.send("Must have an admin username as the \'from\' field for announcements");
             }
-            
+
             const msg = new Message({
                 to, from, title, body, broadcast: false
             });
-            
+
             await msg.save();
             return res.send(msg).status(200);
         } catch (err) {
@@ -79,14 +79,32 @@ Router.post('/newMessage',
 );
 
 // get all messages/announcements for a specific user (by id)
-Router.get('allMessages/:id',
+Router.get('/allMessages/:id',
     async (req, res) => {
         try {
-            const userId = req.params;
-            Message.findById(userId, (err1, user => {
-                if (err) return res.send("User not found").status(400);
-                console.log(user);
-            }))
+            const userId = req.params.id;
+            let announcementsList = [];
+            let messagesList = [];
+            await Student.findById(userId).then(user => {
+                return user.courses;
+            }).then(async userCourses => {
+                let count = 0;
+                userCourses.forEach(async course => {
+                    await Message.find({ broadcast: true, to: course }).then(announcements => {
+                        announcementsList = announcementsList.concat(announcements);
+                        count++;
+                    })
+                })
+                return announcementsList;
+            }).then(announcementsList => {
+                // TODO: get messages now and return an object like { convos: { uname: [ { message }, { message } ], uname2 : [ {message}...] }, announcements: announcementsList }
+
+            }).then(messages => {
+                setTimeout(a => {
+                    res.send({ announcements: announcementsList, messages: messagesList }).status(200); // let things finish loading, in case
+                }, 1000)
+
+            })
         } catch (err) {
             return res.send('Error while getting messages for user').status(400);
         }
