@@ -20,7 +20,7 @@ const Announcement = (props) => {
     console.log(announcement)
 
     return (
-        <Container className="announcements-list" >
+        <Container className="announcement-item" >
             <Row onClick={() => console.log("clickedAnnouncement")}>
                 <Col xs={0} md={1} className="text-center">
                     img
