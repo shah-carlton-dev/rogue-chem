@@ -10,8 +10,9 @@ const Announcement = (props) => {
     }
 
     const trimAnnouncementBody = () => {
-        const str = announcement.body.substring(0, Math.min(announcement.body.length, 25));
-        if (announcement.body.length > 25) return str + "...";
+        const max = 40;
+        const str = announcement.body.substring(0, Math.min(announcement.body.length, max));
+        if (announcement.body.length > max) return str + "...";
         else return str;
     }
 
@@ -20,7 +21,7 @@ const Announcement = (props) => {
 
     return (
         <Container className="announcements-list" >
-            <Row>
+            <Row onClick={() => console.log("clickedAnnouncement")}>
                 <Col xs={0} md={1} className="text-center">
                     img
                 </Col>
