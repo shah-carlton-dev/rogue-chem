@@ -42,14 +42,14 @@ const UserCourses = ({ course }) => {
     useEffect(() => {
         console.log("mounted")
         console.log(courseName);
-        return function cleanup() {
-            console.log("unmounted");
-            console.log(courseName)
-            console.log("section:");
-            console.log(sectionChange);
-            console.log("file:");
-            console.log(previewChange);
-        }
+        // return function cleanup() {
+        //     console.log("unmounted");
+        //     console.log(courseName)
+        //     console.log("section:");
+        //     console.log(sectionChange);
+        //     console.log("file:");
+        //     console.log(previewChange);
+        // }
     }, []);
 
     const getPreview = async (id) => {

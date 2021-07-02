@@ -1,0 +1,1 @@
+// modal to view announcement on click
