@@ -10,6 +10,8 @@ const AnnouncementsList = (props) => {
     const [meta, setMeta] = useState([]);
     const [aList, setAList] = useState([]);
 
+    console.log(aList)
+
     useEffect(() => {
         getAnnouncementsList(userData.user._id);
     }, []);
@@ -18,7 +20,9 @@ const AnnouncementsList = (props) => {
         console.log(id);
         try {
             await Axios.get(API_URL + "/msg/metaDoc").then(res => setMeta(res.data));
-            await Axios.get(API_URL + "/msg/announcements/" + id).then(res => setAList(res.data));
+            await Axios.get(API_URL + "/msg/announcements/" + id).then(res => {
+                setAList(res.data.sort((a, b) => (a.createdAt > b.createdAt) ? -1 : 1));
+            });
         } catch (err) {
             console.log("error in getAnnouncementsList \n" + err);
         }

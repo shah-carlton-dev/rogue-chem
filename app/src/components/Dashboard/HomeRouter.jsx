@@ -14,6 +14,7 @@ import UserProgress from './UserDash/UserProgress.jsx';
 import AdminProgress from './AdminDash/AdminProgress.jsx';
 import AdminStats from './AdminDash/AdminStats.jsx';
 import Messages from './Messages.jsx';
+import AdminMessages from "../Dashboard/AdminDash/AdminMessages.jsx";
 import ListsContext from "../../context/ListsContext.js";
 
 
@@ -39,7 +40,6 @@ const HomeRouter = (props) => {
                     <Col className="fill-width">
                         <Switch>
                             <Route component={Home} exact path="/home" />
-                            <Route component={Messages} path="/home/messages" />
                             {userData.user.admin ?
                                 <> {/* admin routes */}
                                     <Route component={CourseManagement} path="/home/management/courses" />
@@ -48,10 +48,13 @@ const HomeRouter = (props) => {
                                     <Route component={SampleRender} path="/home/sample" />
                                     <Route component={AdminProgress} path="/home/usage/progress" />
                                     <Route component={AdminStats} path="/home/usage/stats" />
+                                    <Route component={AdminMessages} path="/home/messages" />
+
                                 </> :
                                 <> {/* user routes */}
                                     <Route component={ProfileManagement} path="/home/profile" />
                                     <Route component={UserProgress} path="/home/progress" />
+                                    <Route component={Messages} path="/home/messages" />
                                 </>
                             }
                         </Switch>

@@ -12,7 +12,7 @@ const VideoView = (props) => {
             <Button variant="primary" onClick={handleShow}>
                 Open {props.video.title}
             </Button>
-            <Modal show={show} onHide={handleClose} dialogClassName="modal-dialog">
+            <Modal show={show} onHide={handleClose} dialogClassName="modal-80w">
                 <Modal.Header closeButton>
                     <Modal.Title>{props.video.title}</Modal.Title>
                 </Modal.Header>

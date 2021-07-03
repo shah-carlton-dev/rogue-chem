@@ -17,17 +17,22 @@ const Announcement = (props) => {
         else return str;
     }
 
+    const convertDate = () => {
+        const date = new Date(announcement.createdAt);
+        return (date.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }) + " at " + date.toLocaleTimeString('en-US'))
+    }
+
     const toggleModal = () => {
         setShowAnnouncement(!showAnnouncement);
     }
 
     return (
-        <>
+        <div key={announcement._id}>
             <Container className="announcement-item" >
                 <Row onClick={toggleModal}>
-                    <Col xs={0} md={1} className="text-center">
+                    {/* <Col xs={0} md={1} className="text-center">
                         img
-                    </Col>
+                    </Col> */}
                     <Col xs={12} md={9}>
                         <span className="announcement-title pr-4">{getCourseName() + ": " + announcement.title}</span> <span className="announcement-body">{trimAnnouncementBody()}</span>
                     </Col>
@@ -37,21 +42,28 @@ const Announcement = (props) => {
                 </Row>
                 <hr />
             </Container>
-            <Modal show={showAnnouncement} onHide={toggleModal}>
+            <Modal show={showAnnouncement} onHide={toggleModal} dialogClassName="modal-60w">
                 <Modal.Header closeButton>
-                    <Modal.Title>Modal heading</Modal.Title>
+                    <Modal.Title>{announcement.title}</Modal.Title>
                 </Modal.Header>
-                <Modal.Body>Woohoo, you're reading this text in a modal!</Modal.Body>
-                <Modal.Footer>
-                    <Button variant="secondary" onClick={toggleModal}>
-                        Close
-                    </Button>
-                    <Button variant="primary" onClick={toggleModal}>
-                        Save Changes
-                    </Button>
+                <Modal.Body>
+                    <p className="underline">{getCourseName()}</p>
+                    <p>{announcement.body}</p>
+                </Modal.Body>
+                <Modal.Footer className="smaller-footer">
+                    <Container>
+                        <Row>
+                            <Col xs={4}>
+                                {announcement.from}
+                            </Col>
+                            <Col xs={8} className="align-right">
+                                {convertDate()}
+                            </Col>
+                        </Row>
+                    </Container>
                 </Modal.Footer>
             </Modal>
-        </>
+        </div>
     )
 }
 

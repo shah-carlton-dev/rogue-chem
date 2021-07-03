@@ -10,3 +10,19 @@
 .announcement-item {
     cursor: pointer;
 }
+
+.modal-60w {
+    width: 60vw;
+}
+
+.smaller-footer {
+    font-size: 80%;
+}
+
+.underline {
+    text-decoration: underline;
+}
+
+.align-right {
+    text-align: right;
+}

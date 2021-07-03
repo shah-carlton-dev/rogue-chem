@@ -10,10 +10,6 @@ const Messages = (props) => {
     sessionStorage.clear();
     sessionStorage.setItem("last-route", history.location.pathname);
 
-    // get announcements
-
-    // get messages
-
     return (
         <Container className="pt-2 px-0 mx-4">
             <h2>Messages</h2>
