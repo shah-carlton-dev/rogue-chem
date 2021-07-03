@@ -20,11 +20,13 @@ const Messages = (props) => {
             <hr />
             <div className="announcements pl-3">
                 <h4 >Announcements</h4>
+                <hr />
                 < AnnouncementsList />
             </div>
 
             <div className="dms pl-3">
                 <h4>Direct Messages</h4>
+                <hr />
                 <DMList />
             </div>
         </Container>
