@@ -15,7 +15,6 @@ const AdminMessages = (props) => {
     sessionStorage.clear();
     sessionStorage.setItem("last-route", history.location.pathname);
 
-    const [metaDoc, setMetaDoc] = useState({});
     const [showAnnouncement, setShowAnnouncement] = useState(false);
     const [showMessage, setShowMessage] = useState(false);
 
@@ -25,23 +24,6 @@ const AdminMessages = (props) => {
 
     const toggleMessages = () => {
         setShowMessage(!showMessage);
-    }
-
-    const postAnnouncement = async () => {
-        console.log("posting announcement")
-    }
-
-    const getCourseNameFromId = (id) => {
-        return metaDoc.filter(c => c.id === id)[0].name;
-    }
-
-    useEffect(() => {
-        getMetaDoc();
-        if (metaDoc !== {}) console.log(metaDoc)
-    }, [])
-
-    const getMetaDoc = async () => {
-        await Axios.get(API_URL + "/msg/metaDoc").then(res => setMetaDoc(res.data));
     }
 
     return (

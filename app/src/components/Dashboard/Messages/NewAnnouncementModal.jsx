@@ -35,7 +35,6 @@ const NewAnnouncementModal = (props) => {
 
     useEffect(() => {
         getMetaDoc();
-        if (metaDoc !== {}) console.log(metaDoc)
     }, [])
 
     const getMetaDoc = async () => {
