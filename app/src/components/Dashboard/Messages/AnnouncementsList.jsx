@@ -10,8 +10,6 @@ const AnnouncementsList = (props) => {
     const [meta, setMeta] = useState([]);
     const [aList, setAList] = useState([]);
 
-    console.log(aList)
-
     useEffect(() => {
         getAnnouncementsList(userData.user._id);
     }, []);
@@ -32,7 +30,7 @@ const AnnouncementsList = (props) => {
         <div className="announcements-list" >
             {
                 aList.map(a => (<>
-                    <Announcement announcement={a} meta={meta} />
+                    <Announcement announcement={a} meta={meta} isAdmin={props.isAdmin}/>
                 </>))
             }
         </div>

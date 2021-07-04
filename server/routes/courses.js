@@ -344,20 +344,7 @@ Router.post('/allData', async (req, res) => {
                 }).then(async () => {
                     if (courses.length === ids.length) {
                         return res.send(courses).status(200);
-                    }
-                    // courses.forEach( course => {
-                    //     let list = []; // this will have a list of the sections
-                    //     course.sections.forEach(async section => {
-                    //         await Section.findById(mongoose.Types.ObjectId(section)).then((sec => {
-                    //             list.push(sec); // find each section and push to list
-                    //             if (course.sections.length === list.length) {
-                    //                 sections[course.name] = list;
-                    //                 courses[0].sections = sections[course.name];
-                    //                 return res.status(200).send(courses);
-                    //             }
-                    //         }))
-                    //     })
-                    // })
+                    }                    
                 })
             })
         } catch (err) {

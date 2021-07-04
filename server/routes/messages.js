@@ -91,14 +91,18 @@ Router.get('/announcements/:id', async (req, res) => {
     try {
         const userId = req.params.id;
         let announcementsList = [];
-        await Student.findById(userId).then(user => {
-            return user.courses;
+        await Student.findById(userId).then(async user => {
+            if (!user) {
+                return await Admin.findById(userId).then(admin => {
+                    return admin.courses
+                })
+            } else {
+                return user.courses;
+            }
         }).then(async userCourses => {
-            let count = 0;
             userCourses.forEach(async course => {
                 await Message.find({ broadcast: true, to: course }).then(announcements => {
                     announcementsList.push(announcements);
-                    count++;
                     if (userCourses.length === announcementsList.length) {
                         return res.send(announcementsList.flat()).status(200);
                     }
@@ -109,5 +113,13 @@ Router.get('/announcements/:id', async (req, res) => {
         return res.send('Error while getting messages for user').status(400);
     }
 });
+
+Router.delete('/announcement/:id', async (req, res) => {
+    try {
+        await Message.deleteOne({_id: req.params.id});
+    } catch (err) {
+        return res.send('Error while trying to delete announcement. Try again later.')
+    }
+})
 
 module.exports = Router;

@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import { Container, Row, Col, Modal, Button } from "react-bootstrap";
 import "../../../styles/Announcement.css";
+import Axios from "axios";
+import { API_URL } from "../../../utils/constants.js";
 
 const Announcement = (props) => {
-    const { announcement, meta } = props;
+    const { announcement, meta, isAdmin } = props;
     const [showAnnouncement, setShowAnnouncement] = useState(false);
 
     const getCourseName = () => {
@@ -26,19 +28,28 @@ const Announcement = (props) => {
         setShowAnnouncement(!showAnnouncement);
     }
 
+    const deleteAnnouncement = async () => {
+        await Axios.delete(API_URL + "/msg/announcement/" + announcement._id);
+    }
+
     return (
         <div key={announcement._id}>
             <Container className="announcement-item" >
-                <Row onClick={toggleModal}>
-                    {/* <Col xs={0} md={1} className="text-center">
-                        img
-                    </Col> */}
-                    <Col xs={12} md={9}>
-                        <span className="announcement-title pr-4">{getCourseName() + ": " + announcement.title}</span> <span className="announcement-body">{trimAnnouncementBody()}</span>
+                <Row >
+                    <Col xs={12} md={10} onClick={toggleModal}>
+                        <span className="announcement-title pr-3">{getCourseName() + ": " + announcement.title}</span> <span className="announcement-body">{trimAnnouncementBody()}</span>
                     </Col>
-                    <Col xs={12} md={2}>
+                    <Col xs={12} md={1} onClick={toggleModal}>
                         {announcement.from}
                     </Col>
+                    {
+                        isAdmin ? (
+                            <Col xs={12} md={1}>
+                                <Button variant="outline-danger" size="sm" onClick={deleteAnnouncement}>X</Button>
+                            </Col>
+                        ) : (<></>)
+                    }
+
                 </Row>
                 <hr />
             </Container>
