@@ -55,10 +55,12 @@ const Announcement = (props) => {
             </Container>
             <Modal show={showAnnouncement} onHide={toggleModal} dialogClassName="modal-60w">
                 <Modal.Header closeButton>
-                    <Modal.Title>{announcement.title}</Modal.Title>
+                    <Container>
+                        <Row><Modal.Title>{announcement.title}</Modal.Title></Row>
+                        <Row><p className="mb-0">{getCourseName()}</p></Row>
+                    </Container>
                 </Modal.Header>
                 <Modal.Body>
-                    <p className="underline">{getCourseName()}</p>
                     <p>{announcement.body}</p>
                 </Modal.Body>
                 <Modal.Footer className="smaller-footer">
