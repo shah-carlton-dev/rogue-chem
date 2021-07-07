@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect } from "react";
-import { Row, Col } from "react-bootstrap";
+import { Container, Row, Col, Form } from "react-bootstrap";
 import UserContext from "../../context/UserContext.js";
 import AdminCourses from "./AdminDash/AdminCourses.jsx";
 import UserCourses from "./UserDash/Courses/UserCourses.jsx";
@@ -37,13 +37,16 @@ const Home = (props) => {
     }
 
     return (<>
-        <Row className="top-nav py-1">
-            <Col lg={3}>
+        {/* <Container>  */}
+        {/* refactor the top bar as a form */}
+        <Form >
+            <Row className="top-nav">
+                {/* <Col lg={3}>
                 <Select
                     options={courseData}
                     valueField="_id"
                     disabled={false}
-                    onChange={(val) => { setSelected(val[0]) }}
+                    onChange={(val) => { console.log(val); setSelected(val[0]); }}
                     labelField="name"
                     placeholder={selected.name}
                     separator={true}
@@ -53,17 +56,32 @@ const Home = (props) => {
                     closeOnSelect={true}
                     backspaceDelete={false}
                 />
-            </Col>
-            <Col lg={8} className="">
-                <p className="text-center">dashboard nav links, search, etc will be here</p>
-            </Col>
-        </Row>
+            </Col> */}
+                <Col lg={3} className="pt-3">
+
+                    <Form.Group controlId="select-course" >
+                        <Form.Control as="select" onChange={e => setSelected(courseData.filter(c => c._id === e.target.value)[0])} defaultValue={"hi"}>
+                            {courseData.map(c => <option value={c._id}>{c.name}</option>)}
+                        </Form.Control>
+                    </Form.Group>
+                </Col>
+                <Col lg={5} className="pt-3">
+                    <Form.Group controlId="select-course" >
+                        <Form.Control as="select" onChange={e => setSelected(courseData.filter(c => c._id === e.target.value)[0])} defaultValue={"hi"}>
+                            {courseData.map(c => <option value={c._id}>{c.name}</option>)}
+                        </Form.Control>
+                    </Form.Group>
+                </Col>
+            </Row>
+        </Form>
         {userData.user.admin ? (
             <AdminCourses course={selected} />
         ) : (
             <UserCourses course={selected} />
         )}
-    </>)
+        {/* </Container> */}
+    </>
+    )
 }
 
 export default Home;
