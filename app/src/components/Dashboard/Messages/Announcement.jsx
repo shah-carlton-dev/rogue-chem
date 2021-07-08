@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Container, Row, Col, Modal, Button } from "react-bootstrap";
+import { Container, Row, Col, Modal, Button, Collapse } from "react-bootstrap";
 import "../../../styles/Announcement.css";
 import Axios from "axios";
 import { API_URL } from "../../../utils/constants.js";
@@ -37,11 +37,18 @@ const Announcement = (props) => {
             <Container className="announcement-item" >
                 <Row >
                     <Col xs={12} md={10} onClick={toggleModal}>
-                        <span className="announcement-title pr-3">{getCourseName() + ": " + announcement.title}</span> <span className="announcement-body">{trimAnnouncementBody()}</span>
+                        <span className="announcement-title pr-3">{announcement.title}</span>
+                        {
+                            showAnnouncement ? <></> :
+                                <span className="announcement-body">{trimAnnouncementBody()}</span>
+                        }
                     </Col>
-                    <Col xs={12} md={1} onClick={toggleModal}>
-                        {announcement.from}
-                    </Col>
+                    {
+                        showAnnouncement ? <></> :
+                            <Col xs={12} md={1} onClick={toggleModal}>
+                                {announcement.from}
+                            </Col>
+                    }
                     {
                         isAdmin ? (
                             <Col xs={12} md={1}>
@@ -51,8 +58,35 @@ const Announcement = (props) => {
                     }
 
                 </Row>
+                {/* <Row>
+                    <Col>
+                        <Collapse in={showAnnouncement}>
+                            <Container>
+                                <Row>
+                                    <Col>
+                                        <p className="mb-1">
+                                            {getCourseName()}
+                                        </p>
+                                        <p className="mb-1">
+                                            {announcement.body}
+                                        </p>
+                                    </Col>
+                                </Row>
+                                <Row className="smaller-footer">
+                                    <Col xs={12} md={2}>
+                                        {announcement.from}
+                                    </Col>
+                                    <Col xs={12} md={5} className="align-right">
+                                        {convertDate()}
+                                    </Col>
+                                </Row>
+                            </Container>
+                        </Collapse>
+                    </Col>
+                </Row> */}
                 <hr />
             </Container>
+
             <Modal show={showAnnouncement} onHide={toggleModal} dialogClassName="modal-60w">
                 <Modal.Header closeButton>
                     <Container>

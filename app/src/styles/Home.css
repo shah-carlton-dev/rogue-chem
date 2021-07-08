@@ -19,19 +19,39 @@
     color: black !important;
 } */
 
-::placeholder {
+/* ::placeholder {
     font-size: medium;
     color: black;
-}
+} */
 
 .top-nav {
-    background-color: rgb(226, 225, 225);
+    /* background-color: rgb(226, 225, 225); */
     min-height: 4vh;
     width: 100%;
     margin: 0px;
     padding-left: 1vw;
-    height: fit-content;
+    /* height: fit-content; */
 }
+
+.search-bar {
+    display: block;
+    width: 100%;
+    height: calc(1.5em + .75rem + 2px);
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #495057;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+    border-radius: .25rem;
+  }
+  
+  .search-results {
+    z-index: 99;
+    position: absolute;
+  }
 
 .sidebar {
     background-color: RGB(245, 245, 245);

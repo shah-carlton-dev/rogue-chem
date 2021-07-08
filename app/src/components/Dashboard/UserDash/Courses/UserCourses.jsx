@@ -1,4 +1,5 @@
 import React, { useEffect, useContext, useState } from "react";
+import { useHistory } from "react-router";
 import ResizePanel from "react-resize-panel";
 import '../../../../styles/UserCourses.css';
 import CourseInfo from './CourseInfo.jsx';
@@ -12,9 +13,9 @@ import { Col } from "react-bootstrap";
 // component containing entire use dashboard (minus dashboard nav)
 
 const UserCourses = ({ course }) => {
-    // const history = useHistory();
-    // sessionStorage.clear();
-    // sessionStorage.setItem("last-route", history.location.pathname); doesn't work, forces all reloads to end up here
+    const history = useHistory();
+    sessionStorage.clear();
+    sessionStorage.setItem("last-route", history.location.pathname); //doesn't work, forces all reloads to end up here
 
     const [retrieving, setRetrieving] = useState(true);
     const [sections, setSections] = useState([]);
