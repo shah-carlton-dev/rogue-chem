@@ -1,3 +1,11 @@
 a.card-link {
     bottom: 6px;
 }
+
+.card-title {
+    cursor: pointer;
+}
+
+.height-2 {
+    height: 2rem;
+}

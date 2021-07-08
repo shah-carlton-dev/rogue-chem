@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { Card, Button } from "react-bootstrap";
+import { Card, Button, Container, Row, Col } from "react-bootstrap";
 import '../../../../styles/SectionCard.css';
 import Axios from "axios";
 import ListsContext from '../../../../context/ListsContext.js';
@@ -7,7 +7,7 @@ import UserContext from '../../../../context/UserContext.js';
 import { API_URL } from '../../../../utils/constants';
 
 const SectionCard = (props) => {
-    const { section, setSectionChange } = props;
+    const { section, setSectionChange, selected } = props;
     const { userData, setUserData } = useContext(UserContext);
     const { queue, setQueue, recents, setRecents } = useContext(ListsContext);
 
@@ -25,17 +25,18 @@ const SectionCard = (props) => {
     }
 
     return (
-        <Card className="h-100" style={{ width: '18rem' }}>
-            <Card.Body>
-                <Card.Title>{section.name}</Card.Title>
-                <Card.Text>
-                    {section.description}
-                </Card.Text>
-
-                <Button variant="link" onClick={() => setSectionChange(section._id)}>View Files</Button>
-        &nbsp;&nbsp;
-        <Button variant="link" onClick={() => handleAddToQueue(section._id)}>Add to Queue</Button>
-
+        <Card className="h-100" style={{ width: '14rem' }} border={(selected ? "primary" : "secondary")}>
+            <Card.Body className="p-2">
+                <Container className="px-1">
+                    <Row className="height-2">
+                        <Col xs={12} sm={9} onClick={() => setSectionChange(section._id)} className="card-title m-0">
+                            <Card.Title><h5 className="my-1">{section.name}</h5></Card.Title>
+                        </Col>
+                        <Col xs={12} sm={3} className="pl-auto pr-0">
+                            <Button size="sm" variant="outline-dark" onClick={() => handleAddToQueue(section._id)}>+</Button>
+                        </Col>
+                    </Row>
+                </Container>
             </Card.Body>
         </Card>)
 }

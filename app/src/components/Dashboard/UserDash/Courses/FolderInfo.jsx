@@ -4,7 +4,7 @@ import '@phuocng/react-pdf-viewer/cjs/react-pdf-viewer.css';
 import '../../../../styles/PDFView.css';
 
 const FolderInfo = (props) => {
-    const { files, setPreviewChange, sectionName } = props;
+    const { files, setPreviewChange, section } = props;
     //console.log(files);
     return (
         <div className="filelist-root">
@@ -12,7 +12,8 @@ const FolderInfo = (props) => {
                 files.length === 0 ?
                     <p className="italicize text-center">No files in this folder</p> :
                     <dl>
-                        <h5> {sectionName}</h5>
+                        <h5>{section.name}</h5>
+                        <p>{section.description}</p>
                         <hr />
                         {files.map(file =>
                             <div className="file-description" key={file._id}>

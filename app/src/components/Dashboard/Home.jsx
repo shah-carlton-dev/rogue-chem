@@ -14,8 +14,8 @@ const SearchBar = ({ search, setSearch, setShowSearch }) => {
             value={search}
             placeholder={"search folders and files"}
             onChange={(e) => setSearch(e.target.value)}
-            onFocus={() => setShowSearch("true")}
-            onBlur={() => setShowSearch("false")}
+            onFocus={() => setShowSearch(true)}
+            onBlur={() => setShowSearch(false)}
         />
     )
 }
@@ -47,7 +47,7 @@ const Home = (props) => {
     const [search, setSearch] = useState("");
     const [results, setResults] = useState([]);
     const [notFilteredList, setNotFilteredList] = useState([]);
-    const [showSearch, setShowSearch] = useState("false");
+    const [showSearch, setShowSearch] = useState(false);
 
     useEffect(() => {
         getCourseData();
@@ -90,14 +90,14 @@ const Home = (props) => {
                         </Form.Control>
                     </Form.Group>
                 </Col>
-                <Col lg={5} className="pt-3">
+                <Col lg={3} className="pt-3">
                     <div>
-                        <SearchBar onClick={() => console.log(document.activeElement)} search={search} setSearch={setSearch} setShowSearch={setShowSearch} />
+                        <SearchBar search={search} setSearch={setSearch} setShowSearch={setShowSearch} />
                     </div>
-                    <SearchResults results={results} showSearch={showSearch} />
+                    {showSearch && <SearchResults results={results} showSearch={showSearch} />}
                 </Col>
             </Row>
-            <hr className="m-0"/>
+            <hr className="m-0" />
         </Form>
         {userData.user.admin ? (
             <AdminCourses course={selected} />

@@ -26,7 +26,7 @@ const UserCourses = ({ course }) => {
     const [preview, setPreview] = useState({});
     const courseName = course.name;
     const courseId = course._id;
-    const [sectionName, setSectionName] = useState("");
+    const [section, setSection] = useState("");
 
     useEffect(() => {
         getSectionData(courseId);
@@ -72,7 +72,7 @@ const UserCourses = ({ course }) => {
         console.log("getting file list");
         try {
             if (sections !== undefined) {
-                setSectionName(sections.filter(s => s._id === id)[0].name);
+                setSection(sections.filter(s => s._id === id)[0]);
             }
         } catch { }
         try {
@@ -113,14 +113,14 @@ const UserCourses = ({ course }) => {
             <ResizePanel direction="s" handleClass="customHandle" borderClass="customResizeBorder" style={{ height: '20vh' }}>
                 <div className='content-area'>
                     <div className='header panel container'>
-                        <CourseInfo things={{ courseName, sections, setSectionChange }} />
+                        <CourseInfo things={{ courseName, sections, setSectionChange, sectionChange }} />
                     </div>
                 </div>
             </ResizePanel>
             <div className='content-area'>
                 <Col xs={4}>
                     <div className='content panel right-border'>
-                        <FolderInfo files={files} setPreviewChange={setPreviewChange} sectionName={sectionName} />
+                        <FolderInfo files={files} setPreviewChange={setPreviewChange} section={section} />
                     </div>
                 </Col>
                 <Col xs={5} className="preview-render right-border">
