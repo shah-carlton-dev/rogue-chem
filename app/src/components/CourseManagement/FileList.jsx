@@ -40,7 +40,7 @@ const FileList = (props) => {
                 </tr>
             </thead>
             <tbody>
-                {files.length > 0 ? files.map(
+                {files.length > 0 && files.map(
                     ({ _id, title, description, file_path, file_mimetype }) => (
                         <tr key={_id}>
                             <td className="file-title">{title}</td>
@@ -49,16 +49,16 @@ const FileList = (props) => {
                             <td>
                                 <a href="#/" onClick={() => downloadFile(_id, file_path, file_mimetype)}>
                                     Download
-										</a>
+                                </a>
                             </td>
                             <td>
                                 <a href="#/" onClick={() => removeHandler(_id)} >
                                     Remove
-								</a>
+                                </a>
                             </td>
                         </tr>
                     )
-                ) : <></>}
+                )}
             </tbody>
         </table>
     </>)

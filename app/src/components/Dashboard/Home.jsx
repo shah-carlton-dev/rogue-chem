@@ -1,6 +1,7 @@
 import React, { useContext, useState, useEffect } from "react";
-import { Container, Row, Col, Form, Card, ListGroup, OverlayTrigger, Tooltip } from "react-bootstrap";
+import { Container, Row, Col, Form, Card, ListGroup } from "react-bootstrap";
 import UserContext from "../../context/UserContext.js";
+import DashContext from "../../context/DashContext.js";
 import AdminCourses from "./AdminDash/AdminCourses.jsx";
 import UserCourses from "./UserDash/Courses/UserCourses.jsx";
 import { API_URL } from '../../utils/constants.js';
@@ -20,7 +21,7 @@ const SearchBar = ({ search, setSearch, setShowSearch }) => {
     )
 }
 
-const SearchResults = ({ results, showSearch }) => {
+const SearchResults = ({ results, showSearch, handleSearchSelection }) => {
     return (
         <div className="search-results">
             <Card show={showSearch}>
@@ -29,9 +30,9 @@ const SearchResults = ({ results, showSearch }) => {
                         results.length > 0 ?
                             (results.map((data, index) => {
                                 <>
-                                    <ListGroup.Item onClick={e => console.log(e)}>yeah</ListGroup.Item>
+                                    <ListGroup.Item onClick={e => handleSearchSelection(e)}>yeah</ListGroup.Item>
                                 </>
-                            })) : <ListGroup.Item onClick={() => console.log(document.activeElement)}>no matches</ListGroup.Item>
+                            })) : <ListGroup.Item >no matches</ListGroup.Item>
 
                     }
                 </ListGroup>
@@ -54,8 +55,9 @@ const Home = (props) => {
     }, []);
 
     useEffect(() => {
-
-    })
+        // effect for searching
+        console.log(search)
+    }, [search])
 
     const getCourseData = async () => {
         const url = API_URL + '/courses/allData';
@@ -73,28 +75,28 @@ const Home = (props) => {
                 }
             });
         } catch {
-            console.log("error in \'courses.jsx\' getCourseData fn")
+            console.log("Could not collect course data")
         }
     }
 
-    return (<>
-        {/* <Container>  */}
-        {/* refactor the top bar as a form */}
-        <Form>
-            <Row className="top-nav">
-                <Col lg={3} className="pt-3">
+    const handleSearchSelection = (e) => {
+        e.preventDefault();
+        console.log(e.target.value)
+    }
 
-                    <Form.Group controlId="select-course" >
+    return (<>
+        <Form>
+            <Row className="top-nav pt-3 control-height">
+                <Col lg={3} >
+                    <Form.Group controlId="select-course" className="course-selection">
                         <Form.Control as="select" onChange={e => setSelected(courseData.filter(c => c._id === e.target.value)[0])} >
                             {courseData.map(c => <option value={c._id}>{c.name}</option>)}
                         </Form.Control>
                     </Form.Group>
                 </Col>
-                <Col lg={3} className="pt-3">
-                    <div>
-                        <SearchBar search={search} setSearch={setSearch} setShowSearch={setShowSearch} />
-                    </div>
-                    {showSearch && <SearchResults results={results} showSearch={showSearch} />}
+                <Col lg={4} >
+                    <SearchBar search={search} setSearch={setSearch} setShowSearch={setShowSearch} />
+                    {showSearch && <SearchResults results={results} showSearch={showSearch} handleSearchSelection={handleSearchSelection} />}
                 </Col>
             </Row>
             <hr className="m-0" />
@@ -104,7 +106,6 @@ const Home = (props) => {
         ) : (
             <UserCourses course={selected} />
         )}
-        {/* </Container> */}
     </>
     )
 }

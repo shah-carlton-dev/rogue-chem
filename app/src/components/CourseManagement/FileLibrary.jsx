@@ -73,7 +73,7 @@ const FileLibrary = (props) => {
 									</td>
 									<td>
 										{
-											files.map(f => f._id).includes(_id) ? <></> :
+											!files.map(f => f._id).includes(_id) &&
 												<a href="#/" onClick={() => addHandler(_id)} > Add</a>
 										}
 

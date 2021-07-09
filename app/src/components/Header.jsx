@@ -25,9 +25,8 @@ const Header = () => {
 			<Nav className="ml-auto nav-text">
 				{userData.token !== 0 && userData.token !== 1
 					? (<>
-						{userData.user !== undefined ?
-							<Navbar.Text className="pr-3">Welcome, {userData.user.fname} </Navbar.Text> :
-							<></>
+						{userData.user !== undefined &&
+							<Navbar.Text className="pr-3">Welcome, {userData.user.fname} </Navbar.Text>
 						}
 						<Nav.Link onClick={() => logout()} to="/login"> Logout </Nav.Link>
 					</>)

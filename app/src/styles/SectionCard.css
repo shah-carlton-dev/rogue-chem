@@ -9,3 +9,7 @@ a.card-link {
 .height-2 {
     height: 2rem;
 }
+
+.bg-light-grey {
+    background-color: rgb(229, 229, 229);
+}

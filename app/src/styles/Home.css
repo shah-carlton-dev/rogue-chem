@@ -46,12 +46,18 @@
     background-clip: padding-box;
     border: 1px solid #ced4da;
     border-radius: .25rem;
-  }
-  
-  .search-results {
+    outline-color: rgba(59, 130, 246, 0.5);
+}
+
+.course-selection {
+    outline-color: rgba(59, 130, 246, 0.5) !important;
+}
+
+.search-results {
     z-index: 99;
     position: absolute;
-  }
+    min-width: 60%;
+}
 
 .sidebar {
     background-color: RGB(245, 245, 245);

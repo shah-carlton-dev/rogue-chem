@@ -25,7 +25,7 @@ const SectionCard = (props) => {
     }
 
     return (
-        <Card className="h-100" style={{ width: '14rem' }} border={(selected ? "primary" : "secondary")}>
+        <Card className="h-100" style={{ width: '14rem' }} bg={(selected ? "light-grey" : "none")}>
             <Card.Body className="p-2">
                 <Container className="px-1">
                     <Row className="height-2">

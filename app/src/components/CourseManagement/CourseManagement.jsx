@@ -8,7 +8,7 @@ import SectionCreateModal from "./SectionCreateModal";
 import { Container, Row, Col, Button, Modal } from "react-bootstrap";
 import { API_URL } from '../../utils/constants';
 import "../../styles/CourseManagement.css";
-import {useHistory} from "react-router-dom";
+import { useHistory } from "react-router-dom";
 
 const CourseManagement = (props) => {
     const history = useHistory();
@@ -148,10 +148,10 @@ const CourseManagement = (props) => {
         <Container>
             <h1>Course Management</h1>
             {
-                (showCourseList) ? <>
+                (showCourseList) && <>
                     <Button variant="link" onClick={() => setShowCreateCourse(true)}>create new course</Button>
                     <h4>Courses</h4>
-                    <hr/>
+                    <hr />
                     <p>Be careful deleting courses. This action is permanent and they will not be recoverable.</p>
                     <Row>
                         {
@@ -165,27 +165,25 @@ const CourseManagement = (props) => {
                         }
                     </Row>
 
-                </> : <></>
+                </>
             }
             {
-                (showSectionList) ? <>
+                (showSectionList) && <>
                     <Button variant="link" onClick={backToCourses}>back to courses</Button> / <Button variant="link" onClick={() => setShowCreateSection(true)}>add a core folder</Button>
                     <h4 className="">{activeCourse.name + " / "}Core Folders</h4>
-                    <hr/>
+                    <hr />
                     <p>Be careful deleting folders - it will be permanently deleted across all courses. Use the remove button to unassociate it from the current course.</p>
                     <Row>
                         {sections.length === 0 ? <Col className="text-center mt-5"><p className="italicize">No existing core folders. Go ahead and create one!</p> </Col> : sections.map(s => <Col className="py-2" key={s._id} xs={4}><SectionCard section={s} clickHandler={showFiles} deleteHandler={deleteSection} removeHandler={removeSection} /></Col>)}
-                    </Row> </> :
-                    <></>
+                    </Row> </> 
             }
             {
-                (showFileList) ? <>
+                (showFileList) && <>
                     <Button variant="link" onClick={backToSections}>back to core folders</Button>
                     <h4>{activeCourse.name + " / " + activeSection.name + " / "}Files</h4>
-                    <hr/>
+                    <hr />
                     <FileDisplay section={activeSection} ></FileDisplay>
-                </> :
-                    <></>
+                </>
             }
         </Container>
         <Modal show={showCreateCourse}>
