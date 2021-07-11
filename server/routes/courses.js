@@ -331,8 +331,46 @@ Router.put('/addSection', async (req, res) => {
     }
 });
 
+Router.post('/publish/:id', async (req, res) => {
+    try {
+        Course.findById(req.params.id).then(async c => {
+            c.published = !c.published;
+            await c.save();
+        })
+    } catch (err) {
+        return res.send("Error publishing or unpublishing course").status(400);
+    }
+})
+
+// want to return a fat object with all courses
 Router.post('/allData', async (req, res) => {
-    try { // want to return a fat object with all courses, sections, and file info - files can be fetched in a separate call from the frontend
+    try {
+        let { ids } = req.body;
+        if (ids.length === 0) return res.status(304).send(0);
+        let courses = [];
+        try {
+            ids.forEach(async (i) => {
+                await Course.findById(mongoose.Types.ObjectId(i)).then((course) => {
+                    courses.push(course);
+                }).then(async () => {
+                    if (courses.length === ids.length) {
+                        console.log(courses);
+                        return res.send(courses).status(200);
+                    }
+                })
+            })
+        } catch (err) {
+            console.log("Something weird happened.");
+            return res.status(304).send("Something weird happened. Refresh the page and try again");
+        }
+    } catch (err) {
+        return res.status(400).send("Error collecting all course data for user");
+    }
+});
+
+// want to fetch a number of sections by id
+Router.post('/sectionData', async (req, res) => {
+    try {
         let { ids } = req.body;
         if (ids.length === 0) return res.status(304).send(0);
         let courses = [];
@@ -343,8 +381,36 @@ Router.post('/allData', async (req, res) => {
                     courses.push(course);
                 }).then(async () => {
                     if (courses.length === ids.length) {
+                        console.log(courses);
                         return res.send(courses).status(200);
-                    }                    
+                    }
+                })
+            })
+        } catch (err) {
+            console.log("Something weird happened.");
+            return res.status(304).send("Something weird happened. Refresh the page and try again");
+        }
+    } catch (err) {
+        return res.status(400).send("Error collecting all course data for user");
+    }
+});
+
+// want to fetch a number of file info docs by id
+Router.post('/fileData', async (req, res) => {
+    try {
+        let { ids } = req.body;
+        if (ids.length === 0) return res.status(304).send(0);
+        let courses = [];
+        let sections = {};
+        try {
+            ids.forEach(async (i) => {
+                await Course.findById(mongoose.Types.ObjectId(i)).then((course) => {
+                    courses.push(course);
+                }).then(async () => {
+                    if (courses.length === ids.length) {
+                        console.log(courses);
+                        return res.send(courses).status(200);
+                    }
                 })
             })
         } catch (err) {
