@@ -7,8 +7,6 @@ const courseSchema = mongoose.Schema(
         name: String,
         description: String,
         sections: Array,
-        files: Array,
-        videos: Array,
         meta: Boolean,
         courses: {
             type: Array,

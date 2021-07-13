@@ -315,14 +315,16 @@ Router.put('/addSection', async (req, res) => {
         let sectionList = [];
         try {
             if (sections.length === 0) return res.send(sectionList).status(304);
-            await sections.forEach(async (s_id) => {
-                await Section.findById(mongoose.Types.ObjectId(s_id)).then((sec) => {
-                    sectionList.push(sec);
-                    if (sections.length === sectionList.length) {
-                        return res.send(sectionList).status(304);
-                    }
-                })
-            });
+            else {
+                await sections.forEach(async (s_id) => {
+                    await Section.findById(mongoose.Types.ObjectId(s_id)).then((sec) => {
+                        sectionList.push(sec);
+                        if (sections.length === sectionList.length) {
+                            return res.send(sectionList).status(304);
+                        }
+                    })
+                });
+            }
         } catch (err) {
             return res.status(400).send("Error collecting sections for course");
         }
@@ -342,82 +344,62 @@ Router.post('/publish/:id', async (req, res) => {
     }
 })
 
-// want to return a fat object with all courses
+// want to return a fat object with all courses, sections, files, and video data
 Router.post('/allData', async (req, res) => {
     try {
-        let { ids } = req.body;
-        if (ids.length === 0) return res.status(304).send(0);
-        let courses = [];
-        try {
-            ids.forEach(async (i) => {
-                await Course.findById(mongoose.Types.ObjectId(i)).then((course) => {
-                    courses.push(course);
-                }).then(async () => {
-                    if (courses.length === ids.length) {
-                        console.log(courses);
-                        return res.send(courses).status(200);
-                    }
+        const course_ids = req.body.ids.map(c => mongoose.Types.ObjectId(c));
+        if (course_ids.length === 0) return res.status(304).send(0);
+        let courses, sections, files, videos;
+        await Course.find(
+            { _id: { $in: course_ids }, meta: false }
+        ).then(async c => {
+            courses = c;
+            const section_ids = courses.map(c => c.sections).flat().reduce((list, item) => {
+                if (list.indexOf(item.toString()) < 0) list.push(item.toString());
+                return list;
+            }, []).map(s => mongoose.Types.ObjectId(s));
+            return await Section.find(
+                { _id: { $in: section_ids } }
+            );
+        }).then(async s => {
+            sections = s;
+            const file_ids = sections.map(s => s.files).flat().reduce((list, item) => {
+                if (list.indexOf(item.toString()) < 0) list.push(item.toString());
+                return list;
+            }, []).map(s => mongoose.Types.ObjectId(s));
+            const video_ids = sections.map(s => s.videos).flat().reduce((list, item) => {
+                if (list.indexOf(item.toString()) < 0) list.push(item.toString());
+                return list;
+            }, []).map(s => mongoose.Types.ObjectId(s));
+            await File.find(
+                { _id: { $in: file_ids } }
+            ).then(async f => {
+                return await Video.find(
+                    { _id: { $in: video_ids } }
+                ).then(v => {
+                    return { files: f, videos: v };
                 })
-            })
-        } catch (err) {
-            console.log("Something weird happened.");
-            return res.status(304).send("Something weird happened. Refresh the page and try again");
-        }
-    } catch (err) {
-        return res.status(400).send("Error collecting all course data for user");
-    }
-});
-
-// want to fetch a number of sections by id
-Router.post('/sectionData', async (req, res) => {
-    try {
-        let { ids } = req.body;
-        if (ids.length === 0) return res.status(304).send(0);
-        let courses = [];
-        let sections = {};
-        try {
-            ids.forEach(async (i) => {
-                await Course.findById(mongoose.Types.ObjectId(i)).then((course) => {
-                    courses.push(course);
-                }).then(async () => {
-                    if (courses.length === ids.length) {
-                        console.log(courses);
-                        return res.send(courses).status(200);
-                    }
-                })
-            })
-        } catch (err) {
-            console.log("Something weird happened.");
-            return res.status(304).send("Something weird happened. Refresh the page and try again");
-        }
-    } catch (err) {
-        return res.status(400).send("Error collecting all course data for user");
-    }
-});
-
-// want to fetch a number of file info docs by id
-Router.post('/fileData', async (req, res) => {
-    try {
-        let { ids } = req.body;
-        if (ids.length === 0) return res.status(304).send(0);
-        let courses = [];
-        let sections = {};
-        try {
-            ids.forEach(async (i) => {
-                await Course.findById(mongoose.Types.ObjectId(i)).then((course) => {
-                    courses.push(course);
-                }).then(async () => {
-                    if (courses.length === ids.length) {
-                        console.log(courses);
-                        return res.send(courses).status(200);
-                    }
-                })
-            })
-        } catch (err) {
-            console.log("Something weird happened.");
-            return res.status(304).send("Something weird happened. Refresh the page and try again");
-        }
-    } catch (err) {
+            }).then(items => {
+                files = items.files;
+                videos = items.videos;
+                sections.forEach(s => {
+                    s.files.forEach((f_id, f_ix) => {
+                        s.files[f_ix] = files.filter(file => file._id.toString() === f_id.toString())[0];
+                    })
+                    s.videos.forEach((v_id, v_ix) => {
+                        s.videos[v_ix] = videos.filter(video => video._id.toString() === v_id.toString())[0];
+                    })
+                });
+                courses.forEach(c => {
+                    c.sections.forEach((s_id, s_ix) => {
+                        c.sections[s_ix] = sections.filter(sec => sec._id.toString() === s_id.toString())[0];
+                    })
+                });
+                return res.status(200).send(courses);
+            });
+        });
+    } catch (err0) {
+        console.log(err0)
         return res.status(400).send("Error collecting all course data for user");
     }
 });
