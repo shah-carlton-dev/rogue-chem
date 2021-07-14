@@ -47,7 +47,7 @@ const Home = (props) => {
     const [selected, setSelected] = useState({});
     const [search, setSearch] = useState("");
     const [results, setResults] = useState([]);
-    const [notFilteredList, setNotFilteredList] = useState([]);
+    const [searchableList, setSearchableList] = useState({});
     const [showSearch, setShowSearch] = useState(false);
 
     useEffect(() => {
@@ -58,6 +58,43 @@ const Home = (props) => {
         // effect for searching
         console.log(search)
     }, [search])
+
+    const makeSearchable = (data) => {
+        return ( // TODO: decide how tf we gonna do this
+            {
+                sections: data.map(c =>
+                    c.sections.map(s => {
+                        return {
+                            _id: s._id,
+                            name: s.name,
+                            description: s.description
+                        }
+                    })).flat(),
+                files: data.map(c =>
+                    c.sections.map(s =>
+                        s.files.map(f => {
+                            return {
+                                _id: f._id,
+                                title: f.title,
+                                description: f.description,
+                                keywords: f.keywords
+                            }
+                        })
+                    )).flat(),
+                videos: data.map(c =>
+                    c.sections.map(s =>
+                        s.videos.map(v => {
+                            return {
+                                _id: v._id,
+                                title: v.title,
+                                description: v.description,
+                                keywords: v.keywords
+                            }
+                        })
+                    )).flat()
+            }
+        )
+    }
 
     const getCourseData = async () => {
         const url = API_URL + '/courses/allData';
@@ -72,6 +109,7 @@ const Home = (props) => {
                     console.log(res.data);
                     setCourseData(res.data);
                     setSelected(res.data[0]);
+                    console.log(makeSearchable(res.data))
                 }
             });
         } catch {
@@ -90,7 +128,7 @@ const Home = (props) => {
                 <Col lg={3} >
                     <Form.Group controlId="select-course" className="course-selection">
                         <Form.Control as="select" onChange={e => setSelected(courseData.filter(c => c._id === e.target.value)[0])} >
-                            {courseData.map(c => <option value={c._id}>{c.name}</option>)}
+                            {courseData.map(c => <option key={c._id} value={c._id}>{c.name}</option>)}
                         </Form.Control>
                     </Form.Group>
                 </Col>
