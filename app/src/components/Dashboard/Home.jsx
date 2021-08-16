@@ -54,48 +54,6 @@ const Home = (props) => {
         getCourseData();
     }, []);
 
-    useEffect(() => {
-        // effect for searching
-        console.log(search)
-    }, [search])
-
-    const makeSearchable = (data) => {
-        return ( // TODO: decide how tf we gonna do this
-            {
-                sections: data.map(c =>
-                    c.sections.map(s => {
-                        return {
-                            _id: s._id,
-                            name: s.name,
-                            description: s.description
-                        }
-                    })).flat(),
-                files: data.map(c =>
-                    c.sections.map(s =>
-                        s.files.map(f => {
-                            return {
-                                _id: f._id,
-                                title: f.title,
-                                description: f.description,
-                                keywords: f.keywords
-                            }
-                        })
-                    )).flat(),
-                videos: data.map(c =>
-                    c.sections.map(s =>
-                        s.videos.map(v => {
-                            return {
-                                _id: v._id,
-                                title: v.title,
-                                description: v.description,
-                                keywords: v.keywords
-                            }
-                        })
-                    )).flat()
-            }
-        )
-    }
-
     const getCourseData = async () => {
         const url = API_URL + '/courses/allData';
         try {
@@ -108,13 +66,76 @@ const Home = (props) => {
                 else {
                     console.log(res.data);
                     setCourseData(res.data);
-                    setSelected(res.data[0]);
+                    setSelected(res.data[0])
                     console.log(makeSearchable(res.data))
                 }
             });
         } catch {
             console.log("Could not collect course data")
         }
+    }
+
+    useEffect(() => {
+        // effect for searching
+        console.log(search)
+    }, [search])
+
+    const makeSearchable = (data) => {
+        let searchable = ( // TODO: decide how tf we gonna do this
+            {
+                sections: data.map(c =>
+                    c.sections.map(s => {
+                        return {
+                            _id: s._id,
+                            name: s.name,
+                            description: s.description
+                        }
+                    })).flat().filter((section, index, self) =>
+                        index === self.findIndex((s) => (
+                            s._id === section._id
+                        ))
+                    ),
+                files: data.map(c =>
+                    c.sections.map(s =>
+                        s.files.map(f => {
+                            return {
+                                _id: f._id,
+                                title: f.title,
+                                description: f.description,
+                                keywords: f.keywords
+                            }
+                        })
+                    )).flat().flat().filter((file, index, self) =>
+                        index === self.findIndex((f) => (
+                            f._id === file._id
+                        ))
+                    ),
+                videos: data.map(c =>
+                    c.sections.map(s =>
+                        s.videos.map(v => {
+                            return {
+                                _id: v._id,
+                                title: v.title,
+                                description: v.description,
+                                keywords: v.keywords
+                            }
+                        })
+                    )).flat().flat().filter((video, index, self) =>
+                        index === self.findIndex((v) => (
+                            v._id === video._id
+                        ))
+                    ),
+            }
+        )
+        return searchable;
+    }
+
+    const searchFilesVideos = () => {
+
+    }
+
+    const seachSections = () => {
+
     }
 
     const handleSearchSelection = (e) => {
@@ -139,11 +160,14 @@ const Home = (props) => {
             </Row>
             <hr className="m-0" />
         </Form>
+        {/* TODO: add context */}
+        <DashContext.Provider value={{courseData}} >
         {userData.user.admin ? (
-            <AdminCourses course={selected} />
+            <AdminCourses course={selected} courseData={courseData} />
         ) : (
-            <UserCourses course={selected} />
+            <UserCourses course={selected} courseData={courseData} />
         )}
+        </DashContext.Provider>
     </>
     )
 }

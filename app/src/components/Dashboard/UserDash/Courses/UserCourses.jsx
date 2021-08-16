@@ -12,7 +12,7 @@ import { Col } from "react-bootstrap";
 
 // component containing entire use dashboard (minus dashboard nav)
 
-const UserCourses = ({ course }) => {
+const UserCourses = ({ course, courseData }) => {
     const history = useHistory();
     sessionStorage.clear();
     sessionStorage.setItem("last-route", history.location.pathname); //doesn't work, forces all reloads to end up here
@@ -25,11 +25,15 @@ const UserCourses = ({ course }) => {
     const [previewChange, setPreviewChange] = useState(0);
     const [preview, setPreview] = useState({});
     const courseName = course.name;
-    const courseId = course._id;
+    console.log(courseData)
     const [section, setSection] = useState("");
 
     useEffect(() => {
-        getSectionData(courseId);
+        getSectionData();
+        console.log(course)
+        console.log(courseData.filter(c => c._id === course._id).sections)
+        // setSections(courseData.filter(c => c._id === course._id).sections)
+        // setSectionChange(courseData.filter(c => c._id === course._id).sections[0]._id)
     }, [course]);
 
     useEffect(() => {
@@ -39,19 +43,6 @@ const UserCourses = ({ course }) => {
     useEffect(() => {
         getPreview(previewChange);
     }, [previewChange]);
-
-    useEffect(() => {
-        console.log("mounted")
-        console.log(courseName);
-        // return function cleanup() {
-        //     console.log("unmounted");
-        //     console.log(courseName)
-        //     console.log("section:");
-        //     console.log(sectionChange);
-        //     console.log("file:");
-        //     console.log(previewChange);
-        // }
-    }, []);
 
     const getPreview = async (id) => {
         const url = API_URL + '/getFile/' + id;
@@ -101,6 +92,7 @@ const UserCourses = ({ course }) => {
         try {
             if (id !== undefined) {
                 await Axios.get(url).then((res) => {
+                    // console.log(res.data)
                     setSections(res.data);
                     setSectionChange(res.data[0]._id);
                 })
@@ -133,7 +125,7 @@ const UserCourses = ({ course }) => {
                         <FileInfo preview={preview} />
                     </div>
                 </Col>
-                
+
             </div>
         </div>
     </>)

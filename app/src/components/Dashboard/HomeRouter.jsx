@@ -61,6 +61,7 @@ const HomeRouter = (props) => {
                     </Col>
                 </Row>
             </div>
-        </ListsContext.Provider>);
+        </ListsContext.Provider>
+        );
 };
 export default HomeRouter;
