@@ -21,7 +21,7 @@ const SearchBar = ({ search, setSearch, setShowSearch }) => {
     )
 }
 
-const SearchResults = ({ results, showSearch, handleSearchSelection }) => {
+const SearchResults = ({ results, handleSearchSelection }) => {
     return (
         <div className="search-results">
             <Card>
@@ -53,6 +53,10 @@ const Home = (props) => {
     useEffect(() => {
         getCourseData();
     }, []);
+
+    useEffect(() => {
+        console.log(selected)
+    }, [selected])
 
     const getCourseData = async () => {
         const url = API_URL + '/courses/allData';
@@ -127,6 +131,7 @@ const Home = (props) => {
                     ),
             }
         )
+        console.log(searchable);
         return searchable;
     }
 
@@ -155,7 +160,7 @@ const Home = (props) => {
                 </Col>
                 <Col lg={4} >
                     <SearchBar search={search} setSearch={setSearch} setShowSearch={setShowSearch} />
-                    {showSearch && <SearchResults results={results} showSearch={showSearch} handleSearchSelection={handleSearchSelection} />}
+                    {showSearch && <SearchResults results={results} handleSearchSelection={handleSearchSelection} />}
                 </Col>
             </Row>
             <hr className="m-0" />
@@ -163,7 +168,7 @@ const Home = (props) => {
         {/* TODO: add context */}
         <DashContext.Provider value={{course: selected, data: courseData}} >
         {
-            courseData === undefined ? <>loading</> : <>{userData.user.admin ? (
+            courseData !== undefined && <>{userData.user.admin ? (
                 <AdminCourses />
             ) : (
                 <UserCourses />

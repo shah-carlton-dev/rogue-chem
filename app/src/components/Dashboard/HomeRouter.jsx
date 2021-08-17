@@ -16,6 +16,8 @@ import AdminStats from './AdminDash/AdminStats.jsx';
 import Messages from './Messages.jsx';
 import AdminMessages from "../Dashboard/AdminDash/AdminMessages.jsx";
 import ListsContext from "../../context/ListsContext.js";
+import AdminAnnouncements from "../Dashboard/AdminDash/AdminAnnouncements.jsx";
+import Announcements from './Announcements.jsx';
 
 
 const HomeRouter = (props) => {
@@ -49,12 +51,14 @@ const HomeRouter = (props) => {
                                     <Route component={AdminProgress} path="/home/usage/progress" />
                                     <Route component={AdminStats} path="/home/usage/stats" />
                                     <Route component={AdminMessages} path="/home/messages" />
+                                    <Route component={AdminAnnouncements} path="/home/announcements" />
 
                                 </> :
                                 <> {/* user routes */}
                                     <Route component={ProfileManagement} path="/home/profile" />
                                     <Route component={UserProgress} path="/home/progress" />
                                     <Route component={Messages} path="/home/messages" />
+                                    <Route component={Announcements} path="/home/announcements" />
                                 </>
                             }
                         </Switch>

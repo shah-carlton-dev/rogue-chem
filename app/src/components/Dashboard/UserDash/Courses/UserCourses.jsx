@@ -23,10 +23,10 @@ const UserCourses = () => {
   if (data[0] === undefined) loading = true;
 
   const [sections, setSections] = useState([]);
-  const [sectionChange, setSectionChange] = useState(0);
+  const [sectionChange, setSectionChange] = useState(undefined);
   const [files, setFiles] = useState([]);
   const [videos, setVideos] = useState([]);
-  const [previewChange, setPreviewChange] = useState(0);
+  const [previewChange, setPreviewChange] = useState(undefined);
   const [preview, setPreview] = useState({});
   const [section, setSection] = useState("");
 
@@ -86,15 +86,15 @@ const UserCourses = () => {
     if (!loading) {
       const sections_temp = data.filter((c) => c._id === course._id)[0]
         .sections;
-      setSections(sections_temp == undefined ? null : sections_temp);
+      setSections(sections_temp === undefined ? null : sections_temp);
       setSectionChange(
-        data.filter((c) => c._id === course._id)[0].sections._id
+        data.filter((c) => c._id === course._id)[0].sections[0]._id
       );
     }
   }, [course]);
 
   useEffect(() => {
-	if (sectionChange !== undefined) getFileData(sectionChange);
+    if (sectionChange !== undefined) getFileData(sectionChange);
   }, [sectionChange]);
 
   useEffect(() => {
