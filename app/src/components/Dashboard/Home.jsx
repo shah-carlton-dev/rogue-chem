@@ -24,7 +24,7 @@ const SearchBar = ({ search, setSearch, setShowSearch }) => {
 const SearchResults = ({ results, showSearch, handleSearchSelection }) => {
     return (
         <div className="search-results">
-            <Card show={showSearch}>
+            <Card>
                 <ListGroup>
                     {
                         results.length > 0 ?
@@ -161,12 +161,15 @@ const Home = (props) => {
             <hr className="m-0" />
         </Form>
         {/* TODO: add context */}
-        <DashContext.Provider value={{courseData}} >
-        {userData.user.admin ? (
-            <AdminCourses course={selected} courseData={courseData} />
-        ) : (
-            <UserCourses course={selected} courseData={courseData} />
-        )}
+        <DashContext.Provider value={{course: selected, data: courseData}} >
+        {
+            courseData === undefined ? <>loading</> : <>{userData.user.admin ? (
+                <AdminCourses />
+            ) : (
+                <UserCourses />
+            )}</>
+        }
+        
         </DashContext.Provider>
     </>
     )
