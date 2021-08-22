@@ -344,14 +344,14 @@ Router.post('/publish/:id', async (req, res) => {
     }
 })
 
-// want to return a fat object with all courses, sections, files, and video data
+// return a fat object with all published courses with section, file, and video data
 Router.post('/allData', async (req, res) => {
     try {
         const course_ids = req.body.ids.map(c => mongoose.Types.ObjectId(c));
         if (course_ids.length === 0) return res.status(304).send(0);
         let courses, sections, files, videos;
         await Course.find(
-            { _id: { $in: course_ids }, meta: false }
+            { _id: { $in: course_ids }, meta: false, published: true }
         ).then(async c => {
             courses = c;
             const section_ids = courses.map(c => c.sections).flat().reduce((list, item) => {

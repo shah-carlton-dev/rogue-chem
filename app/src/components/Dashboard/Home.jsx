@@ -15,7 +15,7 @@ const Home = (props) => {
   const [courseData, setCourseData] = useState([]);
   const [selected, setSelected] = useState({});
   const [search, setSearch] = useState("");
-  const [results, setResults] = useState([]);
+  const [results, setResults] = useState({});
   const [searchableList, setSearchableList] = useState({});
   const [showSearch, setShowSearch] = useState(false);
 
@@ -38,7 +38,7 @@ const Home = (props) => {
 
   const handleSearchSelection = (e) => {
     // e.preventDefault();
-    if (showSearch) console.log("hey");
+    if (showSearch) console.log(e);
   };
 
   useEffect(() => {
@@ -48,8 +48,7 @@ const Home = (props) => {
   useEffect(() => {
     if (search !== "") {
       const searchResults = Search.searchAll(search, searchableList);
-      console.log(searchResults)
-      setResults([]);
+      setResults(searchResults);
     }
   }, [search]);
 
@@ -81,12 +80,11 @@ const Home = (props) => {
               setSearch={setSearch}
               setShowSearch={setShowSearch}
             />
-            {showSearch && (
-              <SearchResults
-                results={[{ title: "yes" }, { title: "result" }]}
-                handleSearchSelection={handleSearchSelection}
-              />
-            )}
+            <SearchResults
+              results={results}
+              handleSearchSelection={handleSearchSelection}
+              show={showSearch}
+            />
           </Col>
         </Row>
         <hr className="m-0" />

@@ -1,28 +1,38 @@
 import React from "react";
 import { Card, ListGroup, Button } from "react-bootstrap";
+import "../../styles/SearchResults.css";
 
-const SearchResults = ({ results, handleSearchSelection, setShow }) => {
+const SearchResults = ({ results, handleSearchSelection, show }) => {
+  console.log(results);
+  // results in the form of an object: {files: Array, videos: Array, sections: Array}
 
-  const handleClick = (e) => {
-    console.log("gfd");
-    handleSearchSelection(e);
+  const handleClick = (id) => {
+    if (!show) {
+      // console.log("yeah")
+      console.log(id);
+      // handleSearchSelection(id);
+    }
   };
 
   return (
-    <div className="search-results" >
+    <div className={"search-results " + (!show && "display-none")}>
       <Card>
         <ListGroup>
-          {results.length > 0 ? (
-            results.map((data, index) => (
-                <ListGroup.Item key={data.id}>
-                  <div
-                    // onClick={console.log("clicked")}
-                    path={["add", "path", "here"]}
-                  >
-                    {data.title}
-                  </div>
+          {Object.keys(results).length > 0 ? (
+            <div>
+              <ListGroup.Item variant="dark" className="my-auto">
+                Files
+              </ListGroup.Item>
+              {results.files.map((data, index) => (
+                <ListGroup.Item
+                  action
+                  key={data.item._id}
+                  onMouseDown={handleClick(data.item.title)}
+                >
+                  {data.item.title}
                 </ListGroup.Item>
-            ))
+              ))}
+            </div>
           ) : (
             <ListGroup.Item>no matches</ListGroup.Item>
           )}
