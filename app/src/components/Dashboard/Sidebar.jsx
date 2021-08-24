@@ -197,7 +197,7 @@ const Sidebar = (props) => {
               <div className="queue-view">
                 {queue.files.map((q) => (
                   <div className="queue-item">
-                    <h6 style={{ color: "#374151" }}>{q}</h6>
+                    <h6 style={{ color: "#374151" }}>{q.name}</h6>
                   </div>
                 ))}
                 <div className="queue-item"></div>
@@ -213,7 +213,7 @@ const Sidebar = (props) => {
               <div className="qfolders-view">
                 {queue.sections.map((q) => (
                   <div className="qfolder-item">
-                    <h6 style={{ color: "#374151" }}>{q}</h6>
+                    <h6 style={{ color: "#374151" }}>{q.name}</h6>
                   </div>
                 ))}
               </div>
