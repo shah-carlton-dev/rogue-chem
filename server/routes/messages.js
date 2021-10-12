@@ -60,19 +60,27 @@ Router.post('/newAnnouncement', async (req, res) => {
 Router.post('/newMessage', async (req, res) => {
     try {
         const { to, from, title, body } = req.body;
-
-        // TODO: if from is admin, to should be student
+        
+        // check from
         try {
-            await Course.findById(to).then(course => to_course = course);
+            await Admin.findOne({ username: from }).then(admin => admin);
         } catch (err) {
-            return res.send("Must have a course id as the \'to\' field for announcements");
+            try {
+                await Student.findOne({ username: from}).then(admin => admin)
+            } catch (er) {
+                return res.send("Must have an admin/student username as from field")
+            }
         }
 
-        // TODO: if from is student, to should be admin
+        // check to
         try {
-            await Admin.findOne({ username: from }).then(admin => from_admin = admin);
+            await Admin.findOne({ username: to }).then(admin => admin);
         } catch (err) {
-            return res.send("Must have an admin username as the \'from\' field for announcements");
+            try {
+                await Student.findOne({ username: to}).then(admin => admin)
+            } catch (er) {
+                return res.send("Must have an admin/student username as to field")
+            }
         }
 
         const msg = new Message({
@@ -82,9 +90,67 @@ Router.post('/newMessage', async (req, res) => {
         await msg.save();
         return res.send(msg).status(200);
     } catch (err) {
-        return res.send('Error while creating new direct message').status(400);
+        return res.send('Error while creating new message').status(400);
     }
 });
+
+// get messages (users)
+Router.get('/messagesu/:id', async (req, res) => {
+    try {
+        const userId = req.params.id;
+        let username;
+        let messagesList = []; 
+        let fromList = [];
+        try {
+            await Student.findById(userId).then(async user =>
+                username = user.username
+            )
+        } catch (error) {
+            return res.send("id could not be located to fetch messages")
+        }
+        try {
+            await Message.find({"to": username}).then(async list => messagesList = list)
+        } catch (er) {
+        }
+        try {
+            await Message.find({"from": username}).then(async list => fromList = list)
+        } catch (er) {
+        }
+        let reslist = messagesList.concat(fromList)
+        return res.send(reslist).status(200)
+    } catch (err) {
+        return res.send("unable to fetch messages").status(400)
+    }
+})
+
+// get messages (admin)
+Router.get('/messagesa/:id', async (req, res) => {
+    try {
+        const userId = req.params.id;
+        let username;
+        let messagesList = []; 
+        let fromList = [];
+        try {
+            await Admin.findById(userId).then(async user =>
+                username = user.username
+            )
+        } catch (error) {
+            return res.send("id could not be located to fetch messages")
+        }
+        try {
+            await Message.find({"to": username}).then(async list => messagesList = list)
+        } catch (er) {
+        }
+        try {
+            await Message.find({"from": username}).then(async list => fromList = list)
+        } catch (er) {
+        }
+        let reslist = messagesList.concat(fromList)
+        return res.send(reslist).status(200)
+    } catch (err) {
+        return res.send("unable to fetch messages").status(400)
+    }
+})
 
 // get all announcements for a specific user (by id)
 Router.get('/announcements/:id', async (req, res) => {
